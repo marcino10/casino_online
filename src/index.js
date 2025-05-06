@@ -7,6 +7,7 @@ const socketIo = require('socket.io');
 const mongoose = require('mongoose');
 
 const app = express();
+const routes = require('./routes/app')
 const server = http.createServer(app);
 const io = socketIo(server);
 
@@ -16,9 +17,7 @@ mongoose.connect(MONGO_URL)
     .then(() => console.log('✅ Connected to MongoDB'))
     .catch(err => console.error('❌ MongoDB connection error:', err));
 
-app.get('/', (_, res) => {
-    res.status(200).send('Hello from Node.js + MongoDB + Socket.IO!');
-});
+app.use('/', routes);
 
 io.on('connection', socket => {
     console.log('User connected');
