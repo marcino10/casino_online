@@ -1,87 +1,87 @@
 @use 'components/nav';
+@use 'components/footer';
 
 // Base styles
 $font-stack: 'Arial', sans-serif;
-$primary-color: #4CAF50;
-$secondary-color: #FFC107;
+$primary-color: #4caf50;
+$secondary-color: #ffc107;
 $background-color: #292929;
 $text-color: #ddd;
 
 @mixin center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 body {
-  font-family: $font-stack;
-  background-color: $background-color;
-  color: $text-color;
+	font-family: $font-stack;
+	background-color: $background-color;
+	color: $text-color;
 }
 
-
 main {
-  padding: 0;
+	padding: 0;
 }
 
 .hero {
-  @include center;
-  flex-direction: column;
-  text-align: center;
+	@include center;
+	flex-direction: column;
+	text-align: center;
 }
 
 .title {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  width: 100%;
-  padding: 2rem;
-  background-color: #49555A;
-  clip-path: polygon(0 0, 100% 0%,100% 50%, 50% 100%, 0 50%);
+	font-size: 2.5rem;
+	margin-bottom: 10px;
+	width: 100%;
+	padding: 2rem;
+	background-color: #49555a;
+	clip-path: polygon(0 0, 100% 0%, 100% 50%, 50% 100%, 0 50%);
 }
 
 .inventory {
-  @include center;
-  flex-direction: row;
-  background-color: #2B0849;
-  padding: 1rem;
-  border-radius: .5rem;
-  box-shadow: 0 0 3px #FFDD33;
-  background-image: url("/img/poker_banner.png");
+	@include center;
+	flex-direction: row;
+	background-color: #2b0849;
+	padding: 1rem;
+	border-radius: 0.5rem;
+	box-shadow: 0 0 3px #ffdd33;
+	background-image: url('/img/poker_banner.png');
 }
 
 .subtitle {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
+	font-size: 1.2rem;
+	margin-bottom: 20px;
 }
 
 .button {
-  padding: 1rem 2.5rem;
-  height: 100%;
-  width: 25%;
-  background-color: $primary-color;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-  &:hover {
-    animation: button 1s linear infinite alternate;
-  }
+	padding: 1rem 2.5rem;
+	height: 100%;
+	width: 25%;
+	background-color: $primary-color;
+	color: white;
+	text-decoration: none;
+	border-radius: 5px;
+	&:hover {
+		animation: button 1s linear infinite alternate;
+	}
 }
 
 @keyframes button {
-  from {
-    scale: 1;
-    background-color: #4CAF50;
-    box-shadow: 0 0 5px #000;
-  }
-  to {
-    scale: 1.08;
-    box-shadow: 0 0 10px #000;
-    background-color: #4AAB4D;
-  }
+	from {
+		scale: 1;
+		background-color: #4caf50;
+		box-shadow: 0 0 5px #000;
+	}
+	to {
+		scale: 1.08;
+		box-shadow: 0 0 10px #000;
+		background-color: #4aab4d;
+	}
 }
