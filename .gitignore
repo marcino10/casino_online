@@ -1,1 +1,5 @@
 .idea/
+node_modules/
+node/node_modules/
+src/css/
+.env
