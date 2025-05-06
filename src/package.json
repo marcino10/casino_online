@@ -4,8 +4,8 @@
   "description": "Node.js with Socket.IO and SCSS",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "scss": "sass ../src/scss:../src/css -w"
+    "start": "concurrently \"npm run scss\" \"nodemon index.js\"",
+    "scss": "sass scss:css -w"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -14,6 +14,8 @@
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "sass": "^1.74.0"
+    "concurrently": "^8.2.2",
+    "sass": "^1.74.0",
+    "nodemon": "^2.0.15"
   }
 }
