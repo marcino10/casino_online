@@ -1,0 +1,50 @@
+@use 'components/nav';
+
+// Base styles
+$font-stack: 'Arial', sans-serif;
+$primary-color: #4CAF50;
+$secondary-color: #FFC107;
+$background-color: #f4f4f4;
+$text-color: #333;
+
+// Mixin for center alignment
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Global styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-stack;
+  background-color: $background-color;
+  color: $text-color;
+}
+
+main {
+  .game {
+    flex-direction: column;
+    .title {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    .description {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    .placeholder {
+      padding: 20px;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+  }
+}
