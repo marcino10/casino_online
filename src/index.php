@@ -10,5 +10,17 @@
 </head>
 <body>
     <?php require_once('components/nav.php')?>
+
+    <main>
+        <section class="hero">
+            <h1 class="title">Welcome to Big Win Casino</h1>
+            <div class="inventory">
+                <p class="subtitle">Experience the thrill of gaming with our exclusive poker game.</p>
+                <a href="poker.php" class="button">Start Playing</a>
+                <!--        <button></button>-->
+            </div>
+        </section>
+    </main>
+
 </body>
 </html>
