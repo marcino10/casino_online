@@ -1,4 +1,5 @@
 @use 'components/nav';
+@use 'components/footer';
 @use 'variables/colors' as *;
 @use 'variables/mixin' as *;
 
@@ -6,32 +7,31 @@ $font-stack: 'Arial', sans-serif;
 $text-color: #ddd;
 
 @mixin center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 body {
-  font-family: $font-stack;
-  background-color: $background_color;
-  color: $text-color;
+	font-family: $font-stack;
+	background-color: $background-color;
+	color: $text-color;
 }
 
-
 main {
-  padding: 0;
+	padding: 0;
 }
 
 .hero {
-  @include center;
-  flex-direction: column;
-  text-align: center;
+	@include center;
+	flex-direction: column;
+	text-align: center;
 }
 
 .title {
@@ -56,12 +56,12 @@ main {
   overflow: hidden;
   &-image{
     position: absolute;
-    top: 55%;    // change as needed
-    left: 50%;   // change as needed
-    transform: translate(-50%, -50%); // center image
-    width: 100%;  // optional: scale beyond div size
-    pointer-events: none; // so it doesn't block interaction
-    z-index: 0;   // keep it behind content
+    top: 55%;    
+    left: 50%;   
+    transform: translate(-50%, -50%);
+    width: 100%;  
+    pointer-events: none; 
+    z-index: 0;   
   }
   & > *:not(&-image) {
     position: relative;
@@ -70,8 +70,8 @@ main {
 }
 
 .subtitle {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
+	font-size: 1.2rem;
+	margin-bottom: 20px;
 }
 
 .button {
