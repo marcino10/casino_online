@@ -32,5 +32,23 @@ services:
       - ./mongo/mongod.conf:/etc/mongod.conf:ro
       - mongo-data:/data/db
 
+  migrate:
+    image: node:20
+    profiles: ["tools"]
+    container_name: migrate
+    volumes:
+      - ./src:/src
+    working_dir: /src
+    command: npm run migrate
+
+  rollback:
+    image: node:20
+    profiles: ["tools"]
+    container_name: rollback
+    volumes:
+      - ./src:/src
+    working_dir: /src
+    command: npm run rollback
+
 volumes:
   mongo-data:

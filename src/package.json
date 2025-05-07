@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"npm run scss\" \"nodemon index.js\"",
-    "scss": "sass scss:css -w"
+    "scss": "sass scss:css -w",
+    "migrate": "node runMigrations.js",
+    "rollback": "node rollbackMigrations.js"
   },
   "dependencies": {
     "express": "^4.18.2",
