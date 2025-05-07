@@ -13,7 +13,7 @@
     </div>
         <img src="../img/logo.png" alt="" class='logo'>
         <div class='right_section'>
-            <a href="" class='Logout'>Logout</a>
+            <a href="./login.php" class='Logout'>Logout</a>
         </div>
     <a href="" class='Sign-In'>Sign In</a>
 

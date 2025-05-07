@@ -22,6 +22,8 @@ body {
 	font-family: $font-stack;
 	background-color: $background-color;
 	color: $text-color;
+	min-height: 100vh;
+  position: relative;
 }
 
 main {
@@ -35,38 +37,38 @@ main {
 }
 
 .title {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  width: 100%;
-  padding: 0 2rem 2rem 2rem;
-  background-color: $nav_color;
-  clip-path: polygon(0 0, 100% 0%, 50% 100%);
+	font-size: 2.5rem;
+	margin-bottom: 10px;
+	width: 100%;
+	padding: 0 2rem 2rem 2rem;
+	background-color: $nav_color;
+	clip-path: polygon(0 0, 100% 0%, 50% 100%);
 }
 
 .inventory {
-  @include center;
-  flex-direction: row;
-  background-color: #2B0849;
-  padding: 1rem;
-  height: 100%;
-  width: 100%;
-  border-radius: .5rem;
-  box-shadow: 0 0 5px $shadow_color;
-  position: relative;
-  overflow: hidden;
-  &-image{
-    position: absolute;
-    top: 55%;    
-    left: 50%;   
-    transform: translate(-50%, -50%);
-    width: 100%;  
-    pointer-events: none; 
-    z-index: 0;   
-  }
-  & > *:not(&-image) {
-    position: relative;
-    z-index: 1;
-  }
+	@include center;
+	flex-direction: row;
+	background-color: #2b0849;
+	padding: 1rem;
+	height: 100%;
+	width: 100%;
+	border-radius: 0.5rem;
+	box-shadow: 0 0 5px $shadow_color;
+	position: relative;
+	overflow: hidden;
+	&-image {
+		position: absolute;
+		top: 55%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 100%;
+		pointer-events: none;
+		z-index: 0;
+	}
+	& > *:not(&-image) {
+		position: relative;
+		z-index: 1;
+	}
 }
 
 .subtitle {
@@ -75,26 +77,26 @@ main {
 }
 
 .button {
-  height: 5rem;
-  width: 50%;
-  color: black ;
-  margin-top: 3rem;
-  text-decoration: none;
-  border-radius: 5px;
-  &:hover {
-    animation: button 1s linear infinite alternate;
-  }
+	height: 5rem;
+	width: 50%;
+	color: black;
+	margin-top: 3rem;
+	text-decoration: none;
+	border-radius: 5px;
+	&:hover {
+		animation: button 1s linear infinite alternate;
+	}
 }
 
 @keyframes button {
-  from {
-    scale: 1;
-    opacity: 1;
-    box-shadow: 0 0 5px #000;
-  }
-  to {
-    scale: 1.08;
-    box-shadow: 0 0 10px $shadow_color;
-    opacity: 0.75;
-  }
+	from {
+		scale: 1;
+		opacity: 1;
+		box-shadow: 0 0 5px #000;
+	}
+	to {
+		scale: 1.08;
+		box-shadow: 0 0 10px $shadow_color;
+		opacity: 0.75;
+	}
 }
