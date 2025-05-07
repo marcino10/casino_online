@@ -1,12 +1,21 @@
 <div class='nav'>
+    <div class='left_section'>
+    <img src="../img/avatar_icon.png" alt="" class='avatar'>
+    <p class='Nick'>Nick</p>
+    <div class='balance_container'>
+        <p class='balance_title'>Balance:</p>
+        <div class='balance'></div>
     <div class='nav_links'>
         <a href="" class='nav_link'>Main Page</a> 
         <a href="" class='nav_link'>Poker</a>
     </div>
-    <img src="../img/logo.png" alt="" class='logo'>
-    <div class='balance_container'>
-        <p class='balance_title'>Balance:</p>
-        <div class='balance'></div>
     </div>
+    </div>
+        <img src="../img/logo.png" alt="" class='logo'>
+        <div class='right_section'>
+            <a href="" class='Logout'>Logout</a>
+        </div>
+    <a href="" class='Sign-In'>Sign In</a>
+
 </div>
 
