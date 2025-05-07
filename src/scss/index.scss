@@ -40,15 +40,13 @@ main {
   width: 100%;
   padding: 0 2rem 2rem 2rem;
   background-color: $nav_color;
-  clip-path: polygon(0 0, 100% 0%, 50% 100%);
+  animation: title 0.6s ease-in-out forwards;
 }
 
 .inventory {
   @include center;
-  flex-direction: row;
   background-color: #2B0849;
-  padding: 1rem;
-  height: 100%;
+  min-height: 100%;
   width: 100%;
   border-radius: .5rem;
   box-shadow: 0 0 5px $shadow_color;
@@ -56,10 +54,12 @@ main {
   overflow: hidden;
   &-image{
     position: absolute;
-    top: 55%;    
+    top: 50%;
     left: 50%;   
     transform: translate(-50%, -50%);
-    width: 100%;  
+    width: 100%;
+    min-height: 100%;
+    object-fit: cover;
     pointer-events: none; 
     z-index: 0;   
   }
@@ -69,32 +69,88 @@ main {
   }
 }
 
-.subtitle {
-	font-size: 1.2rem;
-	margin-bottom: 20px;
+.button-grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 2vw;
+  width: 75vw;
+  padding: 2rem 0;
 }
 
-.button {
-  height: 5rem;
-  width: 50%;
+.button_game {
+  height: 20vh;
+  width: 100%;
   color: black ;
-  margin-top: 3rem;
+  margin-top: 3vh;
   text-decoration: none;
   border-radius: 5px;
   &:hover {
-    animation: button 1s linear infinite alternate;
+    animation: button_game 1s ease-out infinite alternate;
   }
 }
 
-@keyframes button {
+@keyframes button_game {
   from {
     scale: 1;
     opacity: 1;
     box-shadow: 0 0 5px #000;
   }
   to {
-    scale: 1.08;
+    scale: 1.05;
     box-shadow: 0 0 10px $shadow_color;
-    opacity: 0.75;
+    opacity: 0.8;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    padding: 1rem;
+    animation: title_media 0.6s ease-in-out forwards;
+  }
+
+  .button-grid {
+    flex-direction: column;
+    width: 90vw;
+    gap: 1rem;
+  }
+
+  .button_game {
+    height: 12vh;
+    font-size: 1rem;
+    margin-top: 2vh;
+  }
+
+  .inventory {
+    padding: 1rem 0.5rem;
+  }
+
+  .inventory-image {
+    min-height: 100%;
+  }
+
+  body {
+    font-size: 90%;
+  }
+}
+
+@keyframes title_media {
+  0% {
+    font-size: 2.2rem;
+    clip-path: polygon(0 0, 100% 0%, 100% 10%, 50% 100%, 0% 10%);
+  }
+  100% {
+    font-size: 1.6rem;
+    clip-path: polygon(0 0, 100% 0%, 100% 100%, 50% 100%, 0% 100%);
+  }
+}
+
+@keyframes title {
+  0% {
+    font-size: 1.6rem;
+    clip-path: polygon(0 0, 100% 0%, 100% 100%, 50% 100%, 0% 100%);
+  }
+  100% {
+    font-size: 2.2rem;
+    clip-path: polygon(0 0, 100% 0%, 100% 10%, 50% 100%, 0% 10%);
   }
 }

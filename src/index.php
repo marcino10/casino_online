@@ -15,16 +15,48 @@
     <section class="hero">
         <h1 class="title">Welcome to <br> Big Win Casino</h1>
 
-            <a href="poker.php" class="button">
+        <div class="button-grid">
+            <a href="poker.php" class="button_game">
                 <div class="inventory">
-                <img src="img/poker_banner.png" alt="poker" class="inventory-image">
+                <img src="img/poker_banner1.png" alt="poker" class="inventory-image">
+                <!--        <button></button>-->
+                </div>
+            </a>
+            <a href="poker.php" class="button_game">
+                <div class="inventory">
+                <img src="img/poker_banner1.png" alt="poker" class="inventory-image">
+                <!--        <button></button>-->
+                </div>
+            </a>
+            <a href="poker.php" class="button_game">
+                <div class="inventory">
+                <img src="img/poker_banner1.png" alt="poker" class="inventory-image">
                 <!--        <button></button>-->
                 </div>
             </a>
 
+        </div>
     </section>
 </main>
 <?php require_once('components/footer.php')?>
+
+<script>
+
+        let buttons = document.querySelectorAll('.button_game')
+        let count = 0
+        buttons.forEach(btn => {
+            count++;
+            if (count % 2 === 1){
+                let lastBtn = buttons[buttons.length - 1];
+                lastBtn.style.gridColumn = "span 2";
+            }else{
+                let lastBtn = buttons[buttons.length - 1];
+                lastBtn.style.gridColumn = "span 1";
+            }
+        })
+        console.log("Total buttons:", count);
+
+</script>
 
 </body>
 </html>    
