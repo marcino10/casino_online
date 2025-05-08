@@ -19,10 +19,13 @@ $text-color: #ddd;
 }
 
 body {
-  font-family: $font-stack;
-  background-color: $background-color;
-  color: $text-color;
-  font-size: 100%;
+    min-height: 100vh;
+    position: relative;
+	font-family: $font-stack;
+	background-color: $background-color;
+	color: $text-color;
+	min-height: 100vh;
+  position: relative;
 }
 
 main {
