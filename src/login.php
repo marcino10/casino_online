@@ -8,11 +8,11 @@
 </head>
 <body>
     
-    <div class='login_box'>
+    <form class='login_box'>
         <h3>Logging</h3>
-        <input class='login' type="text" placeholder="Login">
-        <input class='password' type="password" placeholder="Password">
-        <button class='submit_button'>Confirm</button>
-    </div>
+        <input class='login' type="text" placeholder="Login" required>
+        <input class='password' type="password" placeholder="Password" required>
+        <button class='submit_button' type='submit'>Confirm</button>
+</form>
 </body>
 </html>

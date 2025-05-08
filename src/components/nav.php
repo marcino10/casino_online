@@ -14,8 +14,7 @@
         <img src="../img/logo.png" alt="" class='logo'>
         <div class='right_section'>
             <a href="./login.php" class='Logout'>Logout</a>
+            <a href="./Sign_In.php" class='Sign-In'>Sign In</a>
         </div>
-    <a href="" class='Sign-In'>Sign In</a>
-
 </div>
 

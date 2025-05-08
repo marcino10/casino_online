@@ -114,14 +114,31 @@
 	}
 }
 .Sign-In{
-	display: none;
+	// display: none;
 	color: $text-color;
 	text-decoration: none;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: larger;
+	position: relative;
+	overflow: hidden;
+
+	&::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 0;
+		height: 2px;
+		background-color: $text-color;
+		transition: width 0.3s ease-in-out;
+	}
+	&:hover::after {
+		width: 100%;
+	}
 
 }
 .Logout{
+	display: none;
 	color: $text-color;
 	text-decoration: none;
 	font-family: Arial, Helvetica, sans-serif;
