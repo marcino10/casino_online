@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/login.css">
+    <title>Document</title>
+</head>
+<body>
+    
+    <form class='login_box'>
+        <h3>Logging</h3>
+        <input class='login' type="text" placeholder="Login" required>
+        <input class='password' type="password" placeholder="Password" required>
+        <button class='submit_button' type='submit'>Confirm</button>
+</form>
+</body>
+</html>

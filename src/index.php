@@ -11,16 +11,52 @@
 <body>
     <?php require_once('components/nav.php')?>
 
-    <main>
-        <section class="hero">
-            <h1 class="title">Welcome to Big Win Casino</h1>
-            <div class="inventory">
-                <p class="subtitle">Experience the thrill of gaming with our exclusive poker game.</p>
-                <a href="poker.php" class="button">Start Playing</a>
+<main>
+    <section class="hero">
+        <h1 class="title">Welcome to <br> Big Win Casino</h1>
+
+        <div class="button-grid">
+            <a href="poker.php" class="button_game">
+                <div class="inventory">
+                <img src="img/poker_banner1.png" alt="poker" class="inventory-image">
                 <!--        <button></button>-->
-            </div>
-        </section>
-    </main>
+                </div>
+            </a>
+            <a href="poker.php" class="button_game">
+                <div class="inventory">
+                <img src="img/poker_banner1.png" alt="poker" class="inventory-image">
+                <!--        <button></button>-->
+                </div>
+            </a>
+            <a href="poker.php" class="button_game">
+                <div class="inventory">
+                <img src="img/poker_banner1.png" alt="poker" class="inventory-image">
+                <!--        <button></button>-->
+                </div>
+            </a>
+
+        </div>
+    </section>
+</main>
+<?php require_once('components/footer.php')?>
+
+<script>
+
+        let buttons = document.querySelectorAll('.button_game')
+        let count = 0
+        buttons.forEach(btn => {
+            count++;
+            if (count % 2 === 1){
+                let lastBtn = buttons[buttons.length - 1];
+                lastBtn.style.gridColumn = "span 2";
+            }else{
+                let lastBtn = buttons[buttons.length - 1];
+                lastBtn.style.gridColumn = "span 1";
+            }
+        })
+        console.log("Total buttons:", count);
+
+</script>
 
 </body>
-</html>
+</html>    
