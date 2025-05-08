@@ -1,5 +1,0 @@
-<div class='footer'>
-    <img src="../img/footer_image.png" alt="" class='footer_image'>
-    <p class='footer_text'>Website created by Daniel Marcin i Paweł</p>
-    <img src="../img/footer_image.png" alt="" class='footer_image'> 
-</div>

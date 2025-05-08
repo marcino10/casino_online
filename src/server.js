@@ -5,20 +5,31 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const mongoose = require('mongoose');
+const path = require('path');
 
 const app = express();
-const routes = require('./routes')
+const routes = require('./routes/index')
 const userRoutes = require('./routes/user')
 const server = http.createServer(app);
 const io = socketIo(server);
 
 const port = 3000;
 
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection:', reason);
+});
+
 mongoose.connect(MONGO_URL)
     .then(() => console.log('✅ Connected to MongoDB'))
     .catch(err => console.error('❌ MongoDB connection error:', err));
 
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views/pages'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -43,6 +54,6 @@ io.on('connection', socket => {
     socket.on('disconnect', () => console.log('User disconnected'));
 });
 
-server.listen(port, () => {
+server.listen(port,() => {
     console.log(`Server running on http://localhost:${port}`);
 });
