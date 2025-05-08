@@ -3,8 +3,8 @@ require('dotenv').config({ path: '.env' });
 const MONGO_URL = process.env.MONGO_URL;
 
 const mongoose = require('mongoose');
-const cardMigration = require('./api/migrations/cards');
-const userMigration = require('./api/migrations/users');
+const cardMigration = require('./api/migrations/cardsMigration');
+const userMigration = require('./api/migrations/usersMigration');
 
 async function run() {
     try {
