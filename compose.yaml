@@ -3,17 +3,17 @@ services:
     build: ./php-apache
     container_name: php-apache
     volumes:
-      - ./src:/var/www/html
+      - ./php:/var/www/html
     ports:
       - "8080:80"
     depends_on:
       - mongo
 
   node:
-    build: ./src
+    build: ./
     container_name: node-app
     volumes:
-      - ./src:/usr/src/app
+      - .:/usr/src/app
     working_dir: /usr/src/app
     ports:
       - "3000:3000"
@@ -37,8 +37,8 @@ services:
     profiles: ["tools"]
     container_name: migrate
     volumes:
-      - ./src:/src
-    working_dir: /src
+      - .:/usr/src/app
+    working_dir: /usr/src/app
     command: npm run migrate
 
   rollback:
@@ -46,8 +46,8 @@ services:
     profiles: ["tools"]
     container_name: rollback
     volumes:
-      - ./src:/src
-    working_dir: /src
+      - .:/usr/src/app
+    working_dir: /usr/src/app
     command: npm run rollback
 
 volumes:

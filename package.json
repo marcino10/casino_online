@@ -2,16 +2,17 @@
   "name": "node-app",
   "version": "1.0.0",
   "description": "Node.js with Socket.IO and SCSS",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "concurrently \"npm run scss\" \"nodemon index.js\"",
-    "scss": "sass scss:css -w",
-    "migrate": "node runMigrations.js",
-    "rollback": "node rollbackMigrations.js"
+    "start": "concurrently \"npm run scss\" \"nodemon src/server.js\"",
+    "scss": "sass src/scss:src/css -w",
+    "migrate": "node src/runMigrations.js",
+    "rollback": "node src/rollbackMigrations.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
     "express": "^4.18.2",
     "express-async-handler": "^1.2.0",
     "mongoose": "^8.3.2",

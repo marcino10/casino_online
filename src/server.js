@@ -7,7 +7,7 @@ const socketIo = require('socket.io');
 const mongoose = require('mongoose');
 
 const app = express();
-const routes = require('./routes/app')
+const routes = require('./routes')
 const userRoutes = require('./routes/user')
 const server = http.createServer(app);
 const io = socketIo(server);
@@ -17,6 +17,8 @@ const port = 3000;
 mongoose.connect(MONGO_URL)
     .then(() => console.log('✅ Connected to MongoDB'))
     .catch(err => console.error('❌ MongoDB connection error:', err));
+
+app.set('view engine', 'ejs');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
