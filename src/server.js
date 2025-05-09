@@ -6,10 +6,15 @@ const http = require('http');
 const socketIo = require('socket.io');
 const mongoose = require('mongoose');
 const path = require('path');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const flash = require('connect-flash');
+const crypto = require('crypto');
 
 const app = express();
 const routes = require('./routes/index')
-const userRoutes = require('./routes/user')
+const authRoutes = require('./routes/auth')
 const server = http.createServer(app);
 const io = socketIo(server);
 
@@ -31,11 +36,28 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views/pages'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+const sessionSecret = crypto.randomBytes(32).toString('hex');
+app.use(session({
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: true
+}));
+
+app.use(flash());
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    next();
+});
+
+app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
 app.use('/', routes);
-app.use('/user', userRoutes);
+app.use('/auth', authRoutes);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

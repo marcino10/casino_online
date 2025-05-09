@@ -8,11 +8,17 @@
 </head>
 <body>
     
-    <form class='login_box'>
+    <form class='login_box' method="post" action="/auth/login">
         <h3>Logging</h3>
-        <input class='login' type="text" placeholder="Login" required>
-        <input class='password' type="password" placeholder="Password" required>
+        <input class='login' type="text" placeholder="Login" required name="email">
+        <input class='password' type="password" placeholder="Password" name="password" required>
         <button class='submit_button' type='submit'>Confirm</button>
-</form>
+    </form>
+    <% if (error_msg) { %>
+        <h1><%= error_msg %></h1>
+    <% } %>
+    <% if (success_msg) { %>
+        <h1><%= success_msg %></h1>
+    <% } %>
 </body>
 </html>
