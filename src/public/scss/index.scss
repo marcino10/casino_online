@@ -6,12 +6,6 @@
 $font-stack: 'Arial', sans-serif;
 $text-color: #ddd;
 
-@mixin center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -24,8 +18,6 @@ body {
 	font-family: $font-stack;
 	background-color: $background-color;
 	color: $text-color;
-	min-height: 100vh;
-  position: relative;
 }
 
 main {
@@ -38,26 +30,60 @@ main {
   text-align: center;
 }
 
-.title {
-  font-size: 2.5rem;
+.header{
+  position: relative;
   margin-bottom: 10px;
   width: 100%;
-  padding: 0 2rem 2rem 2rem;
-  background-color: $nav_color;
-  clip-path: polygon(0 0, 100% 0%, 100% 10%, 50% 100%, 0% 10%);
-  animation: title-default 0.6s ease-in-out forwards;
+  padding: 1.5rem;
+  background-color: $base_color;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-@keyframes title-default {
-  from {
-    font-size: 1.6rem;
-    clip-path: polygon(0 0, 100% 0%, 100% 100%, 50% 100%, 0% 100%);
-  }
-  to {
-    font-size: 2.5rem;
-    clip-path: polygon(0 0, 100% 0%, 100% 10%, 50% 100%, 0% 10%);
-  }
+.title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.5rem;
+  line-height: 2rem;
 }
+
+.balance-card {
+  background-color: #1e1e2f;
+  color: #ffffff;
+  padding: 1rem 2rem;
+  border-radius: 1em;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  width: clamp(160px, 25%, 300px);
+  white-space: nowrap;
+  overflow: hidden;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.balance {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.3em;
+  color: #b0b0b0;
+  white-space: normal;
+}
+
+.amount {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #00e676;
+  overflow-wrap: break-word;
+}
+
+
+
 
 .inventory {
   @include center;
@@ -65,7 +91,6 @@ main {
   min-height: 100%;
   width: 100%;
   border-radius: .5rem;
-  box-shadow: 0 0 5px $shadow_color;
   position: relative;
   overflow: hidden;
 
@@ -84,6 +109,7 @@ main {
   & > *:not(&-image) {
     position: relative;
     z-index: 1;
+
   }
 }
 
@@ -91,12 +117,12 @@ main {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2vw;
-  width: 75vw;
+  width: 60vw;
   padding: 2rem 0;
 }
 
 .button_game {
-  height: 20vh;
+  height: 12rem;
   width: 100%;
   color: black;
   text-decoration: none;
@@ -104,40 +130,63 @@ main {
   margin-top: 3vh;
 
   &:hover {
-    animation: button_game_hover 1s ease-out infinite alternate;
+    animation: button_game_hover 0.3s ease-out forwards;
   }
 }
 
 @keyframes button_game_hover {
-  from {
-    scale: 1;
+  0% {
     opacity: 1;
-    box-shadow: 0 0 5px #000;
+    scale: 1;
+    box-shadow: 0 0 0 #fff;
   }
-  to {
-    scale: 1.05;
-    box-shadow: 0 0 10px $shadow_color;
-    opacity: 0.8;
+  100% {
+    opacity: 0.6;
+    scale: 1.01;
+    box-shadow: 0 0 3px #fff;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 800px) {
+  .header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .title {
+    position: static;
+    margin-left: 10%;
     font-size: 1.6rem;
     padding: 1rem;
     animation: title-mobile 0.6s ease-in-out forwards;
+    line-height: normal;
   }
 
   @keyframes title-mobile {
     from {
       font-size: 2.2rem;
-      clip-path: polygon(0 0, 100% 0%, 100% 10%, 50% 100%, 0% 10%);
     }
     to {
       font-size: 1.6rem;
-      clip-path: polygon(0 0, 100% 0%, 100% 100%, 50% 100%, 0% 100%);
     }
   }
+
+  .balance-card {
+    max-width: 30vw;
+    padding: 0.4rem;
+    font-size: 0.9rem;
+    line-height: 0.8rem;
+  }
+
+  .balance {
+    font-size: 0.8rem;
+  }
+
+  .amount {
+    font-size: 0.9rem;
+  }
+
 
   .button-grid {
     display: flex;
@@ -161,46 +210,46 @@ main {
   }
 }
 
-@media (min-width: 2048px) {
-  html{
-    display: flex;
-    justify-content: center;
-  }
-
-  .title {
-    font-size: 3rem;
-    padding: 1rem;
-    animation: title-large 0.6s ease-in-out forwards;
-  }
-
-  @keyframes title-large {
-    from {
-      font-size: 2.2rem;
-      clip-path: polygon(0 0, 100% 0%, 100% 10%, 50% 100%, 50% 100%, 0% 10%);
-    }
-    to {
-      font-size: 3rem;
-      clip-path: polygon(0 0, 100% 0%, 100% 10%, 65% 100%, 35% 100%, 0% 10%);
-    }
-  }
-
-  .button-grid {
-    grid-template-columns: repeat(2, 1fr);
-    width: 65vw;
-    gap: 2.5vw;
-
-  }
-
-  .button_game {
-    height: 12rem;
-    font-size: 1.2rem;
-  }
-
-  .inventory {
-    padding: 1rem 0.5rem;
-  }
-
-  body {
-    font-size: 150%;
-  }
-}
+//@media (min-width: 2048px) {
+//  html{
+//    display: flex;
+//    justify-content: center;
+//  }
+//
+//  .title {
+//    font-size: 3rem;
+//    padding: 1rem;
+//    animation: title-large 0.6s ease-in-out forwards;
+//  }
+//
+//  @keyframes title-large {
+//    from {
+//      font-size: 2.2rem;
+//      clip-path: polygon(0 0, 100% 0%, 100% 10%, 50% 100%, 50% 100%, 0% 10%);
+//    }
+//    to {
+//      font-size: 3rem;
+//      clip-path: polygon(0 0, 100% 0%, 100% 10%, 65% 100%, 35% 100%, 0% 10%);
+//    }
+//  }
+//
+//  .button-grid {
+//    grid-template-columns: repeat(2, 1fr);
+//    width: 65vw;
+//    gap: 2.5vw;
+//
+//  }
+//
+//  .button_game {
+//    height: 12rem;
+//    font-size: 1.2rem;
+//  }
+//
+//  .inventory {
+//    padding: 1rem 0.5rem;
+//  }
+//
+//  body {
+//    font-size: 150%;
+//  }
+//}
