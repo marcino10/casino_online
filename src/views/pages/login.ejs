@@ -10,15 +10,17 @@
     
     <form class='login_box' method="post" action="/auth/login">
         <h3>Logging</h3>
-        <input class='login' type="text" placeholder="Login" required name="email">
+        <input class='login' type="text" placeholder="Login" required name="login">
         <input class='password' type="password" placeholder="Password" name="password" required>
         <button class='submit_button' type='submit'>Confirm</button>
     </form>
-    <% if (error_msg) { %>
-        <h1><%= error_msg %></h1>
-    <% } %>
-    <% if (success_msg) { %>
-        <h1><%= success_msg %></h1>
-    <% } %>
+    <p class="server-msg">
+        <% if (error_msg) { %>
+            <%= error_msg %>
+        <% } else if (success_msg) { %>
+            <%= success_msg %>
+        <% } %>
+    </p>
+
 </body>
 </html>

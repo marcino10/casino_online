@@ -3,22 +3,40 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 const jwt = require('jsonwebtoken');
 
-const auth = (req, res, next) => {
-    const token = req.cookies.token;
-
+const isValidToken = token => {
     if(!token) {
-        req.flash('error_msg', 'You have to log in')
-        res.redirect('/login');
+        return false;
     }
 
     try {
-        const decode = jwt.verify(token, JWT_SECRET);
-        req.user = decode;
-        next();
+        const decoded = jwt.verify(token, JWT_SECRET)
+        return decoded;
     } catch (error) {
-        req.flash('error_msg', 'You have to log in')
-        res.redirect('/login');
+        return false;
     }
 }
 
-module.exports = auth;
+const auth = (req, res, next) => {
+    const token = req.cookies.token;
+
+    const decoded = isValidToken(token);
+    if (decoded === false) {
+        req.flash('error_msg', 'You have to log in')
+        return res.redirect('/login');
+    } else {
+        req.user = decoded;
+        next();
+    }
+}
+
+const redirectIfAuth = (req, res, next) => {
+    const token = req.cookies.token;
+    
+    if (isValidToken(token) !== false) {
+        return res.redirect('/');
+    } else {
+        next();
+    }
+}
+
+module.exports = [auth, redirectIfAuth];
