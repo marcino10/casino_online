@@ -13,90 +13,62 @@
 
 <main>
     <section class="hero">
-        <div class="header">
-        <h1 class="title">BIG <br>WIN</h1>
-
-        <section class="balance-card">
-            <h2 class="balance">Balance</h2>
-            <div class="amount">$2,450.75</div>
-        </section>
-
-        </div>
+        <%- include('../partials/header') %>
 
         <div class="button-grid">
-            <a href="poker.ejs" class="button_game">
+            <a href="/poker" class="button_game">
                 <div class="inventory">
                 <img src="/img/poker_banner1.webp" alt="poker" class="inventory-image">
                 <!--        <button></button>-->
                 </div>
             </a>
-            <a href="poker.ejs" class="button_game">
+            <a href="/poker" class="button_game">
                 <div class="inventory">
                 <img src="/img/poker_banner1.webp" alt="poker" class="inventory-image">
                 <!--        <button></button>-->
                 </div>
             </a>
-            <a href="poker.ejs" class="button_game">
+            <a href="/poker" class="button_game">
                 <div class="inventory">
                 <img src="/img/poker_banner1.webp" alt="poker" class="inventory-image">
                 <!--        <button></button>-->
+                </div>
+            </a>
+            </a>
+            <a href="/poker" class="button_game">
+                <div class="inventory">
+                    <img src="/img/poker_banner1.webp" alt="poker" class="inventory-image">
+                    <!--        <button></button>-->
+                </div>
+            </a>
+            </a>
+            <a href="/poker" class="button_game">
+                <div class="inventory">
+                    <img src="/img/poker_banner1.webp" alt="poker" class="inventory-image">
+                    <!--        <button></button>-->
+                </div>
+            </a>
+            </a>
+            <a href="/poker" class="button_game">
+                <div class="inventory">
+                    <img src="/img/poker_banner1.webp" alt="poker" class="inventory-image">
+                    <!--        <button></button>-->
+                </div>
+            </a>
+            </a>
+            <a href="/poker" class="button_game">
+                <div class="inventory">
+                    <img src="/img/poker_banner1.webp" alt="poker" class="inventory-image">
+                    <!--        <button></button>-->
                 </div>
             </a>
 
         </div>
     </section>
+    <%- include('../partials/footer') %>
 </main>
 
-
-<script>
-
-        let buttons = document.querySelectorAll('.button_game')
-        let count = 0
-        buttons.forEach(btn => {
-            count++;
-            if (count % 2 === 1){
-                let lastBtn = buttons[buttons.length - 1];
-                lastBtn.style.gridColumn = "span 2";
-            }else{
-                let lastBtn = buttons[buttons.length - 1];
-                lastBtn.style.gridColumn = "span 1";
-            }
-        })
-        console.log("Total buttons:", count);
-
-        const toggleButton = document.getElementById("toggle-btn");
-        const sidebar = document.getElementById("sidebar");
-
-        function toggleSidebar() {
-            sidebar.classList.toggle("close");
-            toggleButton.classList.toggle("rotate");
-
-            closeAllSubMenus();
-        }
-
-        function toggleSubMenu(button) {
-            if (!button.nextElementSibling.classList.contains("show")) {
-                closeAllSubMenus();
-            }
-
-            button.nextElementSibling.classList.toggle("show");
-            button.classList.toggle("rotate");
-
-            if (sidebar.classList.contains("close")) {
-                sidebar.classList.toggle("close");
-                toggleButton.classList.toggle("rotate");
-            }
-        }
-
-        function closeAllSubMenus() {
-            Array.from(sidebar.getElementsByClassName("show")).forEach((ul) => {
-                ul.classList.remove("show");
-                ul.previousElementSibling.classList.remove("rotate");
-            });
-        }
-
-
-</script>
+<script src="/js/index.js"></script>
 
 </body>
 </html>    
