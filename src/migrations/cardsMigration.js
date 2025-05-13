@@ -24,10 +24,10 @@ async function up() {
         for (const { value, name } of values) {
             const cardName = `${name} of ${suit}s`;
             cards.push({
-                name: cardName,
+                humanName: cardName,
                 suit: suit,
                 value: value,
-                imageFile: `${suit}_${name}.png`.toLowerCase(),
+                name: `${suit}_${name}`.toLowerCase(),
             });
         }
     }

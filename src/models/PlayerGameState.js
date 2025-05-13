@@ -12,6 +12,9 @@ const playerGameStateSchema = new Schema({
         ref: 'User',
         required: true
     },
+    seat: {
+        type: Number
+    },
     hand: [{
         type: Schema.Types.ObjectId,
         ref: 'Card'

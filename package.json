@@ -20,11 +20,12 @@
     "express-session": "^1.18.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.14.2",
+    "set.prototype.difference": "^1.1.7",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
     "nodemon": "^3.1.10",
-    "sass": "^1.87.0"
+    "sass": "^1.88.0"
   }
 }

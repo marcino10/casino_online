@@ -11,7 +11,7 @@ async function run() {
         await mongoose.connect(MONGO_URL);
 
         await cardMigration.up();
-        await userMigration.up()
+        await userMigration.up();
 
         await mongoose.disconnect();
         console.log('🚀 All migrations completed!');

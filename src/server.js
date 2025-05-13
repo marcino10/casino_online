@@ -13,8 +13,9 @@ const flash = require('connect-flash');
 const crypto = require('crypto');
 
 const app = express();
-const routes = require('./routes/index')
-const authRoutes = require('./routes/auth')
+const routes = require('./routes/indexRoutes');
+const authRoutes = require('./routes/authRoutes');
+const pokerRoutes = require('./api/poker/routes/pokerRoutes');
 const server = http.createServer(app);
 const io = socketIo(server);
 
@@ -58,6 +59,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/', routes);
 app.use('/auth', authRoutes);
+app.use('/api/poker', pokerRoutes);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

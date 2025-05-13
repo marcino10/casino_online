@@ -35,10 +35,7 @@ const pockerTableSchema = new Schema({
     boardDeck: [{
         type: Schema.Types.ObjectId,
         ref: 'Card'
-    }],
-    seat: {
-        type: Number
-    }
+    }]
 });
 
 module.exports = mongoose.model('PockerTable', pockerTableSchema);

@@ -25,7 +25,7 @@ services:
       - mongo-data:/data/db
 
   migrate:
-    image: node:22
+    image: node:24
     profiles: ["tools"]
     container_name: migrate
     volumes:
@@ -34,7 +34,7 @@ services:
     command: npm run migrate
 
   rollback:
-    image: node:22
+    image: node:24
     profiles: ["tools"]
     container_name: rollback
     volumes:

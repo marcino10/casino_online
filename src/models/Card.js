@@ -5,7 +5,7 @@ const app = express();
 const Schema = mongoose.Schema;
 
 const cardSchema = new Schema({
-    name: {
+    humanName: {
         type: String,
         required: true,
         unique: true,
@@ -17,16 +17,18 @@ const cardSchema = new Schema({
         enum: ['heart', 'diamond', 'club', 'spade'],
     },
     value: {
-        type: Number,
-        required: true,
-        min: 2,
-        max: 14
-    },
-    imageFile: {
         type: String,
         required: true,
-        match: /\.(png|jpg|jpeg)$/i
+        enum: [
+            '2', '3', '4', '5', '6', '7', '8', '9', '10',
+            'j', 'q', 'k', 'a'
+        ],
     },
+    name: {
+        type: String,
+        required: true,
+        unique: true
+    }
 })
 
 module.exports = mongoose.model('Card', cardSchema);
