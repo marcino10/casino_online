@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Big Win Casino - Poker</title>
+    <link rel="stylesheet" href="/css/pokerGame.css">
+</head>
+<body>
+<main>
+    <div class="poker-game">
+
+        <div class="table">
+            <div class="deck">
+                <img class="card" src="/img/deck/back_red.svg" alt="deck">
+            </div>
+            <div class="board">
+                <img class="card" src="/img/deck/heart_a.svg" alt="deck">
+                <img class="card" src="/img/deck/heart_a.svg" alt="deck">
+                <img class="card" src="/img/deck/heart_a.svg" alt="deck">
+                <img class="card" src="/img/deck/heart_a.svg" alt="deck">
+                <img class="card" src="/img/deck/heart_a.svg" alt="deck">
+            </div>
+
+            <div class="player-hand">
+                <img class="player-card card" src="/img/deck/heart_a.svg" alt="deck">
+                <img class="player-card card" src="/img/deck/heart_a.svg" alt="deck">
+
+                <div class="hand-reveal">
+                    <img class="card card-reveal" src="/img/deck/heart_a.svg" alt="deck">
+                    <img class="card card-reveal" src="/img/deck/heart_a.svg" alt="deck">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="action-panel">
+            <button>Fold</button>
+            <button>Check</button>
+            <button>Call $50</button>
+            <button class="raise">Raise</button>
+        </div>
+    </div>
+</main>
+
+<script src="/js/pokerReveal.js"></script>
+</body>
+</html>

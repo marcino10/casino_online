@@ -15,6 +15,7 @@ const crypto = require('crypto');
 const app = express();
 const routes = require('./routes/index')
 const authRoutes = require('./routes/auth')
+const pokerRoutes = require('./routes/pokerRoutes')
 const server = http.createServer(app);
 const io = socketIo(server);
 
@@ -58,6 +59,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/', routes);
 app.use('/auth', authRoutes);
+app.use('/poker', pokerRoutes);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
