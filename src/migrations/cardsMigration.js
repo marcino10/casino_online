@@ -11,10 +11,10 @@ const values = [
     { value: 8, name: '8' },
     { value: 9, name: '9' },
     { value: 10, name: '10' },
-    { value: 11, name: 'J' },
-    { value: 12, name: 'Q' },
-    { value: 13, name: 'K' },
-    { value: 14, name: 'A' },
+    { value: 'j', name: 'J' },
+    { value: 'q', name: 'Q' },
+    { value: 'k', name: 'K' },
+    { value: 'a', name: 'A' },
 ];
 
 async function up() {

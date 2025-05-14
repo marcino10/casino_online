@@ -8,10 +8,14 @@ router.get('/',(req, res) => {
 
 router.get('/login', redirectIfAuth,(req, res) => {
     res.render('login');
+});
+
+router.get('/logout', (req, res) => {
+    res.redirect('/auth/logout');
 })
 
-router.get('/register', redirectIfAuth, (req, res) => {
-    res.render('register')
-})
+router.get('/dashboard', auth, (req, res) => {
+    res.render('dashboard')
+});
 
 module.exports = router;

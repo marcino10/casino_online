@@ -13,7 +13,7 @@ const flash = require('connect-flash');
 const crypto = require('crypto');
 
 const app = express();
-const routes = require('./routes/indexRoutes');
+const routes = require('./routes/pageRoutes');
 const authRoutes = require('./routes/authRoutes');
 const pokerRoutes = require('./api/poker/routes/pokerRoutes');
 const server = http.createServer(app);
