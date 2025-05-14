@@ -52,8 +52,8 @@ exports.board = expressAsyncHandler (async (req, res, next) => {
 
     let usedCards = new Set();
     for (let key in json.hands) {
-        if (json.hasOwnProperty(key)) {
-            tempCards = json[key]
+        if (json.hands.hasOwnProperty(key)) {
+            tempCards = json.hands[key]
             for (let i = 0; i < tempCards.length; i++) {
                 const card = tempCards[i];
                 const suit = card.suit;
