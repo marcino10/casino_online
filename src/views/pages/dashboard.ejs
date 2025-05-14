@@ -1,13 +1,58 @@
 <!doctype html>
-<html lang="S">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Big Win Casino</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
-    
+<%- include('../partials/nav') %>
+
+<main>
+    <%- include('../partials/header') %>
+    <section class="dashboard">
+
+        <div class="block">
+            <div class="profile_info">
+                <div class="profile_inner">
+                    <img src="../img/avatar_icon.webp" class="avatar">
+                    <div class="user_info">
+                        <p class="nickname">Nick: TwojaNazwa</p>
+                        <p class="email">Email: emejl.emejl@emejl</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="block">
+            <div class="change_avatar">
+                <h3>Change avatar</h3>
+                <form>
+                    <input class="file" type="file">
+                    <button type="submit">Send new file</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="block">
+            <div class="change_password">
+                <h3>Change password</h3>
+                <form>
+                    <input class="password" type="password" placeholder="Old password">
+                    <input class="password" type="password" placeholder="New password">
+                    <input class="password" type="password" placeholder="Repeat new password">
+                    <button type="submit">Confirm</button>
+                </form>
+            </div>
+        </div>
+
+    </section>
+    <%- include('../partials/footer') %>
+</main>
+
+<script src="/js/index.js"></script>
 </body>
 </html>
