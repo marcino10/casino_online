@@ -1,0 +1,70 @@
+@use '../variables/colors' as *;
+@use '../variables/mixin' as *;
+
+.player-hand {
+  @include center;
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  flex-direction: row-reverse;
+  overflow: clip;
+  width: 12rem;
+  height: 9rem;
+  padding-top: 0;
+  transition: padding-top 0.5s;
+
+  &:hover {
+    padding-top: 9rem;
+  }
+
+}
+.player-card {
+  margin: -2rem;
+  transform: rotate(-10deg);
+
+
+  &:nth-child(2) {
+    transform: rotate(5deg);
+    z-index: 2;
+  }
+}
+
+.hand-reveal{
+  @include center;
+  position: absolute;
+  flex-direction: row;
+  width: 12rem;
+  height: 9rem;
+}
+
+.card-reveal{
+  position: absolute;
+  margin: 0;
+  top: 50%;
+  transform: rotate(10deg);
+  z-index: 3;
+
+  &:nth-child(2) {
+    transform: rotate(-5deg);
+    z-index: 2;
+  }
+}
+
+  //&.reveal .card.front {
+  //  transform: rotateX(-30deg) scale(1.05);
+  //  z-index: 3;
+  //}
+
+  //.corner {
+  //  display: none;
+  //}
+  //
+  //&.reveal .corner {
+  //  display: block;
+  //  position: absolute;
+  //  top: 4px;
+  //  left: 5px;
+  //  font-size: 14px;
+  //}
+
