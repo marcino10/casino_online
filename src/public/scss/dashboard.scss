@@ -3,16 +3,10 @@
 @use 'components/header';
 @use 'variables/colors' as *;
 
-$background-dark: #1a1a1a;
-$panel-dark: #222;
-$text-light: #e0e0e0;
-$primary: #20beff;
-$border-color: #333;
-
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: $background-dark;
-  color: $text-light;
+  background-color: $background_dark;
+  color: $text_light;
   margin: 0;
 }
 
@@ -34,10 +28,9 @@ main {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid $border_color;
   padding-bottom: 1.5rem;
 }
-
 
 .profile_info {
   display: flex;
@@ -66,7 +59,7 @@ main {
   flex-direction: column;
   gap: 0.3rem;
   font-size: 1rem;
-  color: $text-light;
+  color: $text_light;
 }
 
 .change_avatar,
@@ -92,27 +85,111 @@ main {
     width: 100%;
   }
 
-  .password, .file {
-    background: $panel-dark;
-    border: 1px solid $border-color;
-    padding: 0.5rem 0.8rem;
-    border-radius: 6px;
-    color: $text-light;
-    font-size: 0.95rem;
+  .password, 
+  .file {
+    width: 100%;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    border: 0;
+    border-bottom: 1px solid $clear_border;
+    outline: none;
+    background: transparent;
+    font-size: 1rem;
+    color: $login_color;
+
+    &::placeholder {
+        color: $login_color;
+    }
   }
 
   button {
-    background: $primary;
-    color: #000;
-    font-weight: 600;
-    padding: 0.6rem;
-    border: none;
-    border-radius: 6px;
+    box-shadow: 0 4px 55px rgba(255, 255, 255, 0.2);
+    width: 80%;
+    padding: 10px 30px;
+    font-size: 14px;
     cursor: pointer;
-    transition: background 0.3s;
+    display: block;
+    margin: auto;
+    color: $light_text_color;
+    background: $light_bg_color;
+    border: 0;
+    outline: none;
+    border-radius: 30px;
+    border: 2px solid transparent;
+    transition: 0.3s ease;
+    text-transform: capitalize;
 
     &:hover {
-      background: lighten($primary, 5%);
+        background-color: transparent;
+        color: $clear_border;
+        border: 2px solid $clear_border;
     }
   }
 }
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 1.5rem;
+    margin: 0 5%;
+    gap: 2rem;
+  }
+
+  .profile_info, 
+  .profile_inner {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+  .avatar {
+    width: 72px;
+    height: 72px;
+  }
+
+  .change_avatar, 
+  .change_password {
+    h3 {
+      text-align: center;
+    }
+    form {
+      align-items: center;
+    }
+    button {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard {
+    padding: 1rem;
+    margin: 0 2%;
+  }
+
+  .avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .block {
+    padding-bottom: 1rem;
+  }
+
+  .change_avatar, 
+  .change_password {
+    h3 {
+      font-size: 1rem;
+    }
+  }
+
+  .password, 
+  .file {
+    font-size: 0.9rem;
+  }
+
+  button {
+    font-size: 13px;
+    padding: 8px 20px;
+  }
+}
+
