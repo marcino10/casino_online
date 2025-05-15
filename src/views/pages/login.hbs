@@ -16,14 +16,17 @@
         <button type="button" class="container_button register_button">register</button>
     </div>
 
-    <p class="server-msg <%= error_msg ? 'error' : success_msg ? 'success' : '' %>" style="display: none;">
-        <% if (error_msg) { %>
-            <%= error_msg %>
-        <% } else if (success_msg) { %>
-            <%= success_msg %>
-        <% } %>
-    </p>
 
+        {{#if error_msg}}
+            <p class="server-msg error" style="display: none;">
+                {{error_msg}}
+            </p>
+        {{/if}}
+        {{#if success_msg}}
+            <p class="server-msg success" style="display: none;">
+                {{success_msg}}
+            </p>
+        {{/if}}
 
 
     <!-- Login -->
@@ -40,9 +43,9 @@
 
     <!-- Register -->
 
-    <form class="form register_form" method="post" novalidate>
+    <form class="form register_form" method="post" action="/auth/register" novalidate>
         <div class="input-wrapper">
-            <input type="text" class="form_input" placeholder="Username" name="login" required>
+            <input type="text" class="form_input" placeholder="Username" name="nick" required>
             <small class="input-error"></small>
         </div>
 
