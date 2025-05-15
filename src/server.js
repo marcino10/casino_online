@@ -11,6 +11,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
 const crypto = require('crypto');
+const exphbs = require('express-handlebars');
 
 const app = express();
 const routes = require('./routes/pageRoutes');
@@ -34,8 +35,17 @@ mongoose.connect(MONGO_URL)
     .then(() => console.log('✅ Connected to MongoDB'))
     .catch(err => console.error('❌ MongoDB connection error:', err));
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views/pages'));
+
+// Set up handlebars
+const hbs = exphbs.create({
+    extname: '.hbs',
+    defaultLayout: false,
+    partialsDir: path.join(__dirname, 'views', 'partials')
+});
+
+app.engine('hbs', hbs.engine);
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views', 'pages'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const sessionSecret = crypto.randomBytes(32).toString('hex');

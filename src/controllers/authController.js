@@ -41,34 +41,34 @@ exports.register = asyncHandler(async (req, res, next) => {
     const {nick, email, password} = req.body;
     if (!nick || !email || !password) {
         req.flash('error_msg', 'All fields are required');
-        return res.redirect('/register');
+        return res.redirect('/login');
     }
 
     if (!isValidNick(nick)) {
         req.flash('error_msg', 'The username must be between 3-16 characters and can only contains alphanumerical characters or one of the following: _, #, @, =, +, !, -');
-        return res.redirect('/register')
+        return res.redirect('/login')
     }
 
     const nickExists = await User.findOne({nick});
     if (nickExists) {
         req.flash('error_msg', 'Username already exists');
-        return res.redirect('/register')
+        return res.redirect('/login')
     }
 
     if (!isValidEmail(email)) {
         req.flash('error_msg', 'Enter a valid email');
-        return res.redirect('/register')
+        return res.redirect('/login')
     }
 
     const emailExists = await User.findOne({email})
     if (emailExists) {
         req.flash('error_msg', 'There is already account with this email');
-        return res.redirect('/register')
+        return res.redirect('/login')
     }
 
     if(!isValidPassword(password)) {
         req.flash('error_msg', 'Password must contain at least 5 characters and 1 number');
-        return res.redirect('/register')
+        return res.redirect('/login')
     }
 
     const salt = await bcrypt.genSalt(10)
