@@ -15,7 +15,7 @@
 <main>
     <section class="hero">
         <div class="header">
-            <h1 id="title" class="title">POKER</h1>
+            <h1 id="title" class="title">BIG <br> WIN</h1>
             <section class="balance-card">
                 <h2 class="balance">Balance</h2>
                 <div class="amount">$2,450.75</div>
@@ -34,26 +34,8 @@
     <%- include('../partials/footer') %>
 </main>
 
-<script>
-    // Scroll title animation (same as index.ejs)
-    window.addEventListener("scroll", () => {
-        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-        const header = document.querySelector(".header")
-        const title = document.querySelector(".title")
-        const balanceCard = document.querySelector(".balance-card")
+<script src="/js/index.js">
 
-        if (scrollTop > 10) {
-            header.classList.add("scrolled")
-            title.classList.add("scrolled")
-            balanceCard.classList.add("scrolled")
-            title.innerHTML = "POKER"
-        } else {
-            header.classList.remove("scrolled")
-            title.classList.remove("scrolled")
-            balanceCard.classList.remove("scrolled")
-            title.innerHTML = "POKER"
-        }
-    });
 </script>
 
 </body>
