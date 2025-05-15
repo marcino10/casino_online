@@ -12,8 +12,8 @@
 
 <body>
     <%- include('../partials/nav') %>
-
-        <main>
+    
+    <main>
             <%- include('../partials/header') %>
                 <section class="dashboard">
 
@@ -31,8 +31,8 @@
 
                     <div class="block">
                         <div class="change_avatar">
-                            <h3>Change avatar</h3>
-                            <form>
+                            <h3 class="change_avatar_title">Change avatar</h3>
+                            <form class="change_avatar_form">
                                 <input class="file" type="file">
                                 <button type="submit">Save</button>
                             </form>
@@ -41,8 +41,8 @@
 
                     <div class="block">
                         <div class="change_password">
-                            <h3>Change password</h3>
-                            <form>
+                            <h3 class="change_password_title">Change password</h3>
+                            <form class="change_password_form">
                                 <input class="password" type="password" placeholder="Current password" required>
                                 <input class="password" type="password" placeholder="New password" required>
                                 <input class="password" type="password" placeholder="Repeat new password" required>

@@ -70,7 +70,9 @@ main {
   max-width: 500px;
   width: 100%;
 
-  h3 {
+
+  .change_avatar_title, 
+  .change_password_title{
     font-size: 1.2rem;
     font-weight: 500;
     margin-bottom: 0.5rem;
@@ -78,7 +80,8 @@ main {
     text-align: left;
   }
 
-  form {
+  .change_avatar_form, 
+  .change_password_form{
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
@@ -103,7 +106,6 @@ main {
   }
 
   button {
-    box-shadow: 0 4px 55px rgba(255, 255, 255, 0.2);
     width: 80%;
     padding: 10px 30px;
     font-size: 14px;
