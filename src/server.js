@@ -1,8 +1,8 @@
 require('dotenv').config({ path: '.env' });
 const MONGO_URL = process.env.MONGO_URL;
+const PORT = process.env.PORT || 3000;
 
 const express = require('express');
-const http = require('http');
 const socketIo = require('socket.io');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -13,20 +13,23 @@ const flash = require('connect-flash');
 const crypto = require('crypto');
 const exphbs = require('express-handlebars');
 
-const app = express();
 const routes = require('./routes/pageRoutes');
 const authRoutes = require('./routes/authRoutes');
 const pokerRoutes = require('./routes/pokerRoutes');
 const pokerApiRoutes = require('./api/poker/routes/pokerApiRoutes');
-const server = http.createServer(app);
-const io = socketIo(server);
 
-const port = 3000;
 
+const app = express();
+const expressServer = app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+})
+
+const io = new socketIo.Server(expressServer);
+
+// console log for development
 process.on('uncaughtException', (err) => {
     console.error('Uncaught Exception:', err);
 });
-
 process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection:', reason);
 });
@@ -48,6 +51,7 @@ app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views', 'pages'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// session configuration
 const sessionSecret = crypto.randomBytes(32).toString('hex');
 app.use(session({
     secret: sessionSecret,
@@ -55,6 +59,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
+// flash messages configuration
 app.use(flash());
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
@@ -62,17 +67,19 @@ app.use((req, res, next) => {
     next();
 });
 
+//
 app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
+// set up routes
 app.use('/', routes);
 app.use('/poker', pokerRoutes);
 app.use('/auth', authRoutes);
 app.use('/api/poker', pokerApiRoutes);
 
+// catch errors from express-async-handler
 app.use((err, req, res, next) => {
     console.error(err.stack);
 
@@ -83,13 +90,4 @@ app.use((err, req, res, next) => {
     };
 
     res.status(statusCode).json(response);
-});
-
-io.on('connection', socket => {
-    console.log('User connected');
-    socket.on('disconnect', () => console.log('User disconnected'));
-});
-
-server.listen(port,() => {
-    console.log(`Server running on http://localhost:${port}`);
 });
