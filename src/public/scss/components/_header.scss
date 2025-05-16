@@ -31,6 +31,7 @@
   transform: translateX(-50%);
   font-size: 2.5rem;
   line-height: 2rem;
+  text-align: center;
   transition: all 0.3s ease;
 
   &.scrolled {
@@ -44,8 +45,8 @@
 }
 
 .balance-card {
-  background-color: #1e1e2f;
-  color: #ffffff;
+  background-color: $balance_background;
+  color: $header_text_color;
   padding: 1rem 2rem;
   border-radius: 1em;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -79,14 +80,14 @@
   font-size: 1rem;
   font-weight: 500;
   margin-bottom: 0.3em;
-  color: #b0b0b0;
+  color: $balance_text_color;
   white-space: normal;
 }
 
 .amount {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #00e676;
+  color: $amount_color;
   overflow-wrap: break-word;
 }
 
