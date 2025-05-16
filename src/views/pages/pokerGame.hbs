@@ -1,54 +1,48 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Big Win Casino - Poker</title>
-    <link rel="stylesheet" href="/css/pokerGame.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Poker | Big Win Casino</title>
+  <link rel="stylesheet" href="/css/pokerGame.css" />
 </head>
 <body>
-<main>
-    <div class="poker-game">
-
+    <main class="poker-game">
         <div class="table">
+            <div class="players-container" id="playersContainer"></div>
+
             <div class="deck">
-                <img class="card" src="/img/deck/back_red.webp" alt="deck">
+                <img class="card" src="/img/deck/back_red.webp" alt="Deck">
             </div>
+
             <div class="board">
-                <img class="card" src="/img/deck/heart_a_mobile.svg" alt="deck">
-                <img class="card" src="/img/deck/heart_a_mobile.svg" alt="deck">
-                <img class="card" src="/img/deck/heart_a_mobile.svg" alt="deck">
-                <img class="card" src="/img/deck/heart_a_mobile.svg" alt="deck">
-                <img class="card" src="/img/deck/club_j_mobile.svg" alt="deck">
+                <img class="card" src="/img/deck/heart_a_mobile.svg" alt="Card">
+                <img class="card" src="/img/deck/heart_k_mobile.svg" alt="Card">
+                <img class="card" src="/img/deck/diamond_q_mobile.svg" alt="Card">
+                <img class="card" src="/img/deck/spade_j_mobile.svg" alt="Card">
+                <img class="card" src="/img/deck/club_10_mobile.svg" alt="Card">
             </div>
+
             <div class="hand">
                 <div class="player-hand">
-                    <div class="player-card first">
-                        <img class="card" src="/img/deck/heart_a_mobile.svg" alt="deck">
-                        <img class="card" src="/img/deck/spade_a_mobile.svg" alt="deck">
+                    <div class="player-card">
+                        <img class="card front" src="/img/deck/back_red.webp" alt="Card back" />
+                        <img class="card back" src="/img/deck/heart_a_mobile.svg" alt="Card front" />
                     </div>
-                    <div class="player-card second">
-                        <img class="card" src="/img/deck/club_a_mobile.svg" alt="deck">
-                        <img class="card" src="/img/deck/diamond_a_mobile.svg" alt="deck">
+                    <div class="player-card">
+                        <img class="card front" src="/img/deck/back_red.webp" alt="Card back" />
+                        <img class="card back" src="/img/deck/club_a_mobile.svg" alt="Card front" />
                     </div>
                 </div>
             </div>
-
-
-
-        </div>
-
-        <div class="action-panel">
-            <button>Fold</button>
-            <button>Check</button>
-            <button>Call $50</button>
-            <button class="raise">Raise</button>
-        </div>
     </div>
-</main>
 
-<script src="/js/pokerReveal.js"></script>
+    <div class="action-panel">
+      <button class="fold">Fold</button>
+      <button class="check">Check</button>
+      <button class="raise">Raise</button>
+    </div>
+  </main>
+  <script src="/js/pokerReveal.js"></script>
 </body>
 </html>

@@ -31,3 +31,49 @@ document.querySelectorAll('.card-container').forEach(card => {
     card.addEventListener('touchstart', startHold);
     card.addEventListener('touchend', cancelHold);
 });
+
+
+
+
+const players = [
+    { name: 'Alice' },
+    { name: 'Bob' },
+    { name: 'Charlie' },
+    { name: 'Dana' },
+    { name: 'Eli' },
+    { name: 'Frank' },
+    { name: 'Gina' },
+    { name: 'Harry' },
+    { name: 'Ivy' }
+];
+
+const container = document.getElementById('playersContainer');
+
+function positionPlayers(players) {
+    container.innerHTML = '';
+
+    const radius = window.innerWidth < 768 ? 120 : 180;
+    const centerX = container.offsetWidth / 2;
+    const centerY = container.offsetHeight / 2;
+
+    players.forEach((player, index) => {
+        const angle = ((index +  1) / (players.length + 1)) * Math.PI * 2;
+
+        const x = centerX + Math.cos(angle) * radius;
+        const y = centerY + Math.sin(angle) * radius;
+
+        const el = document.createElement('div');
+        el.className = 'player';
+        el.style.left = `${x}px`;
+        el.style.top = `${y}px`;
+        el.innerHTML = `
+      <div class="avatar"></div>
+      <div class="name">${player.name}</div>
+    `;
+
+        container.appendChild(el);
+    });
+}
+
+window.addEventListener('resize', () => positionPlayers(players));
+positionPlayers(players);
