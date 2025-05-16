@@ -2,10 +2,13 @@
 @use 'components/footer';
 @use 'components/header';
 @use 'variables/colors' as *;
+@use 'variables/mixin' as *;
+@use 'variables/reset';
+
 
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: $background_dark;
+  font-family: 'Arial', sans-serif;
+  background-color: $background_color;
   color: $text_light;
   margin: 0;
 }

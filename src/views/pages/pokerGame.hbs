@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
   <title>Poker | Big Win Casino</title>
   <link rel="stylesheet" href="/css/pokerGame.css" />
 </head>
@@ -26,12 +26,12 @@
             <div class="hand">
                 <div class="player-hand">
                     <div class="player-card">
-                        <img class="card front" src="/img/deck/back_red.webp" alt="Card back" />
-                        <img class="card back" src="/img/deck/heart_a_mobile.svg" alt="Card front" />
+                        <img class="card hand-card front" src="/img/deck/club_a_mobile.svg" alt="Card back" />
+                        <img class="card hand-card back" src="/img/deck/back_red.webp" alt="Card front" />
                     </div>
                     <div class="player-card">
-                        <img class="card front" src="/img/deck/back_red.webp" alt="Card back" />
-                        <img class="card back" src="/img/deck/club_a_mobile.svg" alt="Card front" />
+                        <img class="card hand-card front" src="/img/deck/heart_a_mobile.svg" alt="Card back" />
+                        <img class="card hand-card back" src="/img/deck/back_red.webp" alt="Card front" />
                     </div>
                 </div>
             </div>
@@ -43,6 +43,6 @@
       <button class="raise">Raise</button>
     </div>
   </main>
-  <script src="/js/pokerReveal.js"></script>
+  <script type="module" src="/js/pokerReveal.js"></script>
 </body>
 </html>

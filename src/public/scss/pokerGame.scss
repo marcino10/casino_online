@@ -15,119 +15,125 @@ body {
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+}
 
-  .table {
-    flex: 1;
-    position: relative;
-    background: radial-gradient(circle at center, #0f3d2e, #041f1b);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+.table {
+  flex: 1;
+  position: relative;
+  background: radial-gradient(circle at center, #0f3d2e, #041f1b);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.players-container {
+  @include center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.player {
+  position: absolute;
+  width: 8vh;
+  text-align: center;
+  color: #fff;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+
+.avatar {
+  width: 8vh;
+  height: 8vh;
+  border-radius: 50%;
+  background: #333;
+  margin: 0 auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.name {
+  font-size: 2vh;
+  margin-top: 1vh;
+}
+
+
+.deck {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.board {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.card {
+  object-fit: contain;
+  height: 10vh;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.action-panel {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(15, 15, 20, 0.9);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 2rem;
+  color: #fff;
+  background: #2d2d3a;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #44445a;
   }
 
-  .players-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-
-    .player {
-      position: absolute;
-      width: 4.5rem;
-      text-align: center;
-      color: #fff;
-      transform: translate(-50%, -50%);
-      pointer-events: auto;
-
-      .avatar {
-        width: 3rem;
-        height: 3rem;
-        border-radius: 50%;
-        background: #333;
-        margin: 0 auto;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      }
-
-      .name {
-        font-size: 0.8rem;
-        margin-top: 0.2rem;
-      }
-    }
+  &.raise {
+    background: #007bff;
+    font-weight: bold;
   }
 
+  &.call {
+    background: #1b9a59;
+  }
+
+  &.fold {
+    background: #c62828;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .card {
+    height: 6vh;
+  }
 
   .deck {
-    position: absolute;
-    top: 12%;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .board {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .card {
-    width: 4rem;
-    height: 6rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    top: 35%;
   }
 
   .action-panel {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 1rem;
-    background: rgba(15, 15, 20, 0.9);
-    border-top: 1px solid rgba(255,255,255,0.05);
-
+    flex-wrap: wrap;
     button {
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 2rem;
-      color: #fff;
-      background: #2d2d3a;
-      transition: background 0.2s ease;
-
-      &:hover {
-        background: #44445a;
-      }
-
-      &.raise {
-        background: #007bff;
-        font-weight: bold;
-      }
-
-      &.call {
-        background: #1b9a59;
-      }
-
-      &.fold {
-        background: #c62828;
-      }
+      margin: 0.5rem;
+      flex: 1 1 40%;
     }
   }
 
-  @media (max-width: 768px) {
-    .card {
-      width: 3rem;
-      height: 4.5rem;
-    }
-
-    .action-panel {
-      flex-wrap: wrap;
-      button {
-        margin-bottom: 0.5rem;
-        flex: 1 1 45%;
-      }
-    }
+  .avatar {
+    width: 6vh;
+    height: 6vh;
   }
 }
