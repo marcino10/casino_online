@@ -42,21 +42,34 @@ function closeAllSubMenus() {
     })
 }
 
-window.addEventListener("scroll", () => {
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+let isHeaderChanged = false;
+window.addEventListener("scroll", (e) => {
+    const scrollTop = window.scrollY
     const header = document.querySelector(".header")
     const title = document.querySelector(".title")
     const balanceCard = document.querySelector(".balance-card")
 
-    if (scrollTop > 1) {
-        header.classList.add("scrolled")
-        title.classList.add("scrolled")
-        balanceCard.classList.add("scrolled")
-        title.innerHTML = "BIG WIN"
+    if (scrollTop > 0) {
+        if (!isHeaderChanged) {
+            e.preventDefault();
+            header.classList.add("scrolled")
+            title.classList.add("scrolled")
+            balanceCard.classList.add("scrolled")
+            title.innerHTML = "BIG WIN";
+            isHeaderChanged = true;
+
+            window.scrollTo({
+                top: 50,
+                left: 0,
+                behavior: 'smooth'
+            });
+        }
+
     } else {
         header.classList.remove("scrolled")
         title.classList.remove("scrolled")
         balanceCard.classList.remove("scrolled")
-        title.innerHTML = "BIG <br>WIN"
+        title.innerHTML = "BIG <br>WIN";
+        isHeaderChanged = false;
     }
 })
