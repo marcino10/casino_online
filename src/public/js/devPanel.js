@@ -52,10 +52,20 @@ function resetBoard() {
     devLog("Board reset.");
 }
 
+let currentPot = 0;
+
 function setPot() {
-    const pot = document.getElementById('potInput').value;
-    devLog(`Pot set to ${pot}`);
+    const potValue = parseInt(document.getElementById('potInput').value, 10);
+    if (isNaN(potValue)) {
+        devLog("Invalid pot value.");
+        return;
+    }
+
+    currentPot = potValue;
+    document.getElementById('potDisplay').textContent = `Pot: $${currentPot}`;
+    devLog(`Pot set to $${currentPot}`);
 }
+
 
 // Event Listeners
 document.getElementById('dev-deal').addEventListener('click', dealHand);

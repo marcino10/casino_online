@@ -4,9 +4,9 @@
 @use 'variables/mixin' as *;
 
 body {
-  background: #0d0f1a;
+  background: linear-gradient(135deg, $background_dark, $panel_dark);
   font-family: 'Segoe UI', sans-serif;
-  color: #fff;
+  color: $text_light;
   margin: 0;
 }
 
@@ -15,13 +15,17 @@ body {
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+  position: relative;
 }
 
 .table {
   flex: 1;
   position: relative;
   background: radial-gradient(circle at center, #0f3d2e, #041f1b);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border: 5px solid $line_color;
+  border-radius: 50%;
+  margin: 2rem;
+  box-shadow: 0 0 40px rgba(0, 255, 0, 0.1), inset 0 0 60px rgba(0, 255, 0, 0.05);
 }
 
 .players-container {
@@ -35,31 +39,48 @@ body {
   position: absolute;
   width: 8vh;
   text-align: center;
-  color: #fff;
   transform: translate(-50%, -50%);
   pointer-events: auto;
+  transition: all 0.3s ease;
+
+  &.active {
+    animation: playerGlow 1.5s infinite;
+  }
 }
 
 .avatar {
   width: 8vh;
   height: 8vh;
   border-radius: 50%;
-  background: #333;
+  background: linear-gradient(135deg, #444, #222);
   margin: 0 auto;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  border: 2px solid $highlight;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    border-color: $primary;
+  }
 }
 
 .name {
-  font-size: 2vh;
+  font-size: 1.8vh;
   margin-top: 1vh;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  font-weight: 500;
 }
-
 
 .deck {
   position: absolute;
   top: 20%;
   left: 50%;
   transform: translateX(-50%);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateX(-50%) scale(1.05);
+  }
 }
 
 .board {
@@ -68,51 +89,126 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
 }
 
 .card {
-  object-fit: contain;
   height: 10vh;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
 }
 
 .action-panel {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 1rem;
-  background: rgba(15, 15, 20, 0.9);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(15, 15, 20, 0.98);
+  backdrop-filter: blur(15px);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+
+
+  button {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 2rem;
+    color: $highlight;
+    background: linear-gradient(135deg, $line_color, $background_color);
+    transition: all 0.3s ease;
+    min-width: 120px;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(255, 255, 255, 0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+
+      &::after {
+        opacity: 1;
+      }
+    }
+
+    &.raise {
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      font-weight: bold;
+    }
+
+    &.call {
+      background: linear-gradient(135deg, #1b9a59, #147942);
+    }
+
+    &.fold {
+      background: linear-gradient(135deg, #c62828, #8e1c1c);
+    }
+  }
 }
 
-button {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 2rem;
-  color: #fff;
-  background: #2d2d3a;
-  transition: background 0.2s ease;
+@keyframes playerGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); }
+  50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8); }
+}
 
-  &:hover {
-    background: #44445a;
+@media (max-width: 768px) {
+  .table {
+    margin: 1rem;
   }
 
-  &.raise {
-    background: #007bff;
-    font-weight: bold;
+  .card {
+    height: 7vh;
+    border-radius: 0.4rem;
   }
 
-  &.call {
-    background: #1b9a59;
-  }
+  //.action-panel {
+  //    padding: 1rem;
+  //    flex-wrap: wrap;
+  //    gap: 0.5rem;
+  //    width: 100%;
+  //    border-radius: 0;
+  //
+  //    button {
+  //      flex: 1 1 calc(50% - 0.5rem);
+  //      padding: 0.6rem 1rem;
+  //      font-size: 0.9rem;
+  //      min-width: auto;
+  //    }
+  //  }
 
-  &.fold {
-    background: #c62828;
+  .avatar {
+    width: 6vh;
+    height: 6vh;
   }
 }
+
 
 .dev-panel {
   position: fixed;
@@ -162,29 +258,34 @@ button {
   border: 1px solid #333;
 }
 
+.avatar-container {
+  position: relative;
+  display: inline-block;
+  margin: 0 auto;
+}
 
+.reveal-cards {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1rem;
+  height: 1rem;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+  background: linear-gradient(rgba(255, 255, 255, 0.1), transparent);
 
-
-@media (max-width: 768px) {
-  .card {
-    height: 6vh;
-    border-radius: 0.1rem;
+  &:hover {
+    opacity: 1;
+    transform: scale(1.1);
   }
 
-  .deck {
-    top: 35%;
-  }
-
-  .action-panel {
-    flex-wrap: wrap;
-    button {
-      margin: 0.5rem;
-      flex: 1 1 40%;
-    }
-  }
-
-  .avatar {
-    width: 6vh;
-    height: 6vh;
+  &.active {
+    background: $primary;
+    opacity: 1;
   }
 }

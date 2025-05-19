@@ -1,4 +1,5 @@
 import { deck, generateDeck, shuffleDeck, burnCard, formatCardFilename } from './deckCore.js';
+import { dealCard } from './animations.js';
 
 function renderDeckList() {
     const container = document.getElementById('deck-list');
@@ -6,25 +7,19 @@ function renderDeckList() {
     container.innerText = deck.join(', ');
 }
 
-function dealToPlayers(numPlayers = 1) {
-    const handDiv = document.querySelector('.player-hand');
-    if (!handDiv) return;
-    handDiv.innerHTML = '';
 
-    for (let i = 0; i < numPlayers; i++) {
-        const card1 = deck.pop();
-        const card2 = deck.pop();
-        [card1, card2].forEach(card => {
-            const el = document.createElement('div');
-            el.classList.add('player-card');
-            el.innerHTML = `
-              <img class="card hand-card front" src="/img/deck/${formatCardFilename(card)}" />
-              <img class="card hand-card back" src="/img/deck/back_red.webp" />
-            `;
-            handDiv.appendChild(el);
+function dealToPlayers() {
+    const players = document.querySelectorAll('.player');
+    players.forEach((player) => {
+        const cards = player.querySelectorAll('.player-card');
+        cards.forEach((cardContainer) => {
+            const card = deck.pop();
+            if (card) {
+                const frontCard = cardContainer.querySelector('.front');
+                frontCard.src = `/img/deck/${formatCardFilename(card)}`;
+            }
         });
-    }
-
+    });
     renderDeckList();
 }
 
@@ -63,3 +58,4 @@ document.getElementById('burn-card').addEventListener('click', () => {
 
 generateDeck();
 renderDeckList();
+

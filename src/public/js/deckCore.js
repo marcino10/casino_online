@@ -28,3 +28,5 @@ export function formatCardFilename(card) {
     const [_, rank, suit] = card.match(/([0-9jqka]+)([hdcs])/i);
     return `${mapSuit[suit]}_${rank}_mobile.svg`;
 }
+
+
