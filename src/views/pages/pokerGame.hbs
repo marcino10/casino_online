@@ -42,7 +42,43 @@
       <button class="check">Check</button>
       <button class="raise">Raise</button>
     </div>
-  </main>
+
+
+        <!-- Developer Panel -->
+        <div class="dev-panel">
+            <h3>Dev Tools</h3>
+            <div class="dev-group">
+                <button id="dev-deal">Deal Hand</button>
+                <button id="dev-flop">Show Flop</button>
+                <button id="dev-turn">Show Turn</button>
+                <button id="dev-river">Show River</button>
+                <button id="dev-reset">Reset Board</button>
+            </div>
+            <div class="dev-group">
+                <input type="number" id="potInput" placeholder="Set Pot" />
+                <button id="dev-set-pot">Set Pot</button>
+                <label><input type="checkbox" id="dev-ai-toggle" /> AI Enabled</label>
+            </div>
+            <div class="dev-log" id="dev-log"></div>
+
+            <h3>Deck Manager</h3>
+
+            <div class="dev-group">
+                <button id="reset-deck">Reset Deck</button>
+                <button id="shuffle-deck">Shuffle</button>
+                <button id="deal-to-players">Deal to Players</button>
+                <button id="deal-to-board">Deal to Board</button>
+                <button id="burn-card">Burn Card</button>
+            </div>
+
+            <div class="deck-state">
+                <p><strong>Deck:</strong></p>
+                <div id="deck-list" class="deck-list"></div>
+            </div>
+        </div>
+
+
+    </main>
   <script type="module" src="/js/pokerReveal.js"></script>
 </body>
 </html>

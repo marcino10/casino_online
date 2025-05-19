@@ -1,4 +1,6 @@
 import {positionPlayers} from "./pokerPlayers.js";
+import {} from "./devPanel.js";
+import {} from "./deckManager.js";
 
 document.querySelectorAll('.card-container').forEach(card => {
     const front = card.querySelector('.card.front');
@@ -35,3 +37,7 @@ document.querySelectorAll('.card-container').forEach(card => {
 
 window.addEventListener('resize', positionPlayers);
 positionPlayers();
+
+const board = document.querySelector('.board');
+const hand = document.querySelector('.player-hand');
+

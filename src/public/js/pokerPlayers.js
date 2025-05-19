@@ -15,7 +15,7 @@ const container = document.getElementById('playersContainer');
 export function positionPlayers() {
     container.innerHTML = '';
 
-    const radius = window.innerWidth < 768 ? window.innerHeight * 0.2 : window.innerHeight * 0.35;
+    const radius = window.innerWidth < 769 ? window.innerHeight * 0.2 : window.innerHeight * 0.35;
     const centerX = container.offsetWidth / 2;
     const centerY = container.offsetHeight / 2;
 
