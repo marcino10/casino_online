@@ -9,7 +9,6 @@ const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const flash = require('connect-flash');
 const crypto = require('crypto');
 const exphbs = require('express-handlebars');
 const socketHandler = require('./socket');

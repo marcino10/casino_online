@@ -10,6 +10,15 @@ export const isValidPassword = password =>
 export const isSamePassword = (password, confirmPassword) =>
     password === confirmPassword;
 
+export const isValidGameName = name =>
+    name.length >= 1;
+
+export const isValidBuyIn = value =>
+    parseInt(value) >= 50;
+
+export const isValidPlayerCount = count =>
+    parseInt(count) >= 2 && parseInt(count) <= 10;
+
 
 export const rules = {
     login: {
@@ -27,5 +36,20 @@ export const rules = {
     IsSamePassword: {
         validate: isSamePassword,
         message: "This password is different from the previous one"
+    }
+};
+
+export const pokerRules = {
+    tableName: {
+        validate: isValidGameName,
+        message: "Game name must be at least 1 character long"
+    },
+    buyIn: {
+        validate: isValidBuyIn,
+        message: "Minimum buy-in value is $50"
+    },
+    maxNumOfPlayers: {
+        validate: isValidPlayerCount,
+        message: "Number of players must be between 2 and 10"
     }
 };
