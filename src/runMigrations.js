@@ -5,13 +5,16 @@ const MONGO_URL = process.env.MONGO_URL;
 const mongoose = require('mongoose');
 const cardMigration = require('./migrations/cardsMigration');
 const userMigration = require('./migrations/usersMigration');
+const pokerTableMigration = require('./migrations/pokerTablesMigration');
 
 async function run() {
     try {
         await mongoose.connect(MONGO_URL);
 
         await cardMigration.up();
-        await userMigration.up();
+        await userMigration.up().then(async () => {
+            await pokerTableMigration.up();
+        });
 
         await mongoose.disconnect();
         console.log('🚀 All migrations completed!');
