@@ -19,3 +19,16 @@ document.querySelector('.raise').addEventListener('click', () => {
     const pot = document.querySelector('.pot');
     betChip(player, pot, 100);
 });
+import { dealCard } from './animations.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const turnButton = document.getElementById('dev-turn');
+  const turnCard = document.getElementById('turnCard');
+  const deckImage = document.querySelector('.deck img');
+
+  turnCard.style.opacity = '0';
+
+  turnButton.addEventListener('click', () => {
+    dealCard(deckImage, turnCard);
+  });
+});

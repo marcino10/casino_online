@@ -289,3 +289,35 @@ body {
     opacity: 1;
   }
 }
+
+.card-placeholder {
+  width: 10vh;
+  height: 14vh;
+  position: relative;
+}
+.animated-card {
+  position: fixed;
+  border-radius: 0.5rem;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  transition: all 0.6s ease;
+  z-index: 9999;
+  pointer-events: none;
+}
+.animated-card-matrix3d {
+  position: fixed;
+  background-size: cover;
+  background-position: center;
+  border-radius: 0.4rem;
+  z-index: 1000;
+  transition: transform 0.8s ease-in-out, box-shadow 0.6s ease;
+  will-change: transform;
+  filter: brightness(1.4) contrast(1.2) saturate(1.4);
+  pointer-events: none;
+  backface-visibility: hidden;
+  transform-origin: center;
+
+  animation: glitchShadow 0.8s ease-in-out;
+}
+
