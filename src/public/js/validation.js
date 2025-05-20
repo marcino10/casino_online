@@ -7,6 +7,10 @@ export const isValidEmail = email =>
 export const isValidPassword = password =>
     password.length >= 5 && /\d/.test(password);
 
+export const isSamePassword = (password, confirmPassword) =>
+    password === confirmPassword;
+
+
 export const rules = {
     login: {
         validate: isValidNick,
@@ -19,5 +23,9 @@ export const rules = {
     password: {
         validate: isValidPassword,
         message: "Password must be 5+ characters and contain a number."
+    },
+    IsSamePassword: {
+        validate: isSamePassword,
+        message: "This password is different from the previous one"
     }
 };

@@ -1,54 +1,86 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Big Win Casino - Poker</title>
-    <link rel="stylesheet" href="/css/pokerGame.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Poker | Big Win Casino</title>
+  <link rel="stylesheet" href="/css/pokerGame.css" />
 </head>
 <body>
-<main>
-    <div class="poker-game">
-
+    <main class="poker-game">
         <div class="table">
+            <div class="players-container" id="playersContainer"></div>
+
             <div class="deck">
-                <img class="card" src="/img/deck/back_red.webp" alt="deck">
+                <img class="card" src="/img/deck/back_red.webp" alt="Deck">
             </div>
+
             <div class="board">
-                <img class="card" src="/img/deck/heart_a_mobile.svg" alt="deck">
-                <img class="card" src="/img/deck/heart_a_mobile.svg" alt="deck">
-                <img class="card" src="/img/deck/heart_a_mobile.svg" alt="deck">
-                <img class="card" src="/img/deck/heart_a_mobile.svg" alt="deck">
-                <img class="card" src="/img/deck/club_j_mobile.svg" alt="deck">
+                <img class="card" src="/img/deck/heart_a_mobile.svg" alt="Card">
+                <img class="card" src="/img/deck/heart_k_mobile.svg" alt="Card">
+                <img class="card" src="/img/deck/diamond_q_mobile.svg" alt="Card">
+                <img class="card" src="/img/deck/spade_j_mobile.svg" alt="Card">
+                <img class="card" src="/img/deck/club_10_mobile.svg" alt="Card">
             </div>
+
             <div class="hand">
                 <div class="player-hand">
-                    <div class="player-card first">
-                        <img class="card" src="/img/deck/heart_a_mobile.svg" alt="deck">
-                        <img class="card" src="/img/deck/spade_a_mobile.svg" alt="deck">
+                    <div class="player-card">
+                        <img class="card hand-card front" src="/img/deck/club_a_mobile.svg" alt="Card back" />
+                        <img class="card hand-card back" src="/img/deck/back_red.webp" alt="Card front" />
                     </div>
-                    <div class="player-card second">
-                        <img class="card" src="/img/deck/club_a_mobile.svg" alt="deck">
-                        <img class="card" src="/img/deck/diamond_a_mobile.svg" alt="deck">
+                    <div class="player-card">
+                        <img class="card hand-card front" src="/img/deck/heart_a_mobile.svg" alt="Card back" />
+                        <img class="card hand-card back" src="/img/deck/back_red.webp" alt="Card front" />
                     </div>
                 </div>
             </div>
-
-
-
-        </div>
-
-        <div class="action-panel">
-            <button>Fold</button>
-            <button>Check</button>
-            <button>Call $50</button>
-            <button class="raise">Raise</button>
-        </div>
     </div>
-</main>
 
-<script src="/js/pokerReveal.js"></script>
+    <div class="action-panel">
+      <button class="fold">Fold</button>
+      <button class="check">Check</button>
+      <button class="raise">Raise</button>
+    </div>
+
+
+        <!-- Developer Panel -->
+        <div class="dev-panel">
+            <h3>Dev Tools</h3>
+            <div class="dev-group">
+                <button id="dev-deal">Deal Hand</button>
+                <button id="dev-flop">Show Flop</button>
+                <button id="dev-turn">Show Turn</button>
+                <button id="dev-river">Show River</button>
+                <button id="dev-reset">Reset Board</button>
+            </div>
+            <div class="dev-group">
+                <div id="potDisplay">Pot: $0</div>
+                <input type="number" id="potInput" placeholder="Set pot value" />
+                <button id="dev-set-pot">Set Pot</button>
+
+                <label><input type="checkbox" id="dev-ai-toggle" /> AI Enabled</label>
+            </div>
+            <div class="dev-log" id="dev-log"></div>
+
+            <h3>Deck Manager</h3>
+
+            <div class="dev-group">
+                <button id="reset-deck">Reset Deck</button>
+                <button id="shuffle-deck">Shuffle</button>
+                <button id="deal-to-players">Deal to Players</button>
+                <button id="deal-to-board">Deal to Board</button>
+                <button id="burn-card">Burn Card</button>
+            </div>
+
+            <div class="deck-state">
+                <p><strong>Deck:</strong></p>
+                <div id="deck-list" class="deck-list"></div>
+            </div>
+        </div>
+
+
+    </main>
+  <script type="module" src="/js/pokerReveal.js"></script>
 </body>
 </html>
