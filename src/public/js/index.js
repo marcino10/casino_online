@@ -42,8 +42,7 @@ function closeAllSubMenus() {
     })
 }
 
-let isHeaderChanged = false;
-window.addEventListener("scroll", (e) => {
+function changeHeader(event) {
     const scrollTop = window.scrollY
     const header = document.querySelector(".header")
     const title = document.querySelector(".title")
@@ -51,7 +50,9 @@ window.addEventListener("scroll", (e) => {
 
     if (scrollTop > 0) {
         if (!isHeaderChanged) {
-            e.preventDefault();
+            if (event) {
+                event.preventDefault();
+            }
             header.classList.add("scrolled")
             title.classList.add("scrolled")
             balanceCard.classList.add("scrolled")
@@ -72,4 +73,14 @@ window.addEventListener("scroll", (e) => {
         title.innerHTML = "BIG <br>WIN";
         isHeaderChanged = false;
     }
-})
+};
+
+let isHeaderChanged = false;
+window.addEventListener("scroll", (e) => {
+    changeHeader(e);
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    isHeaderChanged = false;
+    changeHeader(null);
+});

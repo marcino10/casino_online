@@ -17,14 +17,14 @@
     </div>
 
 
-        {{#if error_msg}}
+        {{#if flash.error_msg}}
             <p class="server-msg error" style="display: none;">
-                {{error_msg}}
+                {{#each flash.error_msg}}{{this}}<br>{{/each}}
             </p>
         {{/if}}
-        {{#if success_msg}}
+        {{#if flash.success_msg}}
             <p class="server-msg success" style="display: none;">
-                {{success_msg}}
+                {{#each flash.succes_msg}}{{this}}<br>{{/each}}
             </p>
         {{/if}}
 

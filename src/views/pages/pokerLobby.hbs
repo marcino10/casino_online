@@ -14,29 +14,40 @@
 
 <main>
     <section class="hero">
-        <div class="header">
-            <h1 id="title" class="title">BIG <br> WIN</h1>
-            <section class="balance-card">
-                <h2 class="balance">Balance</h2>
-                <div class="amount">$2,450.75</div>
-            </section>
-        </div>
+        {{> header}}
 
-        <div class="description" style="margin-top: 2rem; text-align: center;">
-            <p>Enjoy a classic poker experience. More features coming soon!</p>
-        </div>
-
-        <div class="button_game" style="width: 60vw; height: 12rem; margin: 2rem auto; background-color: #2B0849; display: flex; align-items: center; justify-content: center; border-radius: .5rem;">
-            <p style="color: #ccc; font-size: 1.2rem;">The poker game will be available here soon.</p>
-        </div>
+        <form action="/poker/game/create" method="post">
+            <label for="tableName">Game name:</label>
+            <input type="text" name="tableName" id="tableName"> <br>
+            <label for="buyIn">Buy in value:</label>
+            <input type="number" name="buyIn" id="buyIn" value="50"> <br>
+            <label for="maxNumOfPlayers">Max num of players:</label>
+            <input type="number" value="5" min="2" max="10" name="maxNumOfPlayers" id="maxNumOfPlayers">
+            <input type="submit" value="Create Game">
+        </form>
+        <br>
+        <form action="/poker/join/ox9ty2S6">
+            <input type="submit" value="join">
+        </form>
+        {{#if flash.error_msg}}
+            <p class="server-msg error">
+                {{#each flash.error_msg}}{{this}}<br>{{/each}}
+            </p>
+        {{/if}}
+        {{#if flash.success_msg}}
+            <p class="server-msg success">
+                {{#each flash.success_msg}}{{this}}<br>{{/each}}
+            </p>
+        {{/if}}
     </section>
 
     {{> footer}}
 </main>
 
-<script src="/js/index.js">
-
+<script src="/js/index.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
 </script>
-
 </body>
 </html>

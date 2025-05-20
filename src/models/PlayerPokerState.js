@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const playerGameStateSchema = new Schema({
+const playerPokerStateSchema = new Schema({
     tableId: {
         type: Schema.Types.ObjectId,
-        ref: 'PockerTable',
+        ref: 'PokerTable',
         required: true
     },
     playerId: {
@@ -27,8 +27,14 @@ const playerGameStateSchema = new Schema({
         type: Number,
         default: 0
     },
+    creditsLeft: {
+        type: Number,
+        require: true
+    },
     isFolded: {
         type: Boolean,
         default: false
     }
-})
+});
+
+module.exports = mongoose.model('PlayerPokerState', playerPokerStateSchema);

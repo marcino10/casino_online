@@ -28,7 +28,7 @@ const userSchema = new Schema({
     },
     avatarFile: {
         type: String,
-        default: 'default.webp',
+        default: null,
         match: /\.(png|jpg|jpeg|webp)$/i
     }
 })

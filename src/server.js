@@ -12,6 +12,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const crypto = require('crypto');
 const exphbs = require('express-handlebars');
+const socketHandler = require('./socket');
 
 const routes = require('./routes/pageRoutes');
 const authRoutes = require('./routes/authRoutes');
@@ -59,11 +60,10 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// flash messages configuration
-app.use(flash());
+// Custom flash middleware
 app.use((req, res, next) => {
-    res.locals.success_msg = req.flash('success_msg');
-    res.locals.error_msg = req.flash('error_msg');
+    res.locals.flash = req.session.flash || {};
+    delete req.session.flash;
     next();
 });
 
@@ -91,3 +91,5 @@ app.use((err, req, res, next) => {
 
     res.status(statusCode).json(response);
 });
+
+socketHandler(io);

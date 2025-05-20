@@ -2,6 +2,7 @@ require('dotenv').config({ path: '.env' });
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const jwt = require('jsonwebtoken');
+const {setFlash} = require("../helpers");
 
 const isValidToken = token => {
     if(!token) {
@@ -21,7 +22,7 @@ const auth = (req, res, next) => {
 
     const decoded = isValidToken(token);
     if (decoded === false) {
-        req.flash('error_msg', 'You have to log in')
+        setFlash(req, 'error_msg', 'You have to log in')
         return res.redirect('/login');
     } else {
         req.user = decoded;

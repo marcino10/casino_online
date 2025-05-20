@@ -1,6 +1,8 @@
 require('dotenv').config({ path: '.env' });
 
+const {setFlash} = require("../helpers");
 const User = require("../models/User");
+
 const asyncHandler = require("express-async-handler");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -37,37 +39,53 @@ const isValidPassword = password => {
     return true;
 }
 
+const authenticateUser = async (user, req, res) => {
+    try {
+        const token = jwt.sign({userId: user._id}, JWT_SECRET, {expiresIn: '1h'});
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+        });
+
+        return res.redirect('/');
+    } catch (error) {
+        setFlash(req, 'error_msg', 'Server error, try again later');
+        return res.redirect('/login');
+    }
+};
+
 exports.register = asyncHandler(async (req, res, next) => {
     const {nick, email, password} = req.body;
     if (!nick || !email || !password) {
-        req.flash('error_msg', 'All fields are required');
+        setFlash(req, 'error_msg', 'All fields are required');
         return res.redirect('/login');
     }
 
     if (!isValidNick(nick)) {
-        req.flash('error_msg', 'The username must be between 3-16 characters and can only contains alphanumerical characters or one of the following: _, #, @, =, +, !, -');
+        setFlash(req, 'error_msg', 'The username must be between 3-16 characters and can only contains alphanumerical characters or one of the following: _, #, @, =, +, !, -');
         return res.redirect('/login')
     }
 
     const nickExists = await User.findOne({nick});
     if (nickExists) {
-        req.flash('error_msg', 'Username already exists');
+        setFlash(req, 'error_msg', 'Username already exists');
         return res.redirect('/login')
     }
 
     if (!isValidEmail(email)) {
-        req.flash('error_msg', 'Enter a valid email');
+        setFlash(req, 'error_msg', 'Enter a valid email');
         return res.redirect('/login')
     }
 
     const emailExists = await User.findOne({email})
     if (emailExists) {
-        req.flash('error_msg', 'There is already account with this email');
+        setFlash(req, 'error_msg', 'There is already account with this email');
         return res.redirect('/login')
     }
 
     if(!isValidPassword(password)) {
-        req.flash('error_msg', 'Password must contain at least 5 characters and 1 number');
+        setFlash(req, 'error_msg', 'Password must contain at least 5 characters and 1 number');
         return res.redirect('/login')
     }
 
@@ -80,14 +98,13 @@ exports.register = asyncHandler(async (req, res, next) => {
         password: hashedPassword
     })
 
-    req.flash('success_msg', 'Account created');
-    return res.redirect('/');
+    await authenticateUser(user, req, res);
 });
 
 exports.login = asyncHandler(async (req, res, next) => {
     const {login, password} = req.body;
     if (!login || !password) {
-        req.flash('error_msg', 'All fields are required');
+        setFlash(req, 'error_msg', 'All fields are required');
         return res.redirect('/login');
     }
 
@@ -99,33 +116,21 @@ exports.login = asyncHandler(async (req, res, next) => {
     }
 
     if (!user) {
-        req.flash('error_msg', 'Invalid credentials');
+        setFlash(req, 'error_msg', 'Invalid credentials');
         return res.redirect('/login');
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-        req.flash('error_msg', 'Invalid credentials');
+        setFlash(req, 'error_msg', 'Invalid credentials');
         return res.redirect('/login');
     }
 
-    try {
-        const token = jwt.sign({userId: user._id}, JWT_SECRET, {expiresIn: '1h'});
-
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-        })
-
-        return res.redirect('/');
-    } catch (error) {
-        req.flash('error_msg', 'Server error, try again later');
-        return res.redirect('/login');
-    }
+    await authenticateUser(user, req, res);
 });
 
 exports.logout = asyncHandler(async (req, res, next) => {
     res.clearCookie('token');
-    req.flash('success_msg', 'Logged out');
+    setFlash(req, 'success_msg', 'Logged out');
     return res.redirect('/login');
 });
