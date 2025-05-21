@@ -42,7 +42,7 @@ export const rules = {
 export const pokerRules = {
     tableName: {
         validate: isValidGameName,
-        message: "Game name must be at least 1 character long"
+        message: "Game name cannot be empty"
     },
     buyIn: {
         validate: isValidBuyIn,

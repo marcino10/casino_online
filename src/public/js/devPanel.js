@@ -67,6 +67,7 @@ function setPot() {
 }
 
 
+
 // Event Listeners
 document.getElementById('dev-deal').addEventListener('click', dealHand);
 document.getElementById('dev-flop').addEventListener('click', () => revealStage(0));

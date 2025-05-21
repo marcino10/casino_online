@@ -39,7 +39,25 @@
                 </form>
             </div>
         </div>
+
+        <div class="popup-overlay" id="rejoinGamePopup">
+            <div class="popup-content rejoin-content">
+                <div class="popup-header">
+                    <h2>Re-join Your Game</h2>
+                </div>
+                <div class="close-popup" id="closeRejoinPopup"></div>
+                <div class="rejoin-info">
+                    <p>You are already in a poker game.</p>
+                    <p>Would you like to re-join your table?</p>
+                </div>
+                <div class="rejoin-actions">
+                    <button class="rejoin-btn" id="rejoinConfirmBtn">Re-join</button>
+                    <button class="cancel-btn" id="rejoinLeaveBtn">Leave</button>
+                </div>
+            </div>
+        </div>
     </section>
+
 
         {{#if flash.error_msg}}
             <p class="server-msg error">
@@ -55,7 +73,7 @@
     <section class="poker-rooms-list">
         <h2>Available Poker Rooms</h2>
         <div class="rooms-container">
-            {{!-- Test rooms, replace with dynamic data as needed --}}
+            {{!-- Test rooms --}}
             <div class="room-card">
                 <div class="room-info">
                     <h3>High asf</h3>

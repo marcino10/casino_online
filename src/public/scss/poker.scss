@@ -186,6 +186,66 @@ main {
   }
 }
 
+.popup-content.rejoin-content {
+  max-width: 370px;
+  text-align: center;
+
+  .popup-header h2 {
+    color: $primary;
+    margin-bottom: 1rem;
+  }
+
+  .rejoin-info {
+    margin: 1.2rem 0 2rem 0;
+    font-size: 1.1rem;
+    color: $text-color;
+    p {
+      margin: 0.3rem 0;
+    }
+  }
+
+  .rejoin-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+
+    .rejoin-btn {
+      background: $primary;
+      color: #fff;
+      border: none;
+      border-radius: 2rem;
+      padding: 0.6rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
+      transition: background 0.2s, transform 0.2s;
+
+      &:hover {
+        background: darken($primary, 10%);
+        transform: scale(1.05);
+      }
+    }
+
+    .cancel-btn {
+      background: transparent;
+      color: $primary;
+      border: 1px solid $primary;
+      border-radius: 2rem;
+      padding: 0.6rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+
+      &:hover {
+        background: $primary;
+        color: #fff;
+      }
+    }
+  }
+}
+
 .close-popup {
   position: absolute;
   top: 1rem;

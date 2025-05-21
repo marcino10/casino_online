@@ -39,6 +39,19 @@ function dealToBoard(count = 5) {
     renderDeckList();
 }
 
+function clearChips() {
+    const chips = document.querySelectorAll('.chip');
+    chips.forEach(chip => {
+        // Force reflow to ensure transition works
+        chip.offsetHeight;
+        chip.style.opacity = '0';
+        chip.addEventListener('transitionend', () => {
+            if (chip.parentElement) {
+                chip.remove();
+            }
+        }, { once: true });
+    });
+}
 
 document.getElementById('reset-deck').addEventListener('click', () => {
     generateDeck();
@@ -54,6 +67,7 @@ document.getElementById('burn-card').addEventListener('click', () => {
     burnCard();
     renderDeckList();
 });
+document.getElementById('clear-chips').addEventListener('click', clearChips);
 
 
 generateDeck();

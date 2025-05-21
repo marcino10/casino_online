@@ -74,4 +74,42 @@ document.addEventListener('DOMContentLoaded', () => {
             createGamePopup.classList.remove('active');
         }
     });
+
+    // Re-join
+    const rejoinGamePopup = document.getElementById('rejoinGamePopup');
+    const closeRejoinPopup = document.getElementById('closeRejoinPopup');
+    const rejoinLeaveBtn = document.getElementById('rejoinLeaveBtn');
+    const rejoinConfirmBtn = document.getElementById('rejoinConfirmBtn');
+
+    //Show the rejoin modal (for demo, remove in production)
+    setTimeout(() => {
+        if (rejoinGamePopup) rejoinGamePopup.classList.add('active');
+    }, 1000);
+    //remove this after testing
+
+    if (closeRejoinPopup) {
+        closeRejoinPopup.addEventListener('click', () => {
+            rejoinGamePopup.classList.remove('active');
+        });
+    }
+    if (rejoinLeaveBtn) {
+        rejoinLeaveBtn.addEventListener('click', () => {
+            // leave game logic here
+            rejoinGamePopup.classList.remove('active');
+        });
+    }
+    if (rejoinGamePopup) {
+        rejoinGamePopup.addEventListener('click', (e) => {
+            if (e.target === rejoinGamePopup) {
+                // Close the popup if the user clicks outside of it
+                rejoinGamePopup.classList.remove('active');
+            }
+        });
+    }
+    if (rejoinConfirmBtn) {
+        rejoinConfirmBtn.addEventListener('click', () => {
+            // rejoin game logic here
+            rejoinGamePopup.classList.remove('active');
+        });
+    }
 });
