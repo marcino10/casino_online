@@ -19,16 +19,28 @@ document.querySelector('.raise').addEventListener('click', () => {
     const pot = document.querySelector('.pot');
     betChip(player, pot, 100);
 });
+
 import { dealCard } from './animations.js';
+import { deck, formatCardFilename } from './deckCore.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const turnButton = document.getElementById('dev-turn');
-  const turnCard = document.getElementById('turnCard');
+  const board = document.querySelector('.board');
   const deckImage = document.querySelector('.deck img');
 
-  turnCard.style.opacity = '0';
-
   turnButton.addEventListener('click', () => {
-    dealCard(deckImage, turnCard);
+    if (!deck.length) return;
+
+    const card = deck.pop();
+    const img = document.createElement('img');
+    img.classList.add('card');
+    img.src = `/img/deck/${formatCardFilename(card)}`;
+    img.alt = card;
+    img.style.opacity = '0';
+
+    board.appendChild(img);
+    dealCard(deckImage, img, 0);
   });
 });
+
+

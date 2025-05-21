@@ -27,7 +27,8 @@ function dealToBoard(count = 5) {
     const deckElement = document.querySelector('.deck img');
     if (!boardDiv || !deckElement) return;
 
-    boardDiv.innerHTML = ''; 
+    boardDiv.appendChild(img);
+ 
 
     for (let i = 0; i < count; i++) {
         const card = deck.pop();
@@ -42,6 +43,8 @@ function dealToBoard(count = 5) {
         boardDiv.appendChild(img);
 
         dealCard(deckElement, img, i * 150); 
+        dealCard(deckElement, img, i * 200);
+        
     }
 
     renderDeckList();

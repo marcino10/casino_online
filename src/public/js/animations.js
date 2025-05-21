@@ -1,33 +1,48 @@
 export function dealCard(sourceElement, targetImage, delay = 0) {
-  const cardClone = document.createElement('div');
   const sourceRect = sourceElement.getBoundingClientRect();
   const targetRect = targetImage.getBoundingClientRect();
 
-  cardClone.classList.add('animated-card-matrix3d');
-  cardClone.style.left = `${sourceRect.left}px`;
-  cardClone.style.top = `${sourceRect.top}px`;
-  cardClone.style.width = `${sourceRect.width}px`;
-  cardClone.style.height = `${sourceRect.height}px`;
-  cardClone.style.backgroundImage = `url(${sourceElement.src})`;
+  const cardWrapper = document.createElement('div');
+  cardWrapper.classList.add('card-flip-wrapper');
+  cardWrapper.style.left = `${sourceRect.left}px`;
+  cardWrapper.style.top = `${sourceRect.top}px`;
+  cardWrapper.style.width = `${sourceRect.width}px`;
+  cardWrapper.style.height = `${sourceRect.height}px`;
 
-  document.body.appendChild(cardClone);
+  const cardInner = document.createElement('div');
+  cardInner.classList.add('card-inner');
+
+  const cardBack = document.createElement('div');
+  cardBack.classList.add('card-face', 'back');
+  cardBack.style.backgroundImage = `url(${sourceElement.src})`;
+
+  const cardFront = document.createElement('div');
+  cardFront.classList.add('card-face', 'front');
+  cardFront.style.backgroundImage = `url(${targetImage.src})`;
+
+  cardInner.appendChild(cardFront);
+  cardInner.appendChild(cardBack);
+  cardWrapper.appendChild(cardInner);
+  document.body.appendChild(cardWrapper);
 
   setTimeout(() => {
-    cardClone.style.transform = `matrix3d(
-      0.95, 0.2, 0.1, 0,
-     -0.2, 0.95, 0.1, 0,
-      0.1, 0.0, 1,   0,
-      ${targetRect.left - sourceRect.left}, 
-      ${targetRect.top - sourceRect.top}, 
-      120, 1
-    )`;
+    const dx = targetRect.left - sourceRect.left;
+    const dy = targetRect.top - sourceRect.top;
+    cardWrapper.style.transform = `translate(${dx}px, ${dy}px)`;
   }, delay);
 
-  cardClone.addEventListener('transitionend', () => {
-    cardClone.remove();
-    targetImage.style.opacity = '1';
-  });
+  cardWrapper.addEventListener('transitionend', (e) => {
+    if (e.propertyName !== 'transform') return;
+
+    cardInner.classList.add('flipped');
+
+    setTimeout(() => {
+      cardWrapper.remove();
+      targetImage.style.opacity = '1';
+    }, 600);
+  }, { once: true });
 }
+
 
 
 
