@@ -7,6 +7,122 @@
   <link rel="stylesheet" href="/css/pokerGame.css" />
 </head>
 <body>
+    <div class="pop-up">
+  <button class="close_pop-up">X</button>
+  <div class="hand-rankings">
+    
+    <div class="hand-box">
+  <h3>1 • Straight Flush</h3>
+  <div class="card-row">
+    <img src="/img/deck/heart_10_mobile.svg" class="mini-card" />
+    <img src="/img/deck/heart_9_mobile.svg" class="mini-card" />
+    <img src="/img/deck/heart_8_mobile.svg" class="mini-card" />
+    <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
+    <img src="/img/deck/heart_6_mobile.svg" class="mini-card" />
+  </div>
+  <p>Pięć kolejnych kart w tym samym kolorze.</p>
+</div>
+    
+    <div class="hand-box">
+    <h3>2 • Four of a Kind</h3>
+    <div class="card-row">
+      <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+      <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
+      <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
+      <img src="/img/deck/spade_a_mobile.svg" class="mini-card" />
+      <img src="/img/deck/heart_k_mobile.svg" class="mini-card" />
+    </div>
+    <p>Cztery karty o tej samej wartości.</p>
+  </div>
+
+     <div class="hand-box">
+    <h3>3 • Full House</h3>
+    <div class="card-row">
+      <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+      <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
+      <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
+      <img src="/img/deck/spade_k_mobile.svg" class="mini-card" />
+      <img src="/img/deck/heart_k_mobile.svg" class="mini-card" />
+    </div>
+    <p>Trójka + para.</p>
+  </div>
+
+     <div class="hand-box">
+    <h3>4 • Flush</h3>
+    <div class="card-row">
+      <img src="/img/deck/club_k_mobile.svg" class="mini-card" />
+      <img src="/img/deck/club_10_mobile.svg" class="mini-card" />
+      <img src="/img/deck/club_8_mobile.svg" class="mini-card" />
+      <img src="/img/deck/club_7_mobile.svg" class="mini-card" />
+      <img src="/img/deck/club_5_mobile.svg" class="mini-card" />
+    </div>
+    <p>Pięć kart w tym samym kolorze.</p>
+  </div>
+
+    <div class="hand-box">
+    <h3>5 • Straight</h3>
+    <div class="card-row">
+      <img src="/img/deck/heart_10_mobile.svg" class="mini-card" />
+      <img src="/img/deck/club_9_mobile.svg" class="mini-card" />
+      <img src="/img/deck/diamond_8_mobile.svg" class="mini-card" />
+      <img src="/img/deck/spade_7_mobile.svg" class="mini-card" />
+      <img src="/img/deck/heart_6_mobile.svg" class="mini-card" />
+    </div>
+    <p>Pięć kolejnych kart różnych kolorów.</p>
+  </div>
+
+     <div class="hand-box">
+    <h3>6 • Three of a Kind</h3>
+    <div class="card-row">
+      <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+      <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
+      <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
+      <img src="/img/deck/heart_k_mobile.svg" class="mini-card" />
+      <img src="/img/deck/spade_q_mobile.svg" class="mini-card" />
+    </div>
+    <p>Trzy karty o tej samej wartości.</p>
+  </div>
+
+      <div class="hand-box">
+    <h3>7 • Two Pair</h3>
+    <div class="card-row">
+      <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+      <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
+      <img src="/img/deck/diamond_k_mobile.svg" class="mini-card" />
+      <img src="/img/deck/spade_k_mobile.svg" class="mini-card" />
+      <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
+    </div>
+    <p>Dwie pary różnych wartości.</p>
+  </div>
+
+      <div class="hand-box">
+    <h3>8 • One Pair</h3>
+    <div class="card-row">
+      <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+      <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
+      <img src="/img/deck/club_k_mobile.svg" class="mini-card" />
+      <img src="/img/deck/spade_j_mobile.svg" class="mini-card" />
+      <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
+    </div>
+    <p>Jedna para kart o tej samej wartości.</p>
+  </div>
+
+     <div class="hand-box">
+    <h3>9 • High Card</h3>
+    <div class="card-row">
+      <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+      <img src="/img/deck/spade_k_mobile.svg" class="mini-card" />
+      <img src="/img/deck/diamond_q_mobile.svg" class="mini-card" />
+      <img src="/img/deck/club_9_mobile.svg" class="mini-card" />
+      <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
+    </div>
+    <p>Brak układu – liczy najwyższa karta.</p>
+  </div>
+  </div>
+</div>
+
+<img class="help-circle" id="helpIcon" src="/img/help-circle.svg" alt="Help" />
+
     <main class="poker-game">
         <div class="table">
             <div class="players-container" id="playersContainer"></div>
