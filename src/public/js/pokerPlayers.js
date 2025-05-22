@@ -86,24 +86,28 @@ export function positionPlayers() {
 }
 
 
-export function pushChipFromPlayer(playerIndex) {
+export function pushChipFromPlayer(playerIndex, mainPlayerElement = null) {
     const table = document.querySelector('.table');
-    const players = document.querySelectorAll('.player');
     const chipsContainer = document.querySelector('.chips-container');
-    const player = players[playerIndex];
+    let sourceElement;
 
-    if (!player || !table || !chipsContainer) return;
+    if (playerIndex === -1 && mainPlayerElement) {
+        sourceElement = mainPlayerElement;
+    } else {
+        const players = document.querySelectorAll('.player');
+        sourceElement = players[playerIndex];
+    }
+
+    if (!sourceElement || !table || !chipsContainer) return;
 
     const chip = document.createElement('div');
     chip.classList.add('chip');
     chip.classList.add('chip--red');
 
-
     const chipValue = document.createElement('div');
     chipValue.classList.add('chip-value');
     chipValue.textContent = '100';
     chip.appendChild(chipValue);
-
 
     const chipLogo = document.createElement('img');
     chipLogo.src = '/img/BIG_WIN.svg';
@@ -111,23 +115,19 @@ export function pushChipFromPlayer(playerIndex) {
     chipLogo.classList.add('chip-logo');
     chip.appendChild(chipLogo);
 
-
-    const playerRect = player.getBoundingClientRect();
+    const sourceRect = sourceElement.getBoundingClientRect();
     const containerRect = chipsContainer.getBoundingClientRect();
 
-
-    const startX = playerRect.left - containerRect.left + (playerRect.width / 2);
-    const startY = playerRect.top - containerRect.top + (playerRect.height / 2);
-
+    const startX = sourceRect.left - containerRect.left + (sourceRect.width);
+    const startY = sourceRect.top - containerRect.top + (sourceRect.height);
 
     const randomOffsetX = Math.random() * 300;
-    const randomOffsetY = Math.random()  * 150;
+    const randomOffsetY = Math.random() * 150;
 
-
-    chip.style.transform = `translate(${startX - containerRect.width/2}px, ${startY - containerRect.height/2}px)`;
+    chip.style.opacity = '0.5';
+    chip.style.transform = `translate(${startX - containerRect.width / 2}px, ${startY - containerRect.height / 2}px)`;
+    chip.style.transform += ` rotate(${Math.random() * 360}deg)`;
     chipsContainer.appendChild(chip);
-
-    chip.offsetHeight;
 
 
     requestAnimationFrame(() => {
