@@ -30,9 +30,13 @@ const pokerTableSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     }],
-    isActive : {
+    isActive: {
         type: Boolean,
         default: true
+    },
+    isStarted: {
+        type: Boolean,
+        default: false
     },
     pot: {
         type: Number,
@@ -49,7 +53,17 @@ const pokerTableSchema = new Schema({
     boardDeck: [{
         type: Schema.Types.ObjectId,
         ref: 'Card'
-    }]
+    }],
+    allHandsJson: {
+        type: {},
+        default: {}
+    },
+    lastActionSeat: {
+        type: Number
+    },
+    numOfSeatsInCurrentGame: {
+        type: Number
+    }
 });
 
 pokerTableSchema.path('players').validate(function (players) {

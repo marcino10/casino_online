@@ -1,17 +1,4 @@
-const players = [
-    { name: 'Alice' },
-    { name: 'Bob' },
-    { name: 'Charlie' },
-    { name: 'Dana' },
-    { name: 'Eli' },
-    { name: 'Frank' },
-    { name: 'Gina' },
-    { name: 'Harry' },
-    { name: 'Ivy' }
-];
-
 const container = document.getElementById('playersContainer');
-
 
 function createPlayerElement(player, x, y) {
     const el = document.createElement('div');
@@ -41,7 +28,7 @@ function createPlayerElement(player, x, y) {
             <div class="avatar"></div>
             <button class="reveal-cards" title="Reveal cards">👁</button>
         </div>
-        <div class="name">${player.name}</div>
+        <div class="name">${player}</div>
     `;
 
     // Add click handler for the reveal button
@@ -62,7 +49,7 @@ function createPlayerElement(player, x, y) {
     return el;
 }
 
-export function positionPlayers() {
+export function positionPlayers(players) {
     container.innerHTML = '';
 
     const radius = window.innerWidth < 769 ? window.innerHeight * 0.2 : window.innerHeight * 0.35;

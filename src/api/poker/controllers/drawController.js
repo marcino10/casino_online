@@ -7,7 +7,7 @@ const drawCard = (cards) => {
     const cardArray = cards[randInt].split('_');
     const card = {
         'suit': cardArray[0],
-        'card': cardArray[1]
+        'value': cardArray[1]
     }
     cards.splice(randInt, 1);
 
@@ -57,7 +57,7 @@ exports.board = expressAsyncHandler (async (req, res, next) => {
             for (let i = 0; i < tempCards.length; i++) {
                 const card = tempCards[i];
                 const suit = card.suit;
-                const cardValue = card.card;
+                const cardValue = card.value;
                 usedCards.add(suit + "_" + cardValue);
             }
         }

@@ -8,6 +8,18 @@
 </head>
 <body>
     <main class="poker-game">
+        {{#unless isStarted}}
+            <div class="waiting-popup" id="waiting">
+                <div class="waiting-content">
+                    <p>Waiting for host to start the game</p>
+                    {{#if isHost}}
+                        <button id="start-game-btn">Start Game</button>
+                    {{/if}}
+                    <p>players: 1/10</p>
+                    <p id="start-status"></p>
+                </div>
+                </div>
+        {{/unless}}
         <div class="table">
             <div class="players-container" id="playersContainer"></div>
 
@@ -16,21 +28,17 @@
             </div>
 
             <div class="board">
-                <img class="card" src="/img/deck/heart_a_mobile.svg" alt="Card">
-                <img class="card" src="/img/deck/heart_k_mobile.svg" alt="Card">
-                <img class="card" src="/img/deck/diamond_q_mobile.svg" alt="Card">
-                <img class="card" src="/img/deck/spade_j_mobile.svg" alt="Card">
-                <img class="card" src="/img/deck/club_10_mobile.svg" alt="Card">
+                <img class="card" id="board-card-template" src="" alt="Card" style="display: none;" />
             </div>
 
             <div class="hand">
                 <div class="player-hand">
                     <div class="player-card">
-                        <img class="card hand-card front" src="/img/deck/club_a_mobile.svg" alt="Card back" />
+                        <img class="card hand-card front self-front" src="" alt="Card back" />
                         <img class="card hand-card back" src="/img/deck/back_red.webp" alt="Card front" />
                     </div>
                     <div class="player-card">
-                        <img class="card hand-card front" src="/img/deck/heart_a_mobile.svg" alt="Card back" />
+                        <img class="card hand-card front self-front" src="" alt="Card back" />
                         <img class="card hand-card back" src="/img/deck/back_red.webp" alt="Card front" />
                     </div>
                 </div>
@@ -38,14 +46,14 @@
     </div>
 
     <div class="action-panel">
-      <button class="fold">Fold</button>
-      <button class="check">Check</button>
-      <button class="raise">Raise</button>
+        <button class="fold">Fold</button>
+        <button class="check">Check</button>
+        <button class="raise">Raise</button>
     </div>
 
 
         <!-- Developer Panel -->
-        <div class="dev-panel">
+        <div class="dev-panel" style="display: none;">
             <h3>Dev Tools</h3>
             <div class="dev-group">
                 <button id="dev-deal">Deal Hand</button>
@@ -81,6 +89,13 @@
 
 
     </main>
-  <script type="module" src="/js/pokerReveal.js"></script>
+    <p id="playerNick" style="display: none;">{{ nick }}</p>
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script defer>
+        window.gameData = JSON.parse('{{{gameData}}}');
+        window.isStarted = {{isStarted}};
+    </script>
+    <script type="module" src="/js/pokerGame.js" defer ></script>
+    <script type="module" src="/js/pokerReveal.js" defer></script>
 </body>
 </html>

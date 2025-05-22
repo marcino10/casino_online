@@ -4,6 +4,7 @@ const asyncHandler = require("express-async-handler");
 const { customAlphabet } = require('nanoid');
 const {setFlash} = require("../helpers");
 const PlayerState = require("../models/PlayerPokerState");
+const pokerGame = require('../controllers/pokerGameController');
 
 const generateTableId = async () => {
     const nanoid = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 8);
@@ -189,7 +190,7 @@ exports.join = asyncHandler( async (req, res, next) => {
     try {
         await joinPlayerToGame(table, user);
     } catch (e) {
-table.players.filter(playerId => playerId.toString() !== userId.toString());
+        table.players.filter(playerId => playerId.toString() !== userId.toString());
         await table.save();
         setFlash(req, 'error_msg', 'Something went wrong');
         return res.redirect('/poker');
@@ -216,7 +217,36 @@ exports.show = asyncHandler( async (req, res, next) => {
         return res.redirect('/poker');
     }
 
-    return res.render('pokerGame');
+    const isHost = table.host.toString() === userId.toString();
+    const isStarted = table.isStarted;
+
+    const user = await User.findOne({ _id: userId });
+    const nick = user.nick;
+
+    let playerHand = [];
+    let playersBySeats = [];
+    if (isStarted) {
+        playersBySeats = await pokerGame.getPlayersBySeats(table._id);
+
+        const playerState = await PlayerState.findOne({
+            tableId: table._id,
+            playerId: userId
+        }).populate('hand', 'suit value')
+
+        playerHand = playerState.hand;
+    }
+
+    const gameData = {
+        nick,
+        playersBySeats,
+        playerHand
+    }
+
+    return res.render('pokerGame', {
+        isHost,
+        isStarted,
+        gameData: JSON.stringify(gameData)
+    });
 });
 
 exports.leave = asyncHandler( async (req, res, next) => {

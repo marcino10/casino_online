@@ -107,7 +107,7 @@ const getHandGroups = (boardDeck, playerDeck) => {
 
     for (const card of deck) {
         const suit = card.suit;
-        const cardValue = cardsTranslator.mapNamesToValues([card.card])[0];
+        const cardValue = cardsTranslator.mapNamesToValues([card.value])[0];
 
         if (!suitGroups[suit]) {
             suitGroups[suit] = new Set();

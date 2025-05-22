@@ -1,14 +1,5 @@
-import { positionPlayers } from "./pokerPlayers.js";
 import {} from "./devPanel.js";
 import {} from "./deckManager.js";
-
-
-
-window.addEventListener('resize', positionPlayers);
-
-
-positionPlayers();
-
 
 const board = document.querySelector('.board');
 const hand = document.querySelector('.player-hand');

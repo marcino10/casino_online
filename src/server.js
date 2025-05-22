@@ -9,10 +9,11 @@ const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const flash = require('connect-flash');
 const crypto = require('crypto');
 const exphbs = require('express-handlebars');
-const socketHandler = require('./socket');
+
+const socketAuth = require('./middlewares/socketAuthMiddleware');
+const socketHandler = require('./socket/index');
 
 const routes = require('./routes/pageRoutes');
 const authRoutes = require('./routes/authRoutes');
@@ -25,7 +26,9 @@ const expressServer = app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 })
 
-const io = new socketIo.Server(expressServer);
+const io = new socketIo.Server(expressServer, {
+    connectionStateRecovery: {}
+});
 
 // console log for development
 process.on('uncaughtException', (err) => {
@@ -92,4 +95,5 @@ app.use((err, req, res, next) => {
     res.status(statusCode).json(response);
 });
 
+io.use(socketAuth);
 socketHandler(io);

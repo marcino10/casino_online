@@ -41,7 +41,7 @@ const isValidPassword = password => {
 
 const authenticateUser = async (user, req, res) => {
     try {
-        const token = jwt.sign({userId: user._id}, JWT_SECRET, {expiresIn: '1h'});
+        const token = jwt.sign({userId: user._id}, JWT_SECRET, {expiresIn: '30d'});
 
         res.cookie('token', token, {
             httpOnly: true,
