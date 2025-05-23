@@ -132,6 +132,10 @@
             </div>
 
             <div class="board">
+                <div class="pot-display">
+                    <span class="pot-label">Total Pot:</span>
+                    <span class="pot-amount">$0</span>
+                </div>
                 <div class="cards-container">
                     <img class="card" src="/img/deck/heart_a_mobile.svg" alt="Card">
                     <img class="card" src="/img/deck/heart_k_mobile.svg" alt="Card">
@@ -159,12 +163,35 @@
             </div>
         </div>
 
-        <div class="action-panel">
-          <button class="fold">Fold</button>
-          <button class="check">Check</button>
-          <button class="raise">Raise</button>
-        </div>
+        <div class="action-panels">
+            <div class="action-panel">
+                <div class="action-buttons">
+                    <button class="fold">Fold</button>
+                    <button class="check">Check</button>
+                    <button class="raise">Raise</button>
+                </div>
+            </div>
 
+            <div class="raise-panel">
+                <div class="slider-container">
+                    <input type="range" class="bet-slider" min="100" max="1000" step="100" value="100">
+                    <div class="bet-display">
+                        <span class="bet-label">Bet Amount:</span>
+                        <span class="bet-value">$100</span>
+                    </div>
+                    <div class="quick-bets">
+                        <button class="quick-bet" data-amount="100">$100</button>
+                        <button class="quick-bet" data-amount="300">$300</button>
+                        <button class="quick-bet" data-amount="500">$500</button>
+                        <button class="quick-bet" data-amount="1000">$1000</button>
+                    </div>
+                </div>
+                <div class="raise-actions">
+                    <button class="confirm-raise">Raise</button>
+                    <button class="cancel-raise">Cancel</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Developer Panel -->
         <div class="dev-panel">

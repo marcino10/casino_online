@@ -85,8 +85,19 @@ export function positionPlayers() {
     }
 }
 
+function getChipVariant(betAmount) {
+    const minBet = 100;
+    const maxBet = 1000;
+    const percentage = (betAmount / maxBet) * 100;
 
-export function pushChipFromPlayer(playerIndex, mainPlayerElement = null) {
+    if (percentage >= 90) return 'chip--gold';
+    if (percentage >= 70) return 'chip--black';
+    if (percentage >= 50) return 'chip--blue';
+    if (percentage >= 25) return 'chip--green';
+    return 'chip--red';
+}
+
+export function pushChipFromPlayer(playerIndex, mainPlayerElement = null, betAmount = 100) {
     const table = document.querySelector('.table');
     const chipsContainer = document.querySelector('.chips-container');
     let sourceElement;
@@ -102,11 +113,11 @@ export function pushChipFromPlayer(playerIndex, mainPlayerElement = null) {
 
     const chip = document.createElement('div');
     chip.classList.add('chip');
-    chip.classList.add('chip--red');
+    chip.classList.add(getChipVariant(betAmount));
 
     const chipValue = document.createElement('div');
     chipValue.classList.add('chip-value');
-    chipValue.textContent = '100';
+    chipValue.textContent = betAmount;
     chip.appendChild(chipValue);
 
     const chipLogo = document.createElement('img');

@@ -29,16 +29,62 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const actionPanel = document.querySelector('.action-panel');
+    const raisePanel = document.querySelector('.raise-panel');
+    const raiseButton = document.querySelector('.raise');
+    const confirmRaiseButton = document.querySelector('.confirm-raise');
+    const cancelRaiseButton = document.querySelector('.cancel-raise');
+    const betSlider = document.querySelector('.bet-slider');
+    const betValue = document.querySelector('.bet-value');
+    const quickBets = document.querySelectorAll('.quick-bet');
 
-    document.querySelector('.raise').addEventListener('click', () => {
+    // Initialize the action panel as visible
+    setTimeout(() => {
+        actionPanel.classList.add('visible');
+    }, 100);
+
+    raiseButton.addEventListener('click', () => {
+        actionPanel.classList.remove('visible');
+        setTimeout(() => {
+            raisePanel.classList.add('visible');
+        }, 300);
+    });
+
+    betSlider.addEventListener('input', (e) => {
+        betValue.textContent = `$${e.target.value}`;
+    });
+
+    quickBets.forEach(button => {
+        button.addEventListener('click', () => {
+            const amount = button.dataset.amount;
+            betSlider.value = amount;
+            betValue.textContent = `$${amount}`;
+        });
+    });
+
+    confirmRaiseButton.addEventListener('click', () => {
         const activePlayer = document.querySelector('.player.active');
+        const betAmount = parseInt(betSlider.value);
+        
         if (activePlayer) {
             const playerIndex = Array.from(document.querySelectorAll('.player')).indexOf(activePlayer);
-            pushChipFromPlayer(playerIndex);
+            pushChipFromPlayer(playerIndex, null, betAmount);
         } else {
             const mainPlayer = document.querySelector('.hand');
-            pushChipFromPlayer(1, mainPlayer);
+            pushChipFromPlayer(-1, mainPlayer, betAmount);
         }
+
+        raisePanel.classList.remove('visible');
+        setTimeout(() => {
+            actionPanel.classList.add('visible');
+        }, 300);
+    });
+
+    cancelRaiseButton.addEventListener('click', () => {
+        raisePanel.classList.remove('visible');
+        setTimeout(() => {
+            actionPanel.classList.add('visible');
+        }, 300);
     });
 });
 
@@ -47,7 +93,7 @@ import { deck, formatCardFilename } from './deckCore.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const turnButton = document.getElementById('dev-turn');
-  const board = document.querySelector('.board');
+  const board = document.querySelector('.cards-container');
   const deckImage = document.querySelector('.deck img');
 
   turnButton.addEventListener('click', () => {
@@ -79,4 +125,3 @@ document.addEventListener("DOMContentLoaded", () => {
     popup?.classList.remove("visible");
   });
 });
-

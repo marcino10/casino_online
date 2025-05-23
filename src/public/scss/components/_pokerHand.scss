@@ -65,8 +65,9 @@
 .player-card {
   text-align: center;
   position: relative;
+  aspect-ratio: 1 / 1.4;
   width: 7vh;
-  height: 10vh;
+  height: auto;
   perspective: 800px;
   transition: transform 0.3s ease;
 
@@ -96,12 +97,13 @@
 
 .hand-card {
   position: absolute;
+  width: 100%;
+  height: 100%;
   border-radius: 0.5rem;
   backface-visibility: hidden;
   transition: transform 0.3s;
   transform-origin: 50% center;
-
-
+  object-fit: contain;
 }
 
 @media (max-width: 768px) {
