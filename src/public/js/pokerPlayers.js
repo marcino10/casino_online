@@ -1,13 +1,11 @@
 const players = [
-    { name: 'Alice' },
-    { name: 'Bob' },
-    { name: 'Charlie' },
-    { name: 'Dana' },
-    { name: 'Eli' },
-    { name: 'Frank' },
-    { name: 'Gina' },
-    { name: 'Harry' },
-    { name: 'Ivy' }
+    { name: 'Alice', bet: 120, balance: 1380 },
+    { name: 'Bob', bet: 50, balance: 600 },
+    { name: 'Charlie', bet: 0, balance: 1000 },
+    { name: 'Dana', bet: 30, balance: 900 },
+    { name: 'Eli', bet: 75, balance: 1120 },
+    { name: 'Frank', bet: 0, balance: 500 },
+    { name: 'Gina', bet: 45, balance: 860 },
 ];
 
 const container = document.getElementById('playersContainer');
@@ -19,9 +17,10 @@ function createPlayerElement(player, x, y) {
     el.style.left = `${x}px`;
     el.style.top = `${y}px`;
 
+    
     const hand = document.createElement('div');
     hand.className = 'player-hand';
-
+    
 
     for (let i = 0; i < 2; i++) {
         const cardDiv = document.createElement('div');
@@ -33,16 +32,34 @@ function createPlayerElement(player, x, y) {
         hand.appendChild(cardDiv);
     }
 
-    el.innerHTML = `
-        <div class="player-cards">
-            ${hand.outerHTML}
-        </div>
-        <div class="avatar-container">
-            <div class="avatar"></div>
-            <button class="reveal-cards" title="Reveal cards">👁</button>
-        </div>
-        <div class="name">${player.name}</div>
+   const name = document.createElement('div');
+name.className = 'name';
+name.textContent = player.name;
+
+const info = document.createElement('div');
+info.className = 'info';
+info.innerHTML = `
+        <span class="bet">bet: $${player.bet}</span>
+        <span class="balance">Balance: $${player.balance}</span>
     `;
+
+const avatarContainer = document.createElement('div');
+avatarContainer.className = 'avatar-container';
+avatarContainer.innerHTML = `
+    <div class="avatar"></div>
+    <button class="reveal-cards" title="Reveal cards">👁</button>
+`;
+
+const cardsContainer = document.createElement('div');
+cardsContainer.className = 'player-cards';
+cardsContainer.appendChild(hand);
+
+
+el.appendChild(name);
+el.appendChild(info);
+el.appendChild(avatarContainer);
+el.appendChild(cardsContainer);
+
 
     // Add click handler for the reveal button
     setTimeout(() => {
