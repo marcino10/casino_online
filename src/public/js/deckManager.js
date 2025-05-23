@@ -25,15 +25,27 @@ function dealToPlayers() {
 
 function dealToBoard(count = 5) {
     const boardDiv = document.querySelector('.board');
-    if (!boardDiv) return;
-    boardDiv.innerHTML = '';
+    const deckElement = document.querySelector('.deck img');
+    if (!boardDiv || !deckElement) return;
+
+    boardDiv.appendChild(img);
+
+
     for (let i = 0; i < count; i++) {
         const card = deck.pop();
+        if (!card) continue;
+
         const img = document.createElement('img');
         img.classList.add('card');
         img.src = `/img/deck/${formatCardFilename(card)}`;
         img.alt = card;
+        img.style.opacity = '0';
+
         boardDiv.appendChild(img);
+
+        dealCard(deckElement, img, i * 150);
+        dealCard(deckElement, img, i * 200);
+
     }
 
     renderDeckList();
@@ -67,7 +79,6 @@ document.getElementById('burn-card').addEventListener('click', () => {
     burnCard();
     renderDeckList();
 });
-document.getElementById('clear-chips').addEventListener('click', clearChips);
 
 
 generateDeck();
