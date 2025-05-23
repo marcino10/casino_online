@@ -236,10 +236,38 @@ exports.show = asyncHandler( async (req, res, next) => {
         playerHand = playerState.hand;
     }
 
+    const playersStates = await PlayerState.find({
+        tableId: table._id
+    }).populate('playerId', 'nick').populate('hand', 'suit value');
+
+
+    let playersStatesByNick = {};
+    for (const currentPlayerState of playersStates) {
+        const isFolded = currentPlayerState.isFolded;
+        let hand = [];
+
+        if (isFolded || currentPlayerState.playerId._id.toString() === userId.toString()) {
+            const cards = currentPlayerState.hand;
+            for (const card of cards) {
+                hand.push(card);
+            }
+        }
+
+        playersStatesByNick[currentPlayerState.playerId.nick] = {
+            isFolded,
+            hand,
+            lastBet: currentPlayerState.lastBet,
+            creditsLeft: currentPlayerState.creditsLeft,
+        }
+    }
+
     const gameData = {
         nick,
         playersBySeats,
-        playerHand
+        pot: table.pot,
+        currentBet: table.currentBet,
+        playersStates: playersStatesByNick,
+        activePlayer: playersBySeats[table.currentActionSeat - 1]
     }
 
     return res.render('pokerGame', {

@@ -63,6 +63,34 @@ const getCardsForBoard = async (numOfCards, table, hands) => {
     }
 }
 
+const getMinBetStepValue = async (buyIn) => {
+    return;
+}
+
+const getBlindBetValue = async (buyIn) => {
+    const blindBetValue = Math.round(buyIn / 100);
+
+    if (blindBetValue < 1) {
+        return 1;
+    }
+
+    return blindBetValue;
+}
+
+const betValue = async (table, playerState, betValue) => {
+    const betDiff = betValue - playerState.lastBet;
+
+    table.currentBet = betValue;
+    table.pot += betDiff;
+    await table.save();
+
+    playerState.creditsLeft -= betDiff;
+    playerState.lastBet = betValue
+    await playerState.save();
+
+    return playerState;
+}
+
 const startGame = async (table, io, hostSocket, ioRoom) => {
     const tableId = table._id;
 
@@ -84,26 +112,27 @@ const startGame = async (table, io, hostSocket, ioRoom) => {
         "0": await getCardsForBoard(3, table, playersHands)
     }
 
-    //isStarted: true,
     await PokerTable.updateOne(
         { _id: tableId },
         {
             $set: {
                 allHandsJson: {...boardDeck, ...playersHands},
                 numOfSeatsInCurrentGame: numOfPlayers,
-                // isStarted: true
+                isStarted: true,
+                currentActionSeat: 1,
             }
         }
     );
 
     const playersBySeats = await getPlayersBySeats(table._id);
 
-    const firstPlayer = await PlayerState.findOne({
+    let firstPlayerState = await PlayerState.findOne({
         tableId: tableId,
         seat: 1
     });
 
-    //TO DO: do blind bet for the first player
+    const blindBetValue = await getBlindBetValue(table.buyIn);
+    firstPlayerState =  await betValue(table, firstPlayerState, blindBetValue);
 
     io.in(ioRoom).fetchSockets().then(async (sockets) => {
        for (const socket of sockets) {
@@ -116,7 +145,11 @@ const startGame = async (table, io, hostSocket, ioRoom) => {
 
           socket.emit('game-started', {
                 players: playersBySeats,
-                cards
+                cards,
+                ActionBy: playersBySeats[0],
+                betValue: blindBetValue,
+                creditsLeft: firstPlayerState.creditsLeft,
+                pot: table.pot
           });
        }
     });

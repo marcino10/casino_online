@@ -1,10 +1,11 @@
 const container = document.getElementById('playersContainer');
 
-function createPlayerElement(player, x, y) {
+function createPlayerElement(playerNick, x, y) {
     const el = document.createElement('div');
     el.className = 'player';
     el.style.left = `${x}px`;
     el.style.top = `${y}px`;
+    el.setAttribute('id', `player-${playerNick}`);
 
     const hand = document.createElement('div');
     hand.className = 'player-hand';
@@ -28,7 +29,9 @@ function createPlayerElement(player, x, y) {
             <div class="avatar"></div>
             <button class="reveal-cards" title="Reveal cards">👁</button>
         </div>
-        <div class="name">${player}</div>
+        <div class="name">${playerNick}</div>
+        <p class="player-credits"></p>
+        <p class="player-bet"></p>
     `;
 
     // Add click handler for the reveal button

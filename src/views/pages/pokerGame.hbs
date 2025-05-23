@@ -23,7 +23,7 @@
         <div class="table">
             <div class="players-container" id="playersContainer"></div>
 
-            <div class="deck">
+            <div class="deck" style="display: none;">
                 <img class="card" src="/img/deck/back_red.webp" alt="Deck">
             </div>
 
@@ -46,9 +46,9 @@
     </div>
 
     <div class="action-panel">
-        <button class="fold">Fold</button>
-        <button class="check">Check</button>
-        <button class="raise">Raise</button>
+        <button class="fold" id="fold-btn">Fold</button>
+        <button class="check" id="check-btn">Check</button>
+        <button class="raise" id="raise-btn">Raise</button>
     </div>
 
 
@@ -89,7 +89,7 @@
 
 
     </main>
-    <p id="playerNick" style="display: none;">{{ nick }}</p>
+
     <script src="/socket.io/socket.io.js" defer></script>
     <script defer>
         window.gameData = JSON.parse('{{{gameData}}}');

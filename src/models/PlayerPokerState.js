@@ -19,10 +19,6 @@ const playerPokerStateSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Card'
     }],
-    allBet: {
-        type: Number,
-        default: 0
-    },
     lastBet: {
         type: Number,
         default: 0

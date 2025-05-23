@@ -58,7 +58,7 @@ const pokerTableSchema = new Schema({
         type: {},
         default: {}
     },
-    lastActionSeat: {
+    currentActionSeat: {
         type: Number
     },
     numOfSeatsInCurrentGame: {
