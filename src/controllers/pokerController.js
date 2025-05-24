@@ -223,23 +223,10 @@ exports.show = asyncHandler( async (req, res, next) => {
     const user = await User.findOne({ _id: userId });
     const nick = user.nick;
 
-    let playerHand = [];
-    let playersBySeats = [];
-    if (isStarted) {
-        playersBySeats = await pokerGame.getPlayersBySeats(table._id);
-
-        const playerState = await PlayerState.findOne({
-            tableId: table._id,
-            playerId: userId
-        }).populate('hand', 'suit value')
-
-        playerHand = playerState.hand;
-    }
-
+    const playersBySeats = await pokerGame.getPlayersBySeats(table._id);
     const playersStates = await PlayerState.find({
         tableId: table._id
     }).populate('playerId', 'nick').populate('hand', 'suit value');
-
 
     let playersStatesByNick = {};
     for (const currentPlayerState of playersStates) {

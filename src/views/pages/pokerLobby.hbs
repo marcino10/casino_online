@@ -6,7 +6,7 @@
           content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Big Win Casino - Poker</title>
-    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/poker.css">
 </head>
 <body>
 
@@ -16,19 +16,49 @@
     <section class="hero">
         {{> header}}
 
-        <form action="/poker/game/create" method="post">
-            <label for="tableName">Game name:</label>
-            <input type="text" name="tableName" id="tableName"> <br>
-            <label for="buyIn">Buy in value:</label>
-            <input type="number" name="buyIn" id="buyIn" value="50"> <br>
-            <label for="maxNumOfPlayers">Max num of players:</label>
-            <input type="number" value="5" min="2" max="10" name="maxNumOfPlayers" id="maxNumOfPlayers">
-            <input type="submit" value="Create Game">
-        </form>
-        <br>
-        <form action="/poker/join/aaaaaaaa">
-            <input type="submit" value="join">
-        </form>
+        <div class="create-game-fab" id="createGameFab"></div>
+
+        <div class="popup-overlay" id="createGamePopup">
+            <div class="popup-content">
+                <div class="popup-header">
+                    <h2>Create a new game</h2>
+                </div>
+                    <div class="server-msg" style="display: none;"></div>
+                <div class="close-popup" id="closePopup"></div>
+                <form action="/poker/game/create" method="post">
+                    <label for="tableName">Game name:</label>
+                    <input type="text" name="tableName" id="tableName" placeholder="Enter game name">
+
+                    <label for="buyIn">Buy in value:</label>
+                    <input type="number" name="buyIn" id="buyIn" value="50" >
+
+                    <label for="maxNumOfPlayers">Max num of players:</label>
+                    <input type="number" value="5" min="2" max="10" name="maxNumOfPlayers" id="maxNumOfPlayers" >
+
+                    <input type="submit" value="Create Game">
+                </form>
+            </div>
+        </div>
+
+        <div class="popup-overlay" id="rejoinGamePopup">
+            <div class="popup-content rejoin-content">
+                <div class="popup-header">
+                    <h2>Re-join Your Game</h2>
+                </div>
+                <div class="close-popup" id="closeRejoinPopup"></div>
+                <div class="rejoin-info">
+                    <p>You are already in a poker game.</p>
+                    <p>Would you like to re-join your table?</p>
+                </div>
+                <div class="rejoin-actions">
+                    <button class="rejoin-btn" id="rejoinConfirmBtn">Re-join</button>
+                    <button class="cancel-btn" id="rejoinLeaveBtn">Leave</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
         {{#if flash.error_msg}}
             <p class="server-msg error">
                 {{#each flash.error_msg}}{{this}}<br>{{/each}}
@@ -39,11 +69,48 @@
                 {{#each flash.success_msg}}{{this}}<br>{{/each}}
             </p>
         {{/if}}
+
+    <section class="poker-rooms-list">
+        <h2>Available Poker Rooms</h2>
+        <div class="rooms-container">
+            {{!-- Test rooms --}}
+            <div class="room-card">
+                <div class="room-info">
+                    <h3>High asf</h3>
+                    <p>Players: <span class="players-count">3</span>/<span class="max-players">6</span></p>
+                    <p>Buy-in: $100</p>
+                </div>
+                <form action="/poker/join/aaaaaaaa" method="get">
+                    <button type="submit" class="join-room-btn">Join</button>
+                </form>
+            </div>
+            <div class="room-card">
+                <div class="room-info">
+                    <h3>Cum-Pot</h3>
+                    <p>Players: <span class="players-count">2</span>/<span class="max-players">5</span></p>
+                    <p>Buy-in: $50</p>
+                </div>
+                <form action="/poker/join/aaaaaaaa" method="get">
+                    <button type="submit" class="join-room-btn">Join</button>
+                </form>
+            </div>
+            <div class="room-card">
+                <div class="room-info">
+                    <h3>Skibblers</h3>
+                    <p>Players: <span class="players-count">5</span>/<span class="max-players">8</span></p>
+                    <p>Buy-in: $500</p>
+                </div>
+                <form action="/poker/join/aaaaaaaa" method="get">
+                    <button type="submit" class="join-room-btn">Join</button>
+                </form>
+            </div>
+        </div>
     </section>
 
     {{> footer}}
 </main>
 
 <script src="/js/index.js"></script>
+<script type="module" src="/js/pokerPopup.js"></script>
 </body>
 </html>

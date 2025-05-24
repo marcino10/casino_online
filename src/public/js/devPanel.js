@@ -1,4 +1,5 @@
 import { deck, formatCardFilename } from './deckCore.js';
+import { dealCard } from './animations.js';
 
 let currentStage = 0;
 
@@ -12,33 +13,43 @@ function devLog(msg) {
 
 function dealHand() {
     const hand = document.querySelector('.player-hand');
+    const deckImage = document.querySelector('.deck img');
     hand.innerHTML = '';
+    
     const card1 = deck.pop();
     const card2 = deck.pop();
-    [card1, card2].forEach(card => {
+    
+    [card1, card2].forEach((card, index) => {
         const cardDiv = document.createElement('div');
         cardDiv.className = 'player-card';
         cardDiv.innerHTML = `
-          <img class="card hand-card front" src="/img/deck/${formatCardFilename(card)}" />
+          <img class="card hand-card front" src="/img/deck/${formatCardFilename(card)}" style="opacity: 0" />
           <img class="card hand-card back" src="/img/deck/back_red.webp" />
         `;
         hand.appendChild(cardDiv);
+        
+        const frontCard = cardDiv.querySelector('.front');
+        dealCard(deckImage, frontCard, index * 300);
     });
     devLog("Hand dealt to player (via dev panel).");
 }
 
 function revealStage(stage) {
-    const board = document.querySelector('.board');
+    const board = document.querySelector('.cards-container');
+    const deckImage = document.querySelector('.deck img');
     if (currentStage !== stage) return;
 
     let count = stage === 0 ? 3 : 1;
     for (let i = 0; i < count; i++) {
         const card = deck.pop();
         const img = document.createElement('img');
-        img.className = 'card';
+        img.classList.add('card');
         img.src = `/img/deck/${formatCardFilename(card)}`;
         img.alt = card;
+        img.style.opacity = '0';
+        
         board.appendChild(img);
+        dealCard(deckImage, img, i * 300);
     }
 
     devLog(`Revealed ${["Flop", "Turn", "River"][stage]}`);
@@ -46,7 +57,7 @@ function revealStage(stage) {
 }
 
 function resetBoard() {
-    const board = document.querySelector('.board');
+    const board = document.querySelector('.cards-container');
     board.innerHTML = '';
     currentStage = 0;
     devLog("Board reset.");
@@ -65,6 +76,7 @@ function setPot() {
     document.getElementById('potDisplay').textContent = `Pot: $${currentPot}`;
     devLog(`Pot set to $${currentPot}`);
 }
+
 
 
 // Event Listeners

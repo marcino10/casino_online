@@ -7,6 +7,120 @@
   <link rel="stylesheet" href="/css/pokerGame.css" />
 </head>
 <body>
+    <div class="pop-up">
+        <button class="close_pop-up">X</button>
+        <div class="hand-rankings">
+            <div class="hand-box">
+                <h3>1 • Straight Flush</h3>
+                <div class="card-row">
+                    <img src="/img/deck/heart_10_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/heart_9_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/heart_8_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/heart_6_mobile.svg" class="mini-card" />
+                </div>
+                <p>Five consecutive cards of the same suit.</p>
+            </div>
+            <div class="hand-box">
+                <h3>2 • Four of a Kind</h3>
+                <div class="card-row">
+                    <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/spade_a_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/heart_k_mobile.svg" class="mini-card" />
+                </div>
+                <p>Four cards of the same rank.</p>
+            </div>
+
+            <div class="hand-box">
+                <h3>3 • Full House</h3>
+                <div class="card-row">
+                    <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/spade_k_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/heart_k_mobile.svg" class="mini-card" />
+                </div>
+                <p>Three of a kind and a pair.</p>
+            </div>
+
+            <div class="hand-box">
+                <h3>4 • Flush</h3>
+                <div class="card-row">
+                    <img src="/img/deck/club_k_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/club_10_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/club_8_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/club_7_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/club_5_mobile.svg" class="mini-card" />
+                </div>
+                <p>Five cards of the same suit, not in sequence.</p>
+            </div>
+
+            <div class="hand-box">
+                <h3>5 • Straight</h3>
+                <div class="card-row">
+                    <img src="/img/deck/heart_10_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/club_9_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/diamond_8_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/spade_7_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/heart_6_mobile.svg" class="mini-card" />
+                </div>
+                <p>Five consecutive cards of different suits.</p>
+            </div>
+
+            <div class="hand-box">
+                <h3>6 • Three of a Kind</h3>
+                <div class="card-row">
+                    <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/heart_k_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/spade_q_mobile.svg" class="mini-card" />
+                </div>
+                <p>Three cards of the same rank.</p>
+            </div>
+
+            <div class="hand-box">
+                <h3>7 • Two Pair</h3>
+                <div class="card-row">
+                    <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/diamond_k_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/spade_k_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
+                </div>
+                <p>Two pairs of different ranks.</p>
+            </div>
+
+            <div class="hand-box">
+                <h3>8 • One Pair</h3>
+                <div class="card-row">
+                    <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/club_k_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/spade_j_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
+                </div>
+                <p>One pair of cards of the same rank.</p>
+            </div>
+
+            <div class="hand-box">
+                <h3>9 • High Card</h3>
+                <div class="card-row">
+                    <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/spade_k_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/diamond_q_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/club_9_mobile.svg" class="mini-card" />
+                    <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
+                </div>
+                <p>No combination – the highest card determines the hand.</p>
+            </div>
+        </div>
+    </div>
+
+    <img class="help-circle" id="helpIcon" src="/img/help-circle.svg" alt="Help" />
+
     <main class="poker-game">
         {{#unless isStarted}}
             <div class="waiting-popup" id="waiting">
@@ -18,20 +132,38 @@
                     <p>players: 1/10</p>
                     <p id="start-status"></p>
                 </div>
-                </div>
+            </div>
         {{/unless}}
         <div class="table">
             <div class="players-container" id="playersContainer"></div>
 
-            <div class="deck" style="display: none;">
+            <div class="deck">
                 <img class="card" src="/img/deck/back_red.webp" alt="Deck">
             </div>
 
             <div class="board">
-                <img class="card" id="board-card-template" src="" alt="Card" style="display: none;" />
+                <div class="pot-display">
+                    <span class="pot-label">Total Pot:</span>
+                    <span class="pot-amount">$0</span>
+                </div>
+                <div class="cards-container">
+                    <img class="card" src="/img/deck/heart_a_mobile.svg" alt="Card">
+                    <img class="card" src="/img/deck/heart_k_mobile.svg" alt="Card">
+                    <img class="card" src="/img/deck/diamond_q_mobile.svg" alt="Card">
+                    <img class="card" src="/img/deck/spade_j_mobile.svg" alt="Card">
+                    <img class="card" src="/img/deck/club_10_mobile.svg" alt="Card">
+                </div>
+                <div class="chips-container"></div>
             </div>
 
             <div class="hand">
+                <div class="info">
+                    <span class="bet">bet: $<span class="bet-value"></span></span>
+                    <span class="balance">Balance: $<span class="balance-value"></span></span>
+                </div>
+                <div class="avatar-container main-player">
+                    <div class="avatar"></div>
+                </div>
                 <div class="player-hand">
                     <div class="player-card">
                         <img class="card hand-card front self-front" src="" alt="Card back" />
@@ -43,14 +175,37 @@
                     </div>
                 </div>
             </div>
-    </div>
+        </div>
 
-    <div class="action-panel">
-        <button class="fold" id="fold-btn">Fold</button>
-        <button class="check" id="check-btn">Check</button>
-        <button class="raise" id="raise-btn">Raise</button>
-    </div>
+        <div class="action-panels">
+            <div class="action-panel">
+                <div class="action-buttons">
+                    <button class="fold" id="fold-btn">Fold</button>
+                    <button class="check" id="check-btn">Check</button>
+                    <button class="raise" id="raise-btn">Raise</button>
+                </div>
+            </div>
 
+            <div class="raise-panel">
+                <div class="slider-container">
+                    <input type="range" class="bet-slider" min="100" max="1000" step="100" value="100">
+                    <div class="bet-display">
+                        <span class="bet-label">Bet Amount:</span>
+                        <span class="bet-value">$100</span>
+                    </div>
+                    <div class="quick-bets">
+                        <button class="quick-bet" data-amount="100">$100</button>
+                        <button class="quick-bet" data-amount="300">$300</button>
+                        <button class="quick-bet" data-amount="500">$500</button>
+                        <button class="quick-bet" data-amount="1000">$1000</button>
+                    </div>
+                </div>
+                <div class="raise-actions">
+                    <button class="confirm-raise">Raise</button>
+                    <button class="cancel-raise">Cancel</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Developer Panel -->
         <div class="dev-panel" style="display: none;">
@@ -79,6 +234,7 @@
                 <button id="deal-to-players">Deal to Players</button>
                 <button id="deal-to-board">Deal to Board</button>
                 <button id="burn-card">Burn Card</button>
+                <button id="clear-chips">Clear Chips</button>
             </div>
 
             <div class="deck-state">

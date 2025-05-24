@@ -1,12 +1,13 @@
 @use 'components/nav';
 @use 'components/footer';
 @use 'components/header';
+@use 'components/scrollbar';
 @use 'variables/reset';
 @use 'variables/colors' as *;
 @use 'variables/mixin' as *;
 
 $font-stack: 'Arial', sans-serif;
-$text-color: #ddd;
+
 
 * {
   margin: 0;

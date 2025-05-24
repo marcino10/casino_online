@@ -1,25 +1,50 @@
-export function dealCard(sourceElement, targetElement, delay = 0) {
-    const card = document.createElement('div');
-    card.classList.add('card');
+export function dealCard(sourceElement, targetImage, delay = 0) {
+  const sourceRect = sourceElement.getBoundingClientRect();
+  const targetRect = targetImage.getBoundingClientRect();
 
-    const sourceRect = sourceElement.getBoundingClientRect();
-    const targetRect = targetElement.getBoundingClientRect();
+  const cardWrapper = document.createElement('div');
+  cardWrapper.classList.add('card-flip-wrapper');
+  cardWrapper.style.left = `${sourceRect.left}px`;
+  cardWrapper.style.top = `${sourceRect.top}px`;
+  cardWrapper.style.width = `${sourceRect.width}px`;
+  cardWrapper.style.height = `${sourceRect.height}px`;
 
-    card.style.left = `${sourceRect.left}px`;
-    card.style.top = `${sourceRect.top}px`;
+  const cardInner = document.createElement('div');
+  cardInner.classList.add('card-inner');
+
+  const cardBack = document.createElement('div');
+  cardBack.classList.add('card-face', 'back');
+  cardBack.style.backgroundImage = `url(${sourceElement.src})`;
+
+  const cardFront = document.createElement('div');
+  cardFront.classList.add('card-face', 'front');
+  cardFront.style.backgroundImage = `url(${targetImage.src})`;
+
+  cardInner.appendChild(cardFront);
+  cardInner.appendChild(cardBack);
+  cardWrapper.appendChild(cardInner);
+  document.body.appendChild(cardWrapper);
+
+  setTimeout(() => {
+    const dx = targetRect.left - sourceRect.left;
+    const dy = targetRect.top - sourceRect.top;
+    cardWrapper.style.transform = `translate(${dx}px, ${dy}px)`;
+  }, delay);
+
+  cardWrapper.addEventListener('transitionend', (e) => {
+    if (e.propertyName !== 'transform') return;
+
+    cardInner.classList.add('flipped');
 
     setTimeout(() => {
-        card.classList.add('dealing');
-        card.style.left = `${targetRect.left}px`;
-        card.style.top = `${targetRect.top}px`;
-
-        card.addEventListener('transitionend', () => {
-            targetElement.appendChild(card);
-        });
-    }, delay);
-
-    document.body.appendChild(card);
+      cardWrapper.remove();
+      targetImage.style.opacity = '1';
+    }, 600);
+  }, { once: true });
 }
+
+
+
 
 export function betChip(playerElement, potElement, amount) {
     const chip = document.createElement('div');

@@ -1,12 +1,119 @@
+import { pushChipFromPlayer } from "./pokerPlayers.js";
 import {} from "./devPanel.js";
 import {} from "./deckManager.js";
 
 const board = document.querySelector('.board');
 const hand = document.querySelector('.player-hand');
 
+document.addEventListener('DOMContentLoaded', () => {
+    const mainPlayerHand = document.querySelector('.hand .player-hand');
+    const mainPlayerCards = document.querySelectorAll('.hand .player-card');
+    let mainCardsRevealed = false;
 
-document.querySelector('.raise').addEventListener('click', () => {
-    const player = document.querySelector('.player.active');
-    const pot = document.querySelector('.pot');
-    betChip(player, pot, 100);
+    if (mainPlayerHand) {
+        mainPlayerHand.addEventListener('click', (e) => {
+            if (e.target.closest('.player-card')) {
+                mainCardsRevealed = !mainCardsRevealed;
+                mainPlayerCards.forEach(card => {
+                    card.classList.toggle('revealed', mainCardsRevealed);
+                });
+            }
+        });
+    }
+
+    const actionPanel = document.querySelector('.action-panel');
+    const raisePanel = document.querySelector('.raise-panel');
+    const raiseButton = document.querySelector('.raise');
+    const confirmRaiseButton = document.querySelector('.confirm-raise');
+    const cancelRaiseButton = document.querySelector('.cancel-raise');
+    const betSlider = document.querySelector('.bet-slider');
+    const betValue = document.querySelector('.bet-value');
+    const quickBets = document.querySelectorAll('.quick-bet');
+
+    // Initialize the action panel as visible
+    setTimeout(() => {
+        actionPanel.classList.add('visible');
+    }, 100);
+
+    raiseButton.addEventListener('click', () => {
+        actionPanel.classList.remove('visible');
+        setTimeout(() => {
+            raisePanel.classList.add('visible');
+        }, 300);
+    });
+
+    betSlider.addEventListener('input', (e) => {
+        betValue.textContent = `$${e.target.value}`;
+    });
+
+    quickBets.forEach(button => {
+        button.addEventListener('click', () => {
+            const amount = button.dataset.amount;
+            betSlider.value = amount;
+            betValue.textContent = `$${amount}`;
+        });
+    });
+
+    confirmRaiseButton.addEventListener('click', () => {
+        const activePlayer = document.querySelector('.player.active');
+        const betAmount = parseInt(betSlider.value);
+
+        if (activePlayer) {
+            const playerIndex = Array.from(document.querySelectorAll('.player')).indexOf(activePlayer);
+            pushChipFromPlayer(playerIndex, null, betAmount);
+        } else {
+            const mainPlayer = document.querySelector('.hand');
+            pushChipFromPlayer(-1, mainPlayer, betAmount);
+        }
+
+        raisePanel.classList.remove('visible');
+        setTimeout(() => {
+            actionPanel.classList.add('visible');
+        }, 300);
+    });
+
+    cancelRaiseButton.addEventListener('click', () => {
+        raisePanel.classList.remove('visible');
+        setTimeout(() => {
+            actionPanel.classList.add('visible');
+        }, 300);
+    });
+});
+
+import { dealCard } from './animations.js';
+import { deck, formatCardFilename } from './deckCore.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const turnButton = document.getElementById('dev-turn');
+  const board = document.querySelector('.cards-container');
+  const deckImage = document.querySelector('.deck img');
+
+  turnButton.addEventListener('click', () => {
+    if (!deck.length) return;
+
+    const card = deck.pop();
+    const img = document.createElement('img');
+    img.classList.add('card');
+    img.src = `/img/deck/${formatCardFilename(card)}`;
+    img.alt = card;
+    img.style.opacity = '0';
+
+    board.appendChild(img);
+    dealCard(deckImage, img, 0);
+  });
+});
+
+// popup
+document.addEventListener("DOMContentLoaded", () => {
+  const popup = document.querySelector(".pop-up");
+  const helpIcon = document.querySelector("#helpIcon");
+  const closeBtn = document.querySelector(".close_pop-up");
+
+  helpIcon?.addEventListener("click", () => {
+    popup?.classList.toggle("visible");
+  });
+
+  closeBtn?.addEventListener("click", () => {
+    popup?.classList.remove("visible");
+  });
 });

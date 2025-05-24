@@ -1,21 +1,11 @@
-@use 'variables/reset';
 @use 'components/nav';
+@use 'components/footer';
+@use 'components/header';
+@use 'components/scrollbar';
+@use 'variables/reset';
+@use 'variables/colors' as *;
+@use 'variables/mixin' as *;
 
-// Base styles
-$font-stack: 'Arial', sans-serif;
-$primary-color: #4CAF50;
-$secondary-color: #FFC107;
-$background-color: #f4f4f4;
-$text-color: #333;
-
-// Mixin for center alignment
-@mixin center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-// Global styles
 * {
   margin: 0;
   padding: 0;
@@ -23,29 +13,361 @@ $text-color: #333;
 }
 
 body {
-  font-family: $font-stack;
+  min-height: 100vh;
+  position: relative;
   background-color: $background-color;
   color: $text-color;
 }
 
 main {
-  .game {
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero {
+  @include center;
+  justify-content: start;
+  flex-direction: column;
+  text-align: center;
+  flex: 1;
+}
+
+.create-game-fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 4rem;
+  height: 4rem;
+  background-color: $primary;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s, background-color 0.2s;
+  z-index: 100;
+
+  &:hover {
+    transform: scale(1.1);
+    background-color: darken($primary, 10%);
+  }
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    background-color: white;
+    border-radius: 2px;
+  }
+
+  &::before {
+    width: 2px;
+    height: 24px;
+  }
+
+  &::after {
+    width: 24px;
+    height: 2px;
+  }
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  &.active {
+    display: flex;
+    opacity: 1;
+  }
+}
+
+.popup-content {
+  background-color: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.19);
+  backdrop-filter: blur(10px);
+  border-radius: 2rem;
+  width: min(380px, 95vw);
+  padding: 2rem;
+  position: relative;
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+
+  .active & {
+    transform: scale(1);
+  }
+
+  form {
+    display: flex;
     flex-direction: column;
-    .title {
-      font-size: 2rem;
-      margin-bottom: 20px;
+    padding-inline: clamp(1rem, 5vw, 2.5rem);
+
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 1rem;
+      width: 100%;
+
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        padding: 10px 0;
+        margin-bottom: 20px;
+        border: 0;
+        border-bottom: 1px solid $clear_border;
+        outline: none;
+        background: transparent;
+        font-size: 1rem;
+        color: $login_color;
+
+        &::placeholder {
+          //color: $login_color;
+        }
+
+        &.invalid {
+          border-bottom: 2px solid $error_wrapper_color !important;
+          animation: shake 0.3s ease;
+        }
+      }
+
+      .input-error {
+        color: $error_wrapper_color;
+        font-size: 0.7rem;
+        margin-top: -0.5rem;
+        margin-bottom: 0.2rem;
+        display: block;
+        opacity: 0;
+        transform: translateY(-5px);
+        transition: opacity 0.3s, transform 0.3s;
+
+        &.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
     }
-    .description {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
+
+    label {
+      color: $login_color;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
     }
-    .placeholder {
-      padding: 20px;
-      background-color: white;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      text-align: center;
-      font-size: 1.2rem;
+
+    input[type="submit"] {
+      box-shadow: 0 4px 55px rgba(255, 255, 255, 0.2);
+      width: 80%;
+      padding: 10px 30px;
+      font-size: 14px;
+      cursor: pointer;
+      display: block;
+      margin: auto;
+      background: $primary;
+      border: 0;
+      outline: none;
+      border-radius: 30px;
+      transition: 0.3s ease;
+      text-transform: capitalize;
+
+      &:hover {
+        background-color: darken($primary, 15%);
+        color: $text_color;
+      }
+    }
+  }
+}
+
+.popup-content.rejoin-content {
+  max-width: 370px;
+  text-align: center;
+
+  .popup-header h2 {
+    color: $primary;
+    margin-bottom: 1rem;
+  }
+
+  .rejoin-info {
+    margin: 1.2rem 0 2rem 0;
+    font-size: 1.1rem;
+    color: $text-color;
+    p {
+      margin: 0.3rem 0;
+    }
+  }
+
+  .rejoin-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+
+    .rejoin-btn {
+      background: $primary;
+      color: #fff;
+      border: none;
+      border-radius: 2rem;
+      padding: 0.6rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
+      transition: background 0.2s, transform 0.2s;
+
+      &:hover {
+        background: darken($primary, 10%);
+        transform: scale(1.05);
+      }
+    }
+
+    .cancel-btn {
+      background: transparent;
+      color: $primary;
+      border: 1px solid $primary;
+      border-radius: 2rem;
+      padding: 0.6rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+
+      &:hover {
+        background: $primary;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.close-popup {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    background-color: $text-color;
+    top: 0;
+    left: 50%;
+  }
+
+  &::before {
+    transform: rotate(45deg);
+  }
+
+  &::after {
+    transform: rotate(-45deg);
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-4px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.poker-rooms-list {
+  margin: 2rem auto;
+  width: min(700px, 95vw);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 24px rgba(0, 0, 0, 0.1);
+  padding: 2rem 1.5rem;
+  text-align: left;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    color: $primary;
+    letter-spacing: 1px;
+  }
+
+  .rooms-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .room-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.13);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 1rem;
+    padding: 1.2rem 1.5rem;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.07);
+    transition: box-shadow 0.2s, transform 0.2s;
+
+    &:hover {
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.13);
+      transform: translateY(-2px) scale(1.01);
+    }
+
+    .room-info {
+      h3 {
+        margin: 0 0 0.3rem 0;
+        font-size: 1.2rem;
+        color: $text-color;
+      }
+      p {
+        margin: 0.1rem 0;
+        font-size: 1rem;
+        color: $text-color;
+      }
+      .players-count {
+        color: $primary;
+      }
+      .max-players {
+        font-weight: bold;
+        color: $primary;
+      }
+    }
+
+    .join-room-btn {
+      background: $primary;
+      color: #fff;
+      border: none;
+      border-radius: 2rem;
+      padding: 0.7rem 1.7rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+      transition: background 0.2s, transform 0.2s;
+
+      &:hover {
+        background: darken($primary, 10%);
+        transform: scale(1.05);
+      }
     }
   }
 }

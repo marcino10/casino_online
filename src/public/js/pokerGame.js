@@ -6,6 +6,7 @@ const startBtn = document.querySelector('#start-game-btn');
 const startStatus = document.querySelector('#start-status');
 const waitingPopup = document.querySelector('#waiting');
 const playerCards = document.querySelectorAll('.self-front');
+const playerDiv = document.querySelector('.hand');
 const foldBtn = document.querySelector('#fold-btn');
 const checkBtn = document.querySelector('#check-btn');
 const raiseBtn = document.querySelector('#raise-btn');
@@ -13,9 +14,9 @@ const raiseBtn = document.querySelector('#raise-btn');
 const gameData = window.gameData;
 const playerNick = gameData.nick;
 let playersBySeats = gameData.playersBySeats;
+let playersStates = gameData.playersStates;
 let isStarted = window.isStarted;
 let playerHand = gameData.playersStates[playerNick].hand;
-console.log(playerHand);
 let currentBetValue = gameData.currentBet;
 let pot = gameData.pot;
 let activePlayer = gameData.activePlayer;
@@ -26,9 +27,9 @@ const drawPlayers = () => {
     let playerIndex = playersBySeats.indexOf(playerNick);
     const players = playersBySeats.slice(playerIndex + 1).concat(playersBySeats.slice(0, playerIndex));
 
-    positionPlayers(players);
+    positionPlayers(players, playersStates);
     window.addEventListener('resize', () => {
-        positionPlayers(players);
+        positionPlayers(players, playersStates);
     });
 }
 
@@ -46,12 +47,14 @@ const showPlayerBet = () => {
     }
 
     const currentPlayer = document.querySelector(`#player-${activePlayer}`);
-    const currentBet = currentPlayer.querySelector('.player-bet');
-    const currentCredits = currentPlayer.querySelector('.player-credits');
+    const currentBet = currentPlayer.querySelector('.bet-value');
+    const currentCredits = currentPlayer.querySelector('.balance-value');
 
     currentBet.textContent = currentPlayerBetValue;
     currentCredits.textContent = currentPlayerCredits;
 }
+
+playerDiv.setAttribute('id', `player-${playerNick}`);
 
 if (isStarted) {
     drawPlayers();
