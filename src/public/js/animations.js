@@ -43,9 +43,6 @@ export function dealCard(sourceElement, targetImage, delay = 0) {
   }, { once: true });
 }
 
-
-
-
 export function betChip(playerElement, potElement, amount) {
     const chip = document.createElement('div');
     chip.classList.add('chip');

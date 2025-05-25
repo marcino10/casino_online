@@ -135,7 +135,31 @@
             </div>
         {{/unless}}
         <div class="table">
-            <div class="players-container" id="playersContainer"></div>
+            <div class="player" id="player-template">
+                <div class="name">???</div>
+                <div class="info">
+                    <span class="bet">bet: $<span class="bet-value">???</span></span>
+                    <span class="balance">Balance: $<span class="balance-value">???</span></span>
+                </div>
+                <div class="avatar-container">
+                    <div class="avatar"></div>
+                </div>
+                <div class="player-cards">
+                    <div class="player-hand">
+                        <div class="player-card">
+                            <img class="card hand-card front" src="/img/deck/back_red.webp" alt="Card">
+                            <img class="card hand-card back" src="/img/deck/back_red.webp" alt="Card">
+                        </div>
+                        <div class="player-card">
+                            <img class="card hand-card front" src="/img/deck/back_red.webp" alt="Card">
+                            <img class="card hand-card back" src="/img/deck/back_red.webp" alt="Card">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="players-container" id="playersContainer">
+
+            </div>
 
             <div class="deck">
                 <img class="card" src="/img/deck/back_red.webp" alt="Deck">
@@ -144,7 +168,7 @@
             <div class="board">
                 <div class="pot-display">
                     <span class="pot-label">Total Pot:</span>
-                    <span class="pot-amount">$0</span>
+                    <span class="pot-amount">$<span id="pot-value">???</span></span>
                 </div>
                 <div class="cards-container">
                     <img class="card" src="/img/deck/heart_a_mobile.svg" alt="Card">
@@ -153,26 +177,12 @@
                     <img class="card" src="/img/deck/spade_j_mobile.svg" alt="Card">
                     <img class="card" src="/img/deck/club_10_mobile.svg" alt="Card">
                 </div>
-                <div class="chips-container"></div>
-            </div>
+                <div class="chip" id="chip-template">
+                    <div class="chip-value">100</div>
+                    <img src="/img/BIG_WIN.svg" alt="Chip Logo" class="chip-logo">
+                </div>
+                <div class="chips-container">
 
-            <div class="hand">
-                <div class="info">
-                    <span class="bet">bet: $<span class="bet-value"></span></span>
-                    <span class="balance">Balance: $<span class="balance-value"></span></span>
-                </div>
-                <div class="avatar-container main-player">
-                    <div class="avatar"></div>
-                </div>
-                <div class="player-hand">
-                    <div class="player-card">
-                        <img class="card hand-card front self-front" src="" alt="Card back" />
-                        <img class="card hand-card back" src="/img/deck/back_red.webp" alt="Card front" />
-                    </div>
-                    <div class="player-card">
-                        <img class="card hand-card front self-front" src="" alt="Card back" />
-                        <img class="card hand-card back" src="/img/deck/back_red.webp" alt="Card front" />
-                    </div>
                 </div>
             </div>
         </div>
@@ -252,6 +262,6 @@
         window.isStarted = {{isStarted}};
     </script>
     <script type="module" src="/js/pokerGame.js" defer ></script>
-    <script type="module" src="/js/pokerReveal.js" defer></script>
+    <script type="module" src="/js/pokerGameDev.js" defer></script>
 </body>
 </html>

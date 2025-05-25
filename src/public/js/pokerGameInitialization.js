@@ -1,13 +1,8 @@
 import { pushChipFromPlayer } from "./pokerPlayers.js";
-import {} from "./devPanel.js";
-import {} from "./deckManager.js";
 
-const board = document.querySelector('.board');
-const hand = document.querySelector('.player-hand');
-
-document.addEventListener('DOMContentLoaded', () => {
-    const mainPlayerHand = document.querySelector('.hand .player-hand');
-    const mainPlayerCards = document.querySelectorAll('.hand .player-card');
+export function initialize() {
+    const mainPlayerHand = document.querySelector('.player--main .player-hand');
+    const mainPlayerCards = document.querySelectorAll('.player--main .player-card');
     let mainCardsRevealed = false;
 
     if (mainPlayerHand) {
@@ -55,16 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     confirmRaiseButton.addEventListener('click', () => {
-        const activePlayer = document.querySelector('.player.active');
         const betAmount = parseInt(betSlider.value);
 
-        if (activePlayer) {
-            const playerIndex = Array.from(document.querySelectorAll('.player')).indexOf(activePlayer);
-            pushChipFromPlayer(playerIndex, null, betAmount);
-        } else {
-            const mainPlayer = document.querySelector('.hand');
-            pushChipFromPlayer(-1, mainPlayer, betAmount);
-        }
+        pushChipFromPlayer(0, betAmount);
 
         raisePanel.classList.remove('visible');
         setTimeout(() => {
@@ -78,42 +66,17 @@ document.addEventListener('DOMContentLoaded', () => {
             actionPanel.classList.add('visible');
         }, 300);
     });
-});
 
-import { dealCard } from './animations.js';
-import { deck, formatCardFilename } from './deckCore.js';
+    // popup initialization
+    const popup = document.querySelector(".pop-up");
+    const helpIcon = document.querySelector("#helpIcon");
+    const closeBtn = document.querySelector(".close_pop-up");
 
-document.addEventListener('DOMContentLoaded', () => {
-  const turnButton = document.getElementById('dev-turn');
-  const board = document.querySelector('.cards-container');
-  const deckImage = document.querySelector('.deck img');
+    helpIcon?.addEventListener("click", () => {
+        popup?.classList.toggle("visible");
+    });
 
-  turnButton.addEventListener('click', () => {
-    if (!deck.length) return;
-
-    const card = deck.pop();
-    const img = document.createElement('img');
-    img.classList.add('card');
-    img.src = `/img/deck/${formatCardFilename(card)}`;
-    img.alt = card;
-    img.style.opacity = '0';
-
-    board.appendChild(img);
-    dealCard(deckImage, img, 0);
-  });
-});
-
-// popup
-document.addEventListener("DOMContentLoaded", () => {
-  const popup = document.querySelector(".pop-up");
-  const helpIcon = document.querySelector("#helpIcon");
-  const closeBtn = document.querySelector(".close_pop-up");
-
-  helpIcon?.addEventListener("click", () => {
-    popup?.classList.toggle("visible");
-  });
-
-  closeBtn?.addEventListener("click", () => {
-    popup?.classList.remove("visible");
-  });
-});
+    closeBtn?.addEventListener("click", () => {
+        popup?.classList.remove("visible");
+    });
+}

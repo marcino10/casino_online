@@ -1,69 +1,43 @@
 const container = document.getElementById('playersContainer');
 
-function createPlayerElement(player, x, y) {
-    const el = document.createElement('div');
-    el.className = 'player';
-    el.style.left = `${x}px`;
-    el.style.top = `${y}px`;
-    el.setAttribute('id', `player-${player.nick}`);
+const setCards = (playerElement, playerHand) => {
+    if (playerHand.length === 0) return;
 
-    const hand = document.createElement('div');
-    hand.className = 'player-hand';
+    const deckUrl = '/img/deck'
+    if(playerHand.length > 0) {
+        const cards = playerElement.querySelectorAll('.front');
+        for (let i = 0; i < cards.length; i++) {
+            const card = playerHand[i];
+            const suit = card.suit;
+            const value = card.value;
+            cards[i].setAttribute('src', `${deckUrl}/${suit}_${value}_mobile.svg`);
+        }
+    }
+}
 
-    for (let i = 0; i < 2; i++) {
-        const cardDiv = document.createElement('div');
-        cardDiv.className = 'player-card';
-        cardDiv.innerHTML = `
-            <img class="card hand-card front" src="/img/deck/back_red.webp" alt="Card" />
-            <img class="card hand-card back" src="/img/deck/back_red.webp" alt="Card" />
-        `;
-        hand.appendChild(cardDiv);
+function createPlayerElement(player, x, y, isMainPlayer) {
+    const playerElement = document.querySelector('#player-template').cloneNode(true);
+
+    if(isMainPlayer) {
+        playerElement.classList.add('player--main');
     }
 
-    const name = document.createElement('div');
-    name.className = 'name';
-    name.textContent = player.nick;
+    setCards(playerElement, player.hand);
 
-    const info = document.createElement('div');
-    info.className = 'info';
-    info.innerHTML = `
-            <span class="bet">bet: $<span class="bet-value">${player.bet}</span></span>
-            <span class="balance">Balance: $<span class="balance-value">${player.balance}</span></span>
-        `;
+    playerElement.style.left = `${x}px`;
+    playerElement.style.top = `${y}px`;
+    playerElement.setAttribute('id', `player-${player.nick}`);
+    playerElement.classList.add('player-js')
 
-    const avatarContainer = document.createElement('div');
-    avatarContainer.className = 'avatar-container';
-    avatarContainer.innerHTML = `
-        <div class="avatar"></div>
-        <button class="reveal-cards" title="Reveal cards">👁</button>
-    `;
+    const playerName = playerElement.querySelector('.name');
+    const betValue = playerElement.querySelector('.bet-value');
+    const balanceValue = playerElement.querySelector('.balance-value');
 
-    const cardsContainer = document.createElement('div');
-    cardsContainer.className = 'player-cards';
-    cardsContainer.appendChild(hand);
+    playerName.textContent = player.nick;
+    betValue.textContent = player.bet;
+    balanceValue.textContent = player.balance;
 
-
-    el.appendChild(name);
-    el.appendChild(info);
-    el.appendChild(avatarContainer);
-    el.appendChild(cardsContainer);
-
-    // Add click handler for the reveal button
-    setTimeout(() => {
-        const revealBtn = el.querySelector('.reveal-cards');
-        const playerCards = el.querySelectorAll('.player-card');
-        let cardsRevealed = false;
-
-        revealBtn.addEventListener('click', () => {
-            cardsRevealed = !cardsRevealed;
-            playerCards.forEach(card => {
-                card.classList.toggle('revealed', cardsRevealed);
-            });
-            revealBtn.classList.toggle('active', cardsRevealed);
-        });
-    }, 0);
-
-    return el;
+    return playerElement;
 }
 
 export function positionPlayers(players, playersStates) {
@@ -73,28 +47,31 @@ export function positionPlayers(players, playersStates) {
     const centerX = container.offsetWidth / 2;
     const centerY = container.offsetHeight / 2;
 
-    for (let i = 0; i <= players.length; i++) {
-        if (i === 0) continue;
+    let isMainPlayer;
+    for (let i = 0; i < players.length; i++) {
+        isMainPlayer = (i === 0);
 
-        const playerNick = players[i-1];
+        const playerNick = players[i];
+        const playerState = playersStates[playerNick];
         const player = {
             nick: playerNick,
-            bet: playersStates[playerNick].lastBet,
-            balance: playersStates[playerNick].creditsLeft
+            bet: playerState.lastBet,
+            balance: playerState.creditsLeft,
+            hand: playerState.hand
         }
-        const angle = (((i) / (players.length + 1)) * Math.PI * 2) + 0.5 * Math.PI;
+
+        const angle = ((i / players.length) * Math.PI * 2) + 0.5 * Math.PI;
 
         const x = centerX + Math.cos(angle) * radius;
         const y = centerY + Math.sin(angle) * radius;
 
-        const el = createPlayerElement(player, x, y);
-        el.dataset.playerIndex = i - 1;
-        container.appendChild(el);
+        const playerElement = createPlayerElement(player, x, y, isMainPlayer);
+        playerElement.dataset.playerIndex = i;
+        container.appendChild(playerElement);
     }
 }
 
 function getChipVariant(betAmount) {
-    const minBet = 100;
     const maxBet = 1000;
     const percentage = (betAmount / maxBet) * 100;
 
@@ -105,40 +82,28 @@ function getChipVariant(betAmount) {
     return 'chip--red';
 }
 
-export function pushChipFromPlayer(playerIndex, mainPlayerElement = null, betAmount = 100) {
-    const table = document.querySelector('.table');
+export function pushChipFromPlayer(playerIndex, betAmount = 100) {
     const chipsContainer = document.querySelector('.chips-container');
     let sourceElement;
 
-    if (playerIndex === -1 && mainPlayerElement) {
-        sourceElement = mainPlayerElement;
-    } else {
-        const players = document.querySelectorAll('.player');
-        sourceElement = players[playerIndex];
-    }
+    const players = document.querySelectorAll('.player-js');
+    sourceElement = players[playerIndex];
 
-    if (!sourceElement || !table || !chipsContainer) return;
+    if (!sourceElement || !chipsContainer) return;
 
-    const chip = document.createElement('div');
-    chip.classList.add('chip');
+    const chip = document.querySelector('#chip-template').cloneNode(true);
+    chip.setAttribute('id', '');
+    chip.classList.add('chip-js')
     chip.classList.add(getChipVariant(betAmount));
 
-    const chipValue = document.createElement('div');
-    chipValue.classList.add('chip-value');
+    const chipValue = chip.querySelector('.chip-value');
     chipValue.textContent = betAmount;
-    chip.appendChild(chipValue);
-
-    const chipLogo = document.createElement('img');
-    chipLogo.src = '/img/BIG_WIN.svg';
-    chipLogo.alt = 'Chip Logo';
-    chipLogo.classList.add('chip-logo');
-    chip.appendChild(chipLogo);
 
     const sourceRect = sourceElement.getBoundingClientRect();
     const containerRect = chipsContainer.getBoundingClientRect();
 
     const startX = sourceRect.left - containerRect.left + (sourceRect.width);
-    const startY = sourceRect.top - containerRect.top + (sourceRect.height);
+    const startY = sourceRect.top - containerRect.top + (sourceRect.height / 2);
 
     const randomOffsetX = Math.random() * 300;
     const randomOffsetY = Math.random() * 150;
@@ -147,7 +112,6 @@ export function pushChipFromPlayer(playerIndex, mainPlayerElement = null, betAmo
     chip.style.transform = `translate(${startX - containerRect.width / 2}px, ${startY - containerRect.height / 2}px)`;
     chip.style.transform += ` rotate(${Math.random() * 360}deg)`;
     chipsContainer.appendChild(chip);
-
 
     requestAnimationFrame(() => {
         chip.style.transform = `translate(${randomOffsetX}%, ${randomOffsetY}%)`;
