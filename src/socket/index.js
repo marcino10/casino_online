@@ -1,27 +1,38 @@
 const PokerTable = require('../models/PokerTable');
 require('../controllers/pokerGameController')
-const {getUserTable, startGame, getPlayersBySeats} = require("../controllers/pokerGameController");
+const {getUserTable, startGame, getPlayersBySeats, raise} = require("../controllers/pokerGameController");
 
 module.exports = io => {
     io.on('connection', async (socket) => {
         const userId = socket.user.userId;
         const table = await getUserTable(userId);
         const isHost = userId.toString() === table.host.toString();
+        const roomId = table.tableId;
 
         socket.join(table.tableId);
 
         if (isHost) {
             socket.on('start-game', async () => {
-                await startGame(table, io, socket, table.tableId);
+                await startGame(io, socket, roomId, userId);
             });
         }
 
         console.log(userId + ' connected');
 
-        if (table.isStarted)
+        socket.on('raise', async (data) => {
+            const betValue = data.betValue;
 
-            socket.on('disconnect', () => {
-                console.log(userId + ' disconnected');
-            });
+            if (betValue > 0) {
+                await raise(io, socket, roomId, userId, betValue);
+            }
+        })
+
+        socket.on('call', async () => {
+            await raise(io, socket, roomId, userId, 0);
+        });
+
+        socket.on('disconnect', () => {
+            console.log(userId + ' disconnected');
+        });
     });
-};
+}

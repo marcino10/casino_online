@@ -1,4 +1,4 @@
-import { positionPlayers } from "./pokerPlayers.js";
+import { positionPlayers, pushChipFromPlayer } from "./pokerPlayers.js";
 import { initialize } from "./pokerGameInitialization.js";
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,17 +9,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const waitingPopup = document.querySelector('#waiting');
     const foldBtn = document.querySelector('#fold-btn');
     const checkBtn = document.querySelector('#check-btn');
-    const raiseBtn = document.querySelector('#raise-btn');
+    const potValueElement = document.querySelector('#pot-value')
+    const turnValueElement = document.querySelector('#turn-value');
+
+    const actionPanel = document.querySelector('.action-panel');
+    const raisePanel = document.querySelector('.raise-panel');
+    const raiseButton = document.querySelector('.raise');
+    const confirmRaiseButton = document.querySelector('.confirm-raise');
+    const cancelRaiseButton = document.querySelector('.cancel-raise');
+    const betSlider = document.querySelector('.bet-slider');
+    const betValue = document.querySelector('.bet-value');
+    const quickBets = document.querySelectorAll('.quick-bet');
 
     const gameData = window.gameData;
     const playerNick = gameData.nick;
+    let isStarted = window.isStarted;
     let playersBySeats = gameData.playersBySeats;
     let playersStates = gameData.playersStates;
-    let isStarted = window.isStarted;
-    let playerHand = gameData.playersStates[playerNick].hand;
     let currentBetValue = gameData.currentBet;
     let pot = gameData.pot;
-    let activePlayer = gameData.activePlayer;
+    let activePlayerSeat = gameData.currentTurnSeat;
+    let actionBySeat = null;
     let currentPlayerBetValue = null;
     let currentPlayerCredits = null;
 
@@ -35,12 +45,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const showPlayerBet = () => {
-        if (activePlayer === playerNick) {
-            return;
-        }
+    const updateInfo = () => {
+        potValueElement.textContent = pot;
+        turnValueElement.textContent = playersBySeats[activePlayerSeat - 1];
+    }
 
-        const currentPlayer = document.querySelector(`#player-${activePlayer}`);
+    const updateView = () => {
+        drawPlayers();
+        initialize();
+        updateInfo();
+    }
+
+    const showPlayerBet = () => {
+        const currentPlayer = document.querySelector(`#player-${playersBySeats[actionBySeat - 1]}`);
         const currentBet = currentPlayer.querySelector('.bet-value');
         const currentCredits = currentPlayer.querySelector('.balance-value');
 
@@ -48,9 +65,56 @@ document.addEventListener('DOMContentLoaded', () => {
         currentCredits.textContent = currentPlayerCredits;
     }
 
+    // Initialize the action panel as visible
+    setTimeout(() => {
+        actionPanel.classList.add('visible');
+    }, 100);
+
+    raiseButton.addEventListener('click', () => {
+        actionPanel.classList.remove('visible');
+        setTimeout(() => {
+            raisePanel.classList.add('visible');
+        }, 300);
+    });
+
+    betSlider.addEventListener('input', (e) => {
+        betValue.textContent = `$${e.target.value}`;
+    });
+
+    quickBets.forEach(button => {
+        button.addEventListener('click', () => {
+            const amount = button.dataset.amount;
+            betSlider.value = amount;
+            betValue.textContent = `$${amount}`;
+        });
+    });
+
+    cancelRaiseButton.addEventListener('click', () => {
+        raisePanel.classList.remove('visible');
+        setTimeout(() => {
+            actionPanel.classList.add('visible');
+        }, 300);
+    });
+
+    confirmRaiseButton.addEventListener('click', () => {
+        const betValue = parseInt(betSlider.value);
+
+        socket.emit('raise', {
+            betValue: betValue
+        })
+
+        raisePanel.classList.remove('visible');
+        setTimeout(() => {
+            actionPanel.classList.add('visible');
+        }, 300);
+    });
+
+    checkBtn.addEventListener('click', () => {
+        socket.emit('call');
+    });
+
     if (isStarted) {
-        drawPlayers();
-        initialize();
+        updateView();
     }
 
     if (startBtn) {
@@ -65,16 +129,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('game-started', (data) => {
         playersBySeats = data.players;
-        playerHand = data.cards;
+        playersStates = data.playersStates;
         currentBetValue = data.betValue;
-        activePlayer = data.ActionBy;
         currentPlayerBetValue = data.betValue;
         currentPlayerCredits = data.creditsLeft
+        activePlayerSeat = data.currentTurnSeat;
+        actionBySeat = data.ActionBySeat;
         pot = data.pot;
 
-        drawPlayers();
+        updateView();
         showPlayerBet();
 
         waitingPopup.style.display = 'none';
-    })
+    });
+
+    socket.on('raised', (data) => {
+        actionBySeat = data.ActionBySeat;
+        currentBetValue = data.betValue;
+        currentPlayerBetValue = data.betValue;
+        currentPlayerCredits = data.creditsLeft;
+        pot = data.pot;
+
+        showPlayerBet();
+        updateInfo();
+
+        pushChipFromPlayer(data.seat, data.betValue);
+    });
 });
+
+

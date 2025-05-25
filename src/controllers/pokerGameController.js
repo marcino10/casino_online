@@ -1,4 +1,3 @@
-const {setFlash} = require("../helpers");
 const PlayerState = require("../models/PlayerPokerState");
 const PokerTable = require('../models/PokerTable');
 const User = require('../models/User');
@@ -54,7 +53,7 @@ const getCardsForBoard = async (numOfCards, table, hands) => {
         }).select('_id');
         const cardsIds = matchingCards.map(card => card._id);
 
-        table.boardDeck = cardsIds;
+        table.boardDeck += cardsIds;
         await table.save();
 
         return cards;
@@ -77,10 +76,25 @@ const getBlindBetValue = async (buyIn) => {
     return blindBetValue;
 }
 
-const betValue = async (table, playerState, betValue) => {
-    const betDiff = betValue - playerState.lastBet;
+const bet = async (table, playerState, betValue = null) => {
+    let betDiff;
 
-    table.currentBet = betValue;
+    if (!betValue) {
+        betValue = table.currentBet;
+        betDiff = betValue - playerState.lastBet;
+
+        if (playerState.creditsLeft < betDiff) {
+            betDiff = playerState.creditsLeft;
+        }
+    } else {
+        table.currentBet = betValue;
+        betDiff = betValue - playerState.lastBet;
+
+        if (playerState.creditsLeft < betDiff) {
+            throw new Error('Not enough credits to place this bet');
+        }
+    }
+
     table.pot += betDiff;
     await table.save();
 
@@ -88,71 +102,43 @@ const betValue = async (table, playerState, betValue) => {
     playerState.lastBet = betValue
     await playerState.save();
 
-    return playerState;
+    return betDiff;
 }
 
-const startGame = async (table, io, hostSocket, ioRoom) => {
-    const tableId = table._id;
-
-    if (table.isStarted) return;
-
-    if(table.players.length < 2) {
-        hostSocket.emit('start-status', {
-            message: 'Not enough players'
-        });
-        return;
+const betNewValue = async (table, playerState, betValue) => {
+    let betDiff;
+    try {
+        betDiff =  await bet(table, playerState, betValue);
+    } catch (err) {
+        throw new Error(err.message);
     }
 
-    const numOfPlayers = table.players.length;
+    table.currentBetSeat = playerState.seat;
+    await table.save();
 
+    return betDiff;
+}
 
-    const playersHands = await getCardsForPlayers(numOfPlayers, tableId);
+const getNextPlayerSeat = async (table) => {
+    let nextSeat = table.currentTurnSeat + 1;
 
-    const boardDeck = {
-        "0": await getCardsForBoard(3, table, playersHands)
+    if (nextSeat > table.numOfSeatsInCurrentGame) {
+        nextSeat = 1;
     }
 
-    await PokerTable.updateOne(
-        { _id: tableId },
-        {
-            $set: {
-                allHandsJson: {...boardDeck, ...playersHands},
-                numOfSeatsInCurrentGame: numOfPlayers,
-                isStarted: true,
-                currentActionSeat: 1,
-            }
-        }
-    );
-
-    const playersBySeats = await getPlayersBySeats(table._id);
-
-    let firstPlayerState = await PlayerState.findOne({
-        tableId: tableId,
-        seat: 1
+    const nextPlayerState = await PlayerState.findOne({
+        tableId: table._id,
+        seat: nextSeat
     });
 
-    const blindBetValue = await getBlindBetValue(table.buyIn);
-    firstPlayerState =  await betValue(table, firstPlayerState, blindBetValue);
+    if (nextPlayerState.isFolded) {
+        table.currentTurnSeat = nextSeat;
+        await table.save();
 
-    io.in(ioRoom).fetchSockets().then(async (sockets) => {
-       for (const socket of sockets) {
-          const userId = socket.user.userId;
-          const userState = await PlayerState.findOne({
-              playerId: userId,
-              tableId
-          });
-          const cards = playersHands[userState.seat];
+        return getNextPlayerSeat(table);
+    }
 
-          socket.emit('game-started', {
-                players: playersBySeats,
-                cards,
-                ActionBy: playersBySeats[0],
-                betValue: blindBetValue,
-                creditsLeft: firstPlayerState.creditsLeft,
-                pot: table.pot
-          });
-       }
-    });
+    return nextSeat;
 }
 
 const getUserTable = async (userId) => {
@@ -186,8 +172,142 @@ const getPlayersBySeats = async (tableId) => {
     return playersBySeats;
 }
 
+const getTableByRoom = async (roomId) => {
+    const table = await PokerTable.findOne({tableId: roomId}).populate('players', 'nick').populate('host', 'nick');
+
+    return table;
+}
+
+const getAvailablePlayersStatesByNick = async (playersBySeats, userId, tableId) => {
+    const playersStates = await PlayerState.find({
+        tableId
+    }).populate('playerId', 'nick').populate('hand', 'suit value');
+
+    let playersStatesByNick = {};
+    for (const currentPlayerState of playersStates) {
+        const isFolded = currentPlayerState.isFolded;
+        let hand = [];
+
+        if (isFolded || currentPlayerState.playerId._id.toString() === userId.toString()) {
+            const cards = currentPlayerState.hand;
+            for (const card of cards) {
+                hand.push(card);
+            }
+        }
+
+        playersStatesByNick[currentPlayerState.playerId.nick] = {
+            isFolded,
+            hand,
+            lastBet: currentPlayerState.lastBet,
+            creditsLeft: currentPlayerState.creditsLeft,
+        }
+    }
+
+    return playersStatesByNick;
+}
+
+const raise = async (io, reqSocket, roomId, userId, betValue = 0) => {
+    const table = await getTableByRoom(roomId);
+
+    if (betValue < table.currentBet && betValue !== 0) {
+        return;
+    }
+
+    const playerState = await PlayerState.findOne({
+        playerId: userId,
+        tableId: table._id
+    });
+
+    if (playerState.seat !== table.currentTurnSeat) {
+        return;
+    }
+
+    let betDiff;
+    if (betValue === 0) {
+        try {
+            betDiff = await bet(table, playerState);
+        } catch (err) {
+            return;
+        }
+    } else {
+        try {
+            betDiff = await betNewValue(table, playerState, betValue);
+        } catch (err) {
+            return;
+        }
+    }
+
+    table.currentTurnSeat = await getNextPlayerSeat(table);
+    await table.save();
+
+    io.to(roomId).emit('raised', {
+        ActionBySeat: playerState.seat,
+        betValue: table.currentBet,
+        betDiff,
+        creditsLeft: playerState.creditsLeft,
+        pot: table.pot,
+        currentTurnSeat: table.currentTurnSeat
+    })
+}
+
+const startGame = async (io, hostSocket, roomId, userId) => {
+    const table = await getTableByRoom(roomId)
+    const tableId = table._id;
+
+    if (table.isStarted) return;
+
+    if(table.players.length < 2) {
+        hostSocket.emit('start-status', {
+            message: 'Not enough players'
+        });
+        return;
+    }
+
+    const numOfPlayers = table.players.length;
+    const playersHands = await getCardsForPlayers(numOfPlayers, tableId);
+
+    await PokerTable.updateOne(
+        { _id: tableId },
+        {
+            $set: {
+                allHandsJson: playersHands,
+                numOfSeatsInCurrentGame: numOfPlayers,
+                isStarted: true,
+                currentTurnSeat: 2,
+            }
+        }
+    );
+
+    const firstPlayerState = await PlayerState.findOne({
+        tableId: tableId,
+        seat: 1
+    });
+    const playersBySeats = await getPlayersBySeats(table._id);
+    const blindBetValue = await getBlindBetValue(table.buyIn);
+    const betDiff =  await betNewValue(table, firstPlayerState, blindBetValue);
+
+    io.in(roomId).fetchSockets().then(async (sockets) => {
+       for (const socket of sockets) {
+          const currentUserId = socket.user.userId;
+          const playersStates = await getAvailablePlayersStatesByNick(playersBySeats, currentUserId, tableId);
+
+          socket.emit('game-started', {
+                players: playersBySeats,
+                ActionBySeat: 1,
+                betValue: firstPlayerState.creditsLeft,
+                betDiff,
+                pot: table.pot,
+                currentTurnSeat: table.currentTurnSeat,
+                playersStates
+          });
+       }
+    });
+}
+
 module.exports = {
     startGame,
+    raise,
     getUserTable,
     getPlayersBySeats,
+    getAvailablePlayersStatesByNick
 }
