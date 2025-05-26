@@ -99,14 +99,16 @@ document.addEventListener('DOMContentLoaded', () => {
     confirmRaiseButton.addEventListener('click', () => {
         const betValue = parseInt(betSlider.value);
 
+        pushChipFromPlayer(1, betValue);
+
         socket.emit('raise', {
             betValue: betValue
         })
 
-        raisePanel.classList.remove('visible');
-        setTimeout(() => {
-            actionPanel.classList.add('visible');
-        }, 300);
+        // raisePanel.classList.remove('visible');
+        // setTimeout(() => {
+        //     actionPanel.classList.add('visible');
+        // }, 300);
     });
 
     checkBtn.addEventListener('click', () => {

@@ -43,7 +43,7 @@ function createPlayerElement(player, x, y, isMainPlayer) {
 export function positionPlayers(players, playersStates) {
     container.innerHTML = '';
 
-    const radius = window.innerWidth < 769 ? window.innerHeight * 0.2 : window.innerHeight * 0.35;
+    const radius = window.innerWidth < 769 ? window.innerHeight * 0.32 : window.innerHeight * 0.35;
     const centerX = container.offsetWidth / 2;
     const centerY = container.offsetHeight / 2;
 
@@ -71,18 +71,55 @@ export function positionPlayers(players, playersStates) {
     }
 }
 
-function getChipVariant(betAmount) {
-    const maxBet = 1000;
-    const percentage = (betAmount / maxBet) * 100;
+const CHIP_VALUES = [
+    { value: 0,   class: 'chip--red' },
+    { value: 0,   class: 'chip--green' },
+    { value: 0,   class: 'chip--blue' },
+    { value: 0,   class: 'chip--black' },
+    { value: 0,   class: 'chip--gold' }
+];
 
-    if (percentage >= 90) return 'chip--gold';
-    if (percentage >= 70) return 'chip--black';
-    if (percentage >= 50) return 'chip--blue';
-    if (percentage >= 25) return 'chip--green';
-    return 'chip--red';
+
+function normalizeChipValue(rawValue) {
+    if (rawValue % 5 !== 0) {
+        return Math.round(rawValue / 10) * 10;
+    }
+    return rawValue;
+}
+
+function setChipValue(minBet, maxBet) {
+    const percentages = [0.05, 0.1, 0.25, 0.5, 1];
+
+    CHIP_VALUES[0].value = minBet;
+
+    for (let i = 1; i < CHIP_VALUES.length; i++) {
+        const rawValue = Math.round(maxBet * percentages[i]);
+        console.log("rawValue:", rawValue)
+        CHIP_VALUES[i].value = normalizeChipValue(rawValue);
+    }
+}
+
+function getChipVariant(betAmount) {
+    const sortedChips = CHIP_VALUES.slice().sort((a, b) => b.value - a.value);
+    let amountLeft = betAmount;
+    const chips = [];
+    for (const chip of sortedChips) {
+        if (chip.value <= 0) continue;
+        const count = Math.floor(amountLeft / chip.value);
+        for (let i = 0; i < count; i++) {
+            chips.push({ class: chip.class, value: chip.value });
+        }
+        amountLeft -= count * chip.value;
+        console.log(amountLeft)
+    }
+    return chips;
 }
 
 export function pushChipFromPlayer(playerIndex, betAmount = 100) {
+
+    setChipValue(1, 50);
+    console.log(CHIP_VALUES)
+
     const chipsContainer = document.querySelector('.chips-container');
     let sourceElement;
 
@@ -91,13 +128,7 @@ export function pushChipFromPlayer(playerIndex, betAmount = 100) {
 
     if (!sourceElement || !chipsContainer) return;
 
-    const chip = document.querySelector('#chip-template').cloneNode(true);
-    chip.setAttribute('id', '');
-    chip.classList.add('chip-js')
-    chip.classList.add(getChipVariant(betAmount));
-
-    const chipValue = chip.querySelector('.chip-value');
-    chipValue.textContent = betAmount;
+    const chipVariants = getChipVariant(betAmount);
 
     const sourceRect = sourceElement.getBoundingClientRect();
     const containerRect = chipsContainer.getBoundingClientRect();
@@ -105,16 +136,46 @@ export function pushChipFromPlayer(playerIndex, betAmount = 100) {
     const startX = sourceRect.left - containerRect.left + (sourceRect.width);
     const startY = sourceRect.top - containerRect.top + (sourceRect.height / 2);
 
-    const randomOffsetX = Math.random() * 300;
-    const randomOffsetY = Math.random() * 150;
+    chipVariants.forEach((chipData, idx) => {
+        const chip = document.querySelector('#chip-template').cloneNode(true);
+        chip.setAttribute('id', '');
+        chip.classList.add('chip-js');
+        chip.classList.add(chipData.class);
+
+        const chipValue = chip.querySelector('.chip-value');
+        chipValue.textContent = chipData.value;
+
+
+    const randomOffsetX = Math.random() * 60;
+    const randomOffsetY = Math.random() * 60;
 
     chip.style.opacity = '0.5';
-    chip.style.transform = `translate(${startX - containerRect.width / 2}px, ${startY - containerRect.height / 2}px)`;
+    chip.style.transform = `translate(${- 50}%, ${startY - containerRect.height*0.8}px)`;
     chip.style.transform += ` rotate(${Math.random() * 360}deg)`;
     chipsContainer.appendChild(chip);
 
     requestAnimationFrame(() => {
-        chip.style.transform = `translate(${randomOffsetX}%, ${randomOffsetY}%)`;
+        switch (chipData.class){
+            case 'chip--red':
+                chip.style.transform = `translate(${-275-randomOffsetX}%, ${50-randomOffsetY}%)`;
+                break;
+            case 'chip--green':
+                chip.style.transform = `translate(${-125-randomOffsetX}%, ${50-randomOffsetY}%)`;
+                break;
+            case 'chip--blue':
+                chip.style.transform = `translate(${25-randomOffsetX}%, ${50-randomOffsetY}%)`;
+                break;
+            case 'chip--black':
+                chip.style.transform = `translate(${175-randomOffsetX}%, ${50-randomOffsetY}%)`;
+                break;
+            case 'chip--gold':
+                chip.style.transform = `translate(${325-randomOffsetX}%, ${50-randomOffsetY}%)`;
+                break;
+            default:
+                chip.style.transform = `translate(${75-randomOffsetX}%, ${50-randomOffsetY}%)`;
+                break;
+        }
         chip.style.opacity = '1';
+    });
     });
 }
