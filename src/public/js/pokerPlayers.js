@@ -1,6 +1,6 @@
 const container = document.getElementById('playersContainer');
 
-const setCards = (playerElement, playerHand) => {
+export const setCards = (playerElement, playerHand) => {
     if (playerHand.length === 0) return;
 
     const deckUrl = '/img/deck'
@@ -15,6 +15,37 @@ const setCards = (playerElement, playerHand) => {
     }
 }
 
+const cardsReveal = (e, playerElement) => {
+    const playerCards = playerElement.querySelectorAll('.player-card');
+
+    if (e.target.closest('.player-card')) {
+        playerCards.forEach(card => {
+            card.classList.toggle('revealed');
+        });
+    }
+}
+
+const setEventListenerForCardsReveal = (playerElement) => {
+    const playerHand = playerElement.querySelector('.player-hand');
+
+    if (playerHand) {
+        playerHand.addEventListener('click', (e) => {
+            cardsReveal(e, playerElement);
+        });
+    }
+}
+
+export const deleteEventListenerForCardsReveal = (playerElement) => {
+    const newPLayerElement = playerElement.cloneNode(true);
+    const cards = newPLayerElement.querySelectorAll('.player-card');
+
+    cards.forEach(card => {
+        card.classList.add('revealed');
+    });
+
+    playerElement.replaceWith(newPLayerElement);
+}
+
 function createPlayerElement(player, x, y, isMainPlayer) {
     const playerElement = document.querySelector('#player-template').cloneNode(true);
 
@@ -23,6 +54,16 @@ function createPlayerElement(player, x, y, isMainPlayer) {
     }
 
     setCards(playerElement, player.hand);
+
+    console.log(player)
+    if ((!isMainPlayer && player.hand.length > 0) || (isMainPlayer && player.isFolded)) {
+        const playerCards = playerElement.querySelectorAll('.player-card');
+        playerCards.forEach(card => {
+            card.classList.add('revealed');
+        })
+    } else if(isMainPlayer) {
+        setEventListenerForCardsReveal(playerElement);
+    }
 
     playerElement.style.left = `${x}px`;
     playerElement.style.top = `${y}px`;
@@ -57,7 +98,8 @@ export function positionPlayers(players, playersStates) {
             nick: playerNick,
             bet: playerState.lastBet,
             balance: playerState.creditsLeft,
-            hand: playerState.hand
+            hand: playerState.hand,
+            isFolded: playerState.isFolded
         }
 
         const angle = ((i / players.length) * Math.PI * 2) + 0.5 * Math.PI;

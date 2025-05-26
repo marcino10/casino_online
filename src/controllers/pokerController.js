@@ -232,7 +232,7 @@ exports.show = asyncHandler( async (req, res, next) => {
         pot: table.pot,
         currentBet: table.currentBet,
         playersStates: playersStatesByNick,
-        currentTurnSeat: table.currentTurnSeat
+        currentTurnSeat: table.currentTurnSeat,
     }
 
     return res.render('pokerGame', {

@@ -35,10 +35,9 @@ const getCardsForPlayers = async (numOfPlayers, tableId) => {
     } catch (err) {
         console.error('Error drawing cards:', err);
     }
-
 };
 
-const getCardsForBoard = async (numOfCards, table, hands) => {
+const drawCardsForBoard = async (numOfCards, table, hands) => {
     const postData = {
         numOfCards,
         hands
@@ -59,6 +58,44 @@ const getCardsForBoard = async (numOfCards, table, hands) => {
         return cards;
     } catch (err) {
         console.error('Error drawing cards:', err);
+    }
+}
+
+const nextRound = async (io, roomId, table) => {
+    const currentRound = table.currentRound;
+    const currentCards = table.allHandsJson;
+
+    let newCards;
+    switch (currentRound) {
+        case 0:
+            newCards = await drawCardsForBoard(3, table, currentCards);
+
+            table.allHandsJson = {
+                "0": newCards,
+                ...table.allHandsJson
+            }
+            table.currentRound += 1;
+            await table.save();
+
+            io.to(roomId).emit('board-cards', {
+                cards: newCards
+            });
+            break;
+        case 1:
+        case 2:
+            newCards = await drawCardsForBoard(1, table, currentCards);
+
+            table.allHandsJson["0"].append(newCards);
+            table.currentRound += 1;
+            await table.save();
+
+            io.to(roomId).emit('new-turn', {
+                cards: newCards
+            });
+            break;
+        case 3:
+            // get results, finish game
+            break;
     }
 }
 
@@ -206,6 +243,32 @@ const getAvailablePlayersStatesByNick = async (playersBySeats, userId, tableId) 
     return playersStatesByNick;
 }
 
+const fold = async (io, reqSocket, roomId, userId) => {
+    const table = await getTableByRoom(roomId);
+    const playerState = await PlayerState.findOne({
+        tableId: table._id,
+        playerId: userId
+    }).populate('hand', 'suit value');
+
+    playerState.isFolded = true;
+    await playerState.save();
+
+    if (table.currentTurnSeat === playerState.seat) {
+        table.currentTurnSeat = await getNextPlayerSeat(table);
+        table.save();
+    }
+
+    if (table.currentTurnSeat === table.currentBetSeat) {
+        await nextRound(io, roomId, table);
+    }
+
+    io.to(roomId).emit('folded', {
+        actionBySeat: playerState.seat,
+        currentTurnSeat: table.currentTurnSeat,
+        playerCards: playerState.hand
+    })
+}
+
 const raise = async (io, reqSocket, roomId, userId, betValue = 0) => {
     const table = await getTableByRoom(roomId);
 
@@ -217,6 +280,10 @@ const raise = async (io, reqSocket, roomId, userId, betValue = 0) => {
         playerId: userId,
         tableId: table._id
     });
+
+    if (playerState.isFolded) {
+        return;
+    }
 
     if (playerState.seat !== table.currentTurnSeat) {
         return;
@@ -239,6 +306,10 @@ const raise = async (io, reqSocket, roomId, userId, betValue = 0) => {
 
     table.currentTurnSeat = await getNextPlayerSeat(table);
     await table.save();
+
+    if (table.currentTurnSeat === table.currentBetSeat) {
+        await nextRound(io, roomId, table);
+    }
 
     io.to(roomId).emit('raised', {
         ActionBySeat: playerState.seat,
@@ -266,17 +337,11 @@ const startGame = async (io, hostSocket, roomId, userId) => {
     const numOfPlayers = table.players.length;
     const playersHands = await getCardsForPlayers(numOfPlayers, tableId);
 
-    await PokerTable.updateOne(
-        { _id: tableId },
-        {
-            $set: {
-                allHandsJson: playersHands,
-                numOfSeatsInCurrentGame: numOfPlayers,
-                isStarted: true,
-                currentTurnSeat: 2,
-            }
-        }
-    );
+    table.allHandsJson = playersHands;
+    table.numOfSeatsInCurrentGame = numOfPlayers;
+    table.isStarted = true;
+    table.currentTurnSeat = await getNextPlayerSeat(table);
+    await table.save();
 
     const firstPlayerState = await PlayerState.findOne({
         tableId: tableId,
@@ -307,6 +372,7 @@ const startGame = async (io, hostSocket, roomId, userId) => {
 module.exports = {
     startGame,
     raise,
+    fold,
     getUserTable,
     getPlayersBySeats,
     getAvailablePlayersStatesByNick

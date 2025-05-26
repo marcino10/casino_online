@@ -161,6 +161,7 @@
 
             </div>
 
+<!--            <div></div>-->
             <div class="deck">
                 <img class="card" src="/img/deck/back_red.webp" alt="Deck">
             </div>
@@ -174,7 +175,6 @@
                     <span>Turn: </span>
                     <span id="turn-value">???</span>
                 </div>
-                <img class="card" id="board-card-template" src="/img/deck/back_red.webp" alt="Card">
                 <div class="cards-container">
 
                 </div>
@@ -183,7 +183,7 @@
                     <img src="/img/BIG_WIN.svg" alt="Chip Logo" class="chip-logo">
                 </div>
                 <div class="chips-container">
-
+                    
                 </div>
             </div>
         </div>
@@ -202,7 +202,7 @@
                     <input type="range" class="bet-slider" min="1" max="50" step="1" value="1">
                     <div class="bet-display">
                         <span class="bet-label">Bet Amount:</span>
-                        <span class="bet-value">$100</span>
+                        <span class="bet-value" id="raise-bet-value">$100</span>
                     </div>
                     <div class="quick-bets">
                         <button class="quick-bet" data-amount="5">$5</button>
@@ -219,38 +219,11 @@
         </div>
 
         <!-- Developer Panel -->
-        <div class="dev-panel" style="display: none;">
+<!--        style="display: none;"-->
+        <div class="dev-panel" >
             <h3>Dev Tools</h3>
             <div class="dev-group">
-                <button id="dev-deal">Deal Hand</button>
-                <button id="dev-flop">Show Flop</button>
                 <button id="dev-turn">Show Turn</button>
-                <button id="dev-river">Show River</button>
-                <button id="dev-reset">Reset Board</button>
-            </div>
-            <div class="dev-group">
-                <div id="potDisplay">Pot: $0</div>
-                <input type="number" id="potInput" placeholder="Set pot value" />
-                <button id="dev-set-pot">Set Pot</button>
-
-                <label><input type="checkbox" id="dev-ai-toggle" /> AI Enabled</label>
-            </div>
-            <div class="dev-log" id="dev-log"></div>
-
-            <h3>Deck Manager</h3>
-
-            <div class="dev-group">
-                <button id="reset-deck">Reset Deck</button>
-                <button id="shuffle-deck">Shuffle</button>
-                <button id="deal-to-players">Deal to Players</button>
-                <button id="deal-to-board">Deal to Board</button>
-                <button id="burn-card">Burn Card</button>
-                <button id="clear-chips">Clear Chips</button>
-            </div>
-
-            <div class="deck-state">
-                <p><strong>Deck:</strong></p>
-                <div id="deck-list" class="deck-list"></div>
             </div>
         </div>
 

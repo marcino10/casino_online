@@ -1,6 +1,6 @@
 const PokerTable = require('../models/PokerTable');
 require('../controllers/pokerGameController')
-const {getUserTable, startGame, getPlayersBySeats, raise} = require("../controllers/pokerGameController");
+const {getUserTable, startGame, getPlayersBySeats, raise, fold} = require("../controllers/pokerGameController");
 
 module.exports = io => {
     io.on('connection', async (socket) => {
@@ -29,6 +29,10 @@ module.exports = io => {
 
         socket.on('call', async () => {
             await raise(io, socket, roomId, userId, 0);
+        });
+
+        socket.on('fold', async () => {
+            await fold(io, socket, roomId, userId);
         });
 
         socket.on('disconnect', () => {

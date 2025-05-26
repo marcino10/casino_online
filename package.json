@@ -4,7 +4,7 @@
   "description": "Node.js with Socket.IO and SCSS",
   "main": "src/server.js",
   "scripts": {
-    "start": "concurrently \"npm run scss\" \"nodemon src/server.js\"",
+    "start": "concurrently \"npm run scss\" \"nodemon src/server.js --ignore public/\"",
     "scss": "sass src/public/scss:src/public/css -w",
     "migrate": "node src/runMigrations.js",
     "rollback": "node src/rollbackMigrations.js"
