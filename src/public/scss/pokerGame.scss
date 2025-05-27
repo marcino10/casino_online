@@ -1,12 +1,12 @@
-@use 'variables/reset';
-@use 'components/pokerHand';
-@use 'components/scrollbar';
-@use 'variables/colors' as *;
-@use 'variables/mixin' as *;
+@use "variables/reset";
+@use "components/pokerHand";
+@use "components/scrollbar";
+@use "variables/colors" as *;
+@use "variables/mixin" as *;
 
 body {
 	background: linear-gradient(135deg, $background_dark, $panel_dark);
-	font-family: 'Segoe UI', sans-serif;
+	font-family: "Segoe UI", sans-serif;
 	color: $text_light;
 	margin: 0;
 }
@@ -329,7 +329,7 @@ body {
 	color: $text_light;
 	font-size: 2rem;
 	font-weight: bold;
-	background-image: url('/img/waiting-poker.webp');
+	background-image: url("/img/waiting-poker.webp");
 	background-size: cover;
 	background-position: top;
 	background-repeat: no-repeat;
@@ -338,9 +338,26 @@ body {
 .waiting-content {
 	@include center;
 	flex-direction: column;
-	padding: 25px;
-	border-radius: 20px;
 	background: rgba(0, 0, 0, 0.8);
+	color: white;
+	padding: 30px;
+	border-radius: 20px;
+	text-align: center;
+	box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+	max-width: 400px;
+	margin: auto;
+	font-family: "Segoe UI", sans-serif;
+}
+
+.waiting-title {
+	font-size: 24px;
+	margin-bottom: 10px;
+	color: #00c6ff;
+}
+
+.waiting-players {
+	font-size: 16px;
+	color: #ccc;
 }
 
 @keyframes playerGlow {
@@ -510,7 +527,7 @@ body {
 }
 
 .chip::before {
-	content: '';
+	content: "";
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -636,10 +653,9 @@ body {
 	z-index: 2000;
 
 	&.visible {
-  display: block;
-  overflow-y: auto;
-}
-
+		display: block;
+		overflow-y: auto;
+	}
 }
 
 .close_pop-up {
@@ -651,7 +667,7 @@ body {
 	font-size: 1.2rem;
 	color: white;
 	cursor: pointer;
-  font-size: clamp(1.2rem, 3vh, 3rem);
+	font-size: clamp(1.2rem, 3vh, 3rem);
 }
 
 .open-popup-btn {
@@ -668,7 +684,7 @@ body {
 	position: fixed;
 	left: 1vw;
 	top: clamp(80px, 10vh, 120px);
-	z-index: 2100;
+	z-index: 999;
 	cursor: pointer;
 }
 
@@ -677,7 +693,7 @@ body {
 	flex-wrap: wrap;
 	justify-content: flex-start;
 	gap: 1.4rem;
-  min-width: 1200px;
+	min-width: 200px;
 	padding: 1rem;
 	width: 100%;
 	box-sizing: border-box;
@@ -733,10 +749,10 @@ body {
 	font-size: clamp(0.7rem, 1.2vh, 1rem);
 	font-weight: bold;
 	color: #fff;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 	text-shadow: 0.2vh 0.2vh 0.4vh black;
 	padding: 0.3vh;
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 #player-template {
@@ -816,15 +832,88 @@ body {
 	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
-.exit-circle {
+.exit-button {
 	width: clamp(50px, 4vh, 100px);
 	height: clamp(50px, 4vh, 100px);
 	position: fixed;
 	left: 1vw;
-	top: clamp(20px, 4vh, 60px); 
-	z-index: 2200;
+	top: clamp(20px, 4vh, 60px);
+	z-index: 999;
 	cursor: pointer;
 }
 
+.start-game_btn {
+	background: linear-gradient(90deg, #00c6ff, #0072ff);
+	color: white;
+	font-weight: bold;
+	padding: 14px 28px;
+	border: none;
+	border-radius: 30px;
+	box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4);
+	cursor: pointer;
+	transition: transform 0.2s ease, box-shadow 0.3s ease;
 
+	&:hover {
+		transform: scale(1.05);
+		box-shadow: 0 6px 20px rgba(0, 114, 255, 0.6);
+	}
+}
+
+.start_status {
+	font-size: 24px;
+	margin-bottom: 10px;
+	color: #ff0000;
+}
+
+.exit {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.7);
+	justify-content: center;
+	align-items: center;
+}
+
+.exit-content {
+	background: #1f1f2e;
+	color: #fff;
+	padding: 30px;
+	border-radius: 16px;
+	text-align: center;
+	max-width: 400px;
+	width: 90%;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.exit-actions {
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
+	gap: 20px;
+}
+
+.cancel, .confirm {
+    width: 90px;
+    padding: 9px 18px;     
+    border-radius: 8px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    pointer-events: auto;
+    text-align: center;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.cancel {
+    background: $primary;
+}
+
+.confirm {
+    background: $error_wrapper_color;
+}
 
