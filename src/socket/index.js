@@ -1,5 +1,3 @@
-const PokerTable = require('../models/PokerTable');
-require('../controllers/pokerGameController')
 const {getUserTable, startGame, getPlayersBySeats, raise, fold} = require("../controllers/pokerGameController");
 
 module.exports = io => {

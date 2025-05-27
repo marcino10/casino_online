@@ -3,10 +3,10 @@
         <a href="/">BIG <br>WIN</a>
     </h1>
 
-
-    <section class="balance-card">
-        <h2 class="balance">Balance</h2>
-        <div class="amount">$2,450.75</div>
-    </section>
-
+    {{#if isAuth}}
+        <section class="balance-card">
+            <h2 class="balance">Balance</h2>
+            <div class="amount">${{ balance }}</div>
+        </section>
+    {{/if}}
 </div>

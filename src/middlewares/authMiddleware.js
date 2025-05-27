@@ -3,6 +3,9 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 const jwt = require('jsonwebtoken');
 const {setFlash} = require("../helpers");
+const User = require("../models/User");
+const PlayerState = require("../models/PlayerPokerState");
+const PokerTable = require("../models/PokerTable");
 
 const isValidToken = token => {
     if(!token) {
@@ -15,6 +18,66 @@ const isValidToken = token => {
     } catch (error) {
         return false;
     }
+}
+
+const authInfo = async (req, res, next) => {
+    const token = req.cookies.token;
+
+    if (token) {
+        const decoded = isValidToken(token);
+        if (decoded !== false) {
+            req.user = decoded;
+
+            const userId = req.user.userId;
+
+            const user = await User.findOne({ _id: userId });
+            if (!user) {
+                return res.render('index', {
+                    isAuth: false
+                })
+            }
+
+            const nick = user.nick;
+            const balance = user.credits;
+
+            const playerStates = await PlayerState.find({ playerId: userId })
+                .populate({
+                    path: 'tableId',
+                    match: { isActive: true },
+                    select: '_id tableId'
+                })
+                .lean();
+
+            const activePlayerStates = playerStates.filter(ps => ps.tableId);
+            const table = activePlayerStates[0];
+
+            let isInPokerTable = false;
+            let pokerTableId = null
+            if (activePlayerStates.length > 0) {
+                isInPokerTable = true;
+                pokerTableId = table.tableId.tableId;
+            }
+
+            const activeTables = await PokerTable.find({ isActive: true }).select('tableId players maxNumOfPlayers buyIn tableName').lean();
+
+            const activeTablesWithPlayerCount = activeTables.map(table => ({
+                ...table,
+                playerCount: table.players.length,
+                players: undefined
+            }));
+
+            req.data = {
+                isAuth: true,
+                nick,
+                balance,
+                isInPokerTable,
+                pokerTableId,
+                activeTables: activeTablesWithPlayerCount
+            }
+        }
+    }
+
+    next();
 }
 
 const auth = (req, res, next) => {
@@ -40,4 +103,4 @@ const redirectIfAuth = (req, res, next) => {
     }
 }
 
-module.exports = [auth, redirectIfAuth];
+module.exports = [auth, redirectIfAuth, authInfo];

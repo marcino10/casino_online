@@ -47,7 +47,12 @@ mongoose.connect(MONGO_URL)
 const hbs = exphbs.create({
     extname: '.hbs',
     defaultLayout: false,
-    partialsDir: path.join(__dirname, 'views', 'partials')
+    partialsDir: path.join(__dirname, 'views', 'partials'),
+    helpers: {
+        ifEquals: function (arg1, arg2, options) {
+            return arg1 === arg2 ? options.fn(this) : options.inverse(this);
+        }
+    }
 });
 
 app.engine('hbs', hbs.engine);

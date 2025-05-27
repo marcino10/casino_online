@@ -40,22 +40,24 @@
             </div>
         </div>
 
-        <div class="popup-overlay" id="rejoinGamePopup">
-            <div class="popup-content rejoin-content">
-                <div class="popup-header">
-                    <h2>Re-join Your Game</h2>
-                </div>
-                <div class="close-popup" id="closeRejoinPopup"></div>
-                <div class="rejoin-info">
-                    <p>You are already in a poker game.</p>
-                    <p>Would you like to re-join your table?</p>
-                </div>
-                <div class="rejoin-actions">
-                    <button class="rejoin-btn" id="rejoinConfirmBtn">Re-join</button>
-                    <button class="cancel-btn" id="rejoinLeaveBtn">Leave</button>
+        {{#if isInPokerTable}}
+            <div class="popup-overlay" id="rejoinGamePopup">
+                <div class="popup-content rejoin-content">
+                    <div class="popup-header">
+                        <h2>Re-join Your Game</h2>
+                    </div>
+                    <div class="close-popup" id="closeRejoinPopup"></div>
+                    <div class="rejoin-info">
+                        <p>You are already in a poker game.</p>
+                        <p>Would you like to re-join your table?</p>
+                    </div>
+                    <div class="rejoin-actions">
+                        <a class="rejoin-btn" id="rejoinConfirmBtn" href="/poker/game/{{ pokerTableId }}">Re-join</a>
+                        <a class="cancel-btn" id="rejoinLeaveBtn" href="/poker/leave/{{ pokerTableId }}">Leave</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        {{/if}}
     </section>
 
 
@@ -73,37 +75,18 @@
     <section class="poker-rooms-list">
         <h2>Available Poker Rooms</h2>
         <div class="rooms-container">
-            {{!-- Test rooms --}}
-            <div class="room-card">
-                <div class="room-info">
-                    <h3>High asf</h3>
-                    <p>Players: <span class="players-count">3</span>/<span class="max-players">6</span></p>
-                    <p>Buy-in: $100</p>
+            {{#each activeTables}}
+                <div class="room-card">
+                    <div class="room-info">
+                        <h3>{{ tableName }}</h3>
+                        <p>Players: <span class="players-count">{{ playerCount }}</span>/<span class="max-players">{{ maxNumOfPlayers }}</span></p>
+                        <p>Buy-in: ${{ buyIn }}</p>
+                    </div>
+                    <form action="/poker/join/{{ tableId }}" method="get">
+                        <button type="submit" class="join-room-btn">Join</button>
+                    </form>
                 </div>
-                <form action="/poker/join/aaaaaaaa" method="get">
-                    <button type="submit" class="join-room-btn">Join</button>
-                </form>
-            </div>
-            <div class="room-card">
-                <div class="room-info">
-                    <h3>Cum-Pot</h3>
-                    <p>Players: <span class="players-count">2</span>/<span class="max-players">5</span></p>
-                    <p>Buy-in: $50</p>
-                </div>
-                <form action="/poker/join/aaaaaaaa" method="get">
-                    <button type="submit" class="join-room-btn">Join</button>
-                </form>
-            </div>
-            <div class="room-card">
-                <div class="room-info">
-                    <h3>Skibblers</h3>
-                    <p>Players: <span class="players-count">5</span>/<span class="max-players">8</span></p>
-                    <p>Buy-in: $500</p>
-                </div>
-                <form action="/poker/join/aaaaaaaa" method="get">
-                    <button type="submit" class="join-room-btn">Join</button>
-                </form>
-            </div>
+            {{/each}}
         </div>
     </section>
 

@@ -1,10 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const [auth, redirectIfAuth] = require('../middlewares/authMiddleware');
+const [auth, redirectIfAuth, authInfo] = require('../middlewares/authMiddleware');
 const pokerController = require('../controllers/pokerController');
 
-router.get('/', (req, res) => {
-    res.render('pokerLobby');
+router.get('/', auth, authInfo, (req, res) => {
+    if (!req.data) {
+        return res.render('pokerLobby', {
+            isAuth: false
+        });
+    }
+
+    res.render('pokerLobby', req.data);
 });
 
 router.get('/join/:id', auth, pokerController.join);

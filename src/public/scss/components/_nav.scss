@@ -91,6 +91,10 @@ body {
 		display: flex;
 		align-items: center;
 		gap: 1em;
+
+		&.logout {
+			color: red;
+		}
 	}
 
 	.dropdown-btn {
