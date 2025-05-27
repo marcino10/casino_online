@@ -205,7 +205,7 @@ exports.show = asyncHandler( async (req, res, next) => {
     const table = await PokerTable.findOne({
         tableId: internalTableId,
         isActive: true
-    });
+    }).populate('boardDeck', 'suit value');
 
     if (table === null) {
         setFlash(req, 'error_msg', 'The poker table does not exist');
@@ -233,6 +233,7 @@ exports.show = asyncHandler( async (req, res, next) => {
         currentBet: table.currentBet,
         playersStates: playersStatesByNick,
         currentTurnSeat: table.currentTurnSeat,
+        boardDeck: table.boardDeck
     }
 
     return res.render('pokerGame', {

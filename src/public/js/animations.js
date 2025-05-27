@@ -31,7 +31,11 @@ const createCardInnerForAnimation = (sourceElement, targetImage) => {
     return cardInner;
 }
 
-export function dealCard(card) {
+export function dealCard(card, delay = 100) {
+    if (delay < 100) {
+        delay = 100;
+    }
+
     const cardsContainer = document.querySelector('.cards-container');
     const sourceElement = document.querySelector('.deck img');
 
@@ -51,7 +55,7 @@ export function dealCard(card) {
         const dx = targetRect.left - sourceRect.left;
         const dy = targetRect.top - sourceRect.top;
         cardWrapper.style.transform = `translate(${dx}px, ${dy}px)`;
-    }, 0);
+    }, delay);
 
     cardWrapper.addEventListener('transitionend', (e) => {
         if (e.propertyName !== 'transform') return;

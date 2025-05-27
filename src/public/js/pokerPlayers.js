@@ -55,7 +55,6 @@ function createPlayerElement(player, x, y, isMainPlayer) {
 
     setCards(playerElement, player.hand);
 
-    console.log(player)
     if ((!isMainPlayer && player.hand.length > 0) || (isMainPlayer && player.isFolded)) {
         const playerCards = playerElement.querySelectorAll('.player-card');
         playerCards.forEach(card => {

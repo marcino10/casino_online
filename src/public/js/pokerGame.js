@@ -14,6 +14,7 @@ export const createCardElement = (card) => {
     return cardElement;
 }
 
+
 document.addEventListener('DOMContentLoaded', () => {
     const socket = io();
 
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkBtn = document.querySelector('#check-btn');
     const potValueElement = document.querySelector('#pot-value')
     const turnValueElement = document.querySelector('#turn-value');
+    const cardsContainer = document.querySelector('#boardCards');
 
     const actionPanel = document.querySelector('.action-panel');
     const raisePanel = document.querySelector('.raise-panel');
@@ -42,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentBetValue = gameData.currentBet;
     let pot = gameData.pot;
     let activePlayerSeat = gameData.currentTurnSeat;
+    let boardDeck = gameData.boardDeck;
     let actionBySeat = null;
     let currentPlayerBetValue = null;
     let currentPlayerCredits = null;
@@ -54,6 +57,16 @@ document.addEventListener('DOMContentLoaded', () => {
         positionPlayers(players, playersStates);
     }
 
+    const setBoardCards = () => {
+        cardsContainer.innerHTML = '';
+
+        for (let card of boardDeck) {
+            const cardElement = createCardElement(card);
+            cardsContainer.appendChild(cardElement);
+            cardElement.style.opacity = '1';
+        }
+    }
+
     const updateInfo = () => {
         potValueElement.textContent = pot;
         turnValueElement.textContent = playersBySeats[activePlayerSeat - 1];
@@ -61,8 +74,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateView = () => {
         drawPlayers();
+        setBoardCards();
         initialize();
         updateInfo();
+
+        if (startBtn) {
+            if(isStarted) {
+                startBtn.style.display = 'none';
+            } else {
+                startBtn.style.display = 'block';
+            }
+        }
 
         window.addEventListener('resize', () => {
             updateView();
@@ -77,8 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
         currentBet.textContent = currentPlayerBetValue;
         currentCredits.textContent = currentPlayerCredits;
     }
-
-    console.log(playersStates)
 
     // Initialize the action panel as visible
     setTimeout(() => {
@@ -134,6 +154,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (isStarted) {
         updateView();
+    } else {
+        if (startBtn) {
+            startBtn.style.display = 'block';
+        }
     }
 
     if (startBtn) {
@@ -155,11 +179,12 @@ document.addEventListener('DOMContentLoaded', () => {
         activePlayerSeat = data.currentTurnSeat;
         actionBySeat = data.ActionBySeat;
         pot = data.pot;
-        console.log(playersStates);
+        isStarted = true;
 
         updateView();
         showPlayerBet();
 
+        cardsContainer.innerHTML = '';
         waitingPopup.style.display = 'none';
     });
 
@@ -203,10 +228,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('new-turn', (data) => {
         tempCards = data.cards;
+        console.log(tempCards);
 
-        for (let tempCard of tempCards) {
-            dealCard(tempCard);
+        for (let i = 0; i < tempCards.length; i++) {
+            dealCard(tempCards[i], i * 1000);
         }
+    });
+
+    socket.on('game-ended', (data) => {
+        playersStates = data.playersStates;
+        pot = data.pot;
+        activePlayerSeat = data.currentTurnSeat;
+        isStarted = false;
+
+        updateView();
     });
 });
 

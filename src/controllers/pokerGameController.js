@@ -52,13 +52,122 @@ const drawCardsForBoard = async (numOfCards, table, hands) => {
         }).select('_id');
         const cardsIds = matchingCards.map(card => card._id);
 
-        table.boardDeck += cardsIds;
+        table.boardDeck.push(...cardsIds);
         await table.save();
 
         return cards;
     } catch (err) {
         console.error('Error drawing cards:', err);
     }
+}
+
+const getPrizePools = (numOfPlayers) => {
+    if (numOfPlayers > 6) {
+        return [0.5, 0.3, 0.2];
+    }
+
+    if (numOfPlayers > 2) {
+        return [0.75, 0.25];
+    }
+
+    return [1.0];
+}
+
+const getPositions = async (table) => {
+    const postUrl = `${POKER_API_URL}/positions`;
+
+    const activePlayers = await PlayerState.find({
+        tableId: table._id,
+        isFolded: false
+    }).select('seat');
+
+    const allHands = table.allHandsJson;
+    const playersActiveHands = {};
+
+    for (const player of activePlayers) {
+        const playerSeat = player.seat;
+        playersActiveHands[playerSeat] = allHands[playerSeat];
+    }
+
+    const allActiveHands = {
+        "0": allHands["0"],
+        ...playersActiveHands
+    }
+
+    const res = await axios.post(postUrl, allActiveHands);
+    return res.data.playersPositions;
+}
+
+const distributePrize = async (positions, prizePools, table) => {
+    let currentPrizePool = 0;
+    const numOfPrizePools = prizePools.length;
+    let allPrizeDistributed = 0;
+
+    for (const position of positions) {
+        const numOfAvailablePrizePools = numOfPrizePools - currentPrizePool;
+        if (currentPrizePool >= numOfAvailablePrizePools) {
+            break;
+        }
+
+        const numOfPlayersInPosition = position.length;
+        let prizePoolForPosition = 0;
+        for (let i = 0; i < numOfPlayersInPosition; i++) {
+            if (currentPrizePool >= numOfAvailablePrizePools) {
+                break;
+            }
+
+            prizePoolForPosition += prizePools[currentPrizePool];
+            currentPrizePool++;
+        }
+
+        const prizeValueForPlayer = Math.floor((table.pot * prizePoolForPosition) / numOfPlayersInPosition);
+        allPrizeDistributed += prizeValueForPlayer * numOfPlayersInPosition;
+
+        for (const player of position) {
+            const playerState = await PlayerState.findOne({
+                tableId: table._id,
+                seat: Number(player)
+            });
+
+            playerState.creditsLeft += prizeValueForPlayer;
+            playerState.save();
+        }
+    }
+
+    if (allPrizeDistributed < table.pot) {
+        const remainingPrize = table.pot - allPrizeDistributed;
+        const firstPlayerState = await PlayerState.findOne({
+            tableId: table._id,
+            seat: Number(positions[0][0])
+        })
+
+        firstPlayerState.creditsLeft += remainingPrize;
+        firstPlayerState.save();
+    }
+}
+
+const resetGame = async (table) => {
+    table.isStarted = false;
+    table.currentRound = 0;
+    table.currentTurnSeat = 1;
+    table.currentBetSeat = 0;
+    table.currentBet = 0;
+    table.numOfSeatsInCurrentGame = 0;
+    table.pot = 0;
+    table.boardDeck = [];
+    table.allHandsJson = {};
+    await table.save();
+
+    await PlayerState.updateMany(
+        {tableId: table._id},
+        {
+            $set: {
+                isFolded: false,
+                lastBet: 0,
+                hand: []
+            }
+        }
+    );
 }
 
 const nextRound = async (io, roomId, table) => {
@@ -77,7 +186,7 @@ const nextRound = async (io, roomId, table) => {
             table.currentRound += 1;
             await table.save();
 
-            io.to(roomId).emit('board-cards', {
+            io.to(roomId).emit('new-turn', {
                 cards: newCards
             });
             break;
@@ -85,7 +194,7 @@ const nextRound = async (io, roomId, table) => {
         case 2:
             newCards = await drawCardsForBoard(1, table, currentCards);
 
-            table.allHandsJson["0"].append(newCards);
+            table.allHandsJson["0"].push(...newCards);
             table.currentRound += 1;
             await table.save();
 
@@ -94,7 +203,26 @@ const nextRound = async (io, roomId, table) => {
             });
             break;
         case 3:
-            // get results, finish game
+            const prizePools = getPrizePools(table.numOfSeatsInCurrentGame);
+            const positions = await getPositions(table);
+            await distributePrize(positions, prizePools, table);
+            await resetGame(table)
+
+            const playersBySeats = await getPlayersBySeats(table._id);
+
+
+            io.in(roomId).fetchSockets().then(async (sockets) => {
+                for (const socket of sockets) {
+                    const playersStates = await getAvailablePlayersStatesByNick(playersBySeats, socket.user.userId, table._id);
+
+                    socket.emit('game-ended', {
+                        playersStates,
+                        pot: table.pot,
+                        currentTurnSeat: table.currentTurnSeat
+                    });
+                }
+            });
+
             break;
     }
 }
@@ -170,7 +298,6 @@ const getNextPlayerSeat = async (table) => {
 
     if (nextPlayerState.isFolded) {
         table.currentTurnSeat = nextSeat;
-        await table.save();
 
         return getNextPlayerSeat(table);
     }
@@ -307,10 +434,6 @@ const raise = async (io, reqSocket, roomId, userId, betValue = 0) => {
     table.currentTurnSeat = await getNextPlayerSeat(table);
     await table.save();
 
-    if (table.currentTurnSeat === table.currentBetSeat) {
-        await nextRound(io, roomId, table);
-    }
-
     io.to(roomId).emit('raised', {
         ActionBySeat: playerState.seat,
         betValue: table.currentBet,
@@ -318,7 +441,11 @@ const raise = async (io, reqSocket, roomId, userId, betValue = 0) => {
         creditsLeft: playerState.creditsLeft,
         pot: table.pot,
         currentTurnSeat: table.currentTurnSeat
-    })
+    });
+
+    if (table.currentTurnSeat === table.currentBetSeat) {
+        await nextRound(io, roomId, table);
+    }
 }
 
 const startGame = async (io, hostSocket, roomId, userId) => {
@@ -333,6 +460,8 @@ const startGame = async (io, hostSocket, roomId, userId) => {
         });
         return;
     }
+
+    table.currentTurnSeat = 1;
 
     const numOfPlayers = table.players.length;
     const playersHands = await getCardsForPlayers(numOfPlayers, tableId);

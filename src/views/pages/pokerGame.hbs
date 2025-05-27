@@ -126,9 +126,11 @@
             <div class="waiting-popup" id="waiting">
                 <div class="waiting-content">
                     <p>Waiting for host to start the game</p>
+        {{/unless}}
                     {{#if isHost}}
-                        <button id="start-game-btn">Start Game</button>
+                        <button id="start-game-btn" style="display: none">Start Game</button>
                     {{/if}}
+        {{#unless isStarted}}
                     <p>players: 1/10</p>
                     <p id="start-status"></p>
                 </div>
@@ -175,7 +177,7 @@
                     <span>Turn: </span>
                     <span id="turn-value">???</span>
                 </div>
-                <div class="cards-container">
+                <div class="cards-container" id="boardCards">
 
                 </div>
                 <div class="chip" id="chip-template">
@@ -220,7 +222,7 @@
 
         <!-- Developer Panel -->
 <!--        style="display: none;"-->
-        <div class="dev-panel" >
+        <div class="dev-panel" style="display: none;">
             <h3>Dev Tools</h3>
             <div class="dev-group">
                 <button id="dev-turn">Show Turn</button>
