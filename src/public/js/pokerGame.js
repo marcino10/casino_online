@@ -1,5 +1,6 @@
 import { positionPlayers, pushChipFromPlayer } from "./pokerPlayers.js";
-import { initialize } from "./pokerGameInitialization.js";
+import {initialize} from "./pokerGameInitialization.js";
+import {foldPlayerCards} from "./animations.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const socket = io();
@@ -111,6 +112,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // }, 300);
     });
 
+    foldBtn.addEventListener('click', () => {
+
+        const playerIndex = 0;
+        foldPlayerCards(playerIndex);
+        socket.emit('fold');
+
+
+        actionPanel.classList.remove('visible');
+    });
+
     checkBtn.addEventListener('click', () => {
         socket.emit('call');
     });
@@ -160,3 +171,22 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+document.addEventListener('DOMContentLoaded', () => {
+    const popup = document.querySelector('.pop-up');
+    const closePopup = document.querySelector('.close-popup');
+    const helpIcon = document.querySelector('.help-circle');
+
+    helpIcon.addEventListener('click', () => {
+        popup.classList.add('visible');
+    });
+
+    closePopup.addEventListener('click', () => {
+        popup.classList.remove('visible');
+    });
+
+    popup.addEventListener('click', (e) => {
+        if (e.target === popup) {
+            popup.classList.remove('visible');
+        }
+    });
+});

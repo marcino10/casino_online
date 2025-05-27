@@ -94,7 +94,6 @@ function setChipValue(minBet, maxBet) {
 
     for (let i = 1; i < CHIP_VALUES.length; i++) {
         const rawValue = Math.round(maxBet * percentages[i]);
-        console.log("rawValue:", rawValue)
         CHIP_VALUES[i].value = normalizeChipValue(rawValue);
     }
 }
@@ -110,7 +109,6 @@ function getChipVariant(betAmount) {
             chips.push({ class: chip.class, value: chip.value });
         }
         amountLeft -= count * chip.value;
-        console.log(amountLeft)
     }
     return chips;
 }
@@ -118,7 +116,6 @@ function getChipVariant(betAmount) {
 export function pushChipFromPlayer(playerIndex, betAmount = 100) {
 
     setChipValue(1, 50);
-    console.log(CHIP_VALUES)
 
     const chipsContainer = document.querySelector('.chips-container');
     let sourceElement;
@@ -157,22 +154,22 @@ export function pushChipFromPlayer(playerIndex, betAmount = 100) {
     requestAnimationFrame(() => {
         switch (chipData.class){
             case 'chip--red':
-                chip.style.transform = `translate(${-275-randomOffsetX}%, ${50-randomOffsetY}%)`;
+                chip.style.transform = `translate(${-275-randomOffsetX}%, ${200-randomOffsetY}%)`;
                 break;
             case 'chip--green':
-                chip.style.transform = `translate(${-125-randomOffsetX}%, ${50-randomOffsetY}%)`;
+                chip.style.transform = `translate(${-125-randomOffsetX}%, ${200-randomOffsetY}%)`;
                 break;
             case 'chip--blue':
-                chip.style.transform = `translate(${25-randomOffsetX}%, ${50-randomOffsetY}%)`;
+                chip.style.transform = `translate(${25-randomOffsetX}%, ${200-randomOffsetY}%)`;
                 break;
             case 'chip--black':
-                chip.style.transform = `translate(${175-randomOffsetX}%, ${50-randomOffsetY}%)`;
+                chip.style.transform = `translate(${175-randomOffsetX}%, ${200-randomOffsetY}%)`;
                 break;
             case 'chip--gold':
-                chip.style.transform = `translate(${325-randomOffsetX}%, ${50-randomOffsetY}%)`;
+                chip.style.transform = `translate(${325-randomOffsetX}%, ${200-randomOffsetY}%)`;
                 break;
             default:
-                chip.style.transform = `translate(${75-randomOffsetX}%, ${50-randomOffsetY}%)`;
+                chip.style.transform = `translate(${75-randomOffsetX}%, ${200-randomOffsetY}%)`;
                 break;
         }
         chip.style.opacity = '1';

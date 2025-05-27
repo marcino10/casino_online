@@ -67,6 +67,7 @@ body {
 .avatar {
   width: 8vh;
   height: 8vh;
+  position: relative;
   border-radius: 50%;
   background: linear-gradient(135deg, #444, #222);
   margin: 0 auto;
@@ -81,11 +82,14 @@ body {
 }
 
 .name {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-size: 1.8vh;
   margin-bottom: 0.6vh;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   font-weight: 500;
-  background: rgba(0, 0, 0, 0.4);
   padding: 0.2vh 0.6vh;
   border-radius: 0.4vh;
   color: white;
@@ -645,23 +649,15 @@ body {
 }
 
 
+
 .pop-up {
   position: fixed;
-  top: 4%;
-  left: 5%;
-  width: 90%;
-  height: 90%;
-  max-width: 95vw;
-  max-height: 90vh;
-  padding: 1rem;
-  background-color: rgba(0, 0, 0, 0.6);
-  color: white;
-  border: 2px solid white;
-  border-radius: 1rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background: rgba(10, 10, 10, 0.1);
+  backdrop-filter: blur(8px);
   display: none;
-  overflow: auto;
-  z-index: 2000;
+  z-index: 999;
+
 
   &.visible {
    display: flex;
@@ -669,34 +665,77 @@ body {
    align-items: flex-start;
    overflow-y: auto;
   }
+  .popup-content {
+    background: rgba(10, 10, 10, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.19);
+    backdrop-filter: blur(10px);
+    border-radius: 2rem;
+    width: min(85vw, 1800px);
+    margin: 5vh auto;
+    padding: 4vh 1rem;
+    max-height: 80vh;
+    position: relative;
+    overflow-y: scroll;
+  }
 
-  .close_pop-up {
-    position: absolute;
-    top: 8px;
-    right: 12px;
-    background: transparent;
-    border: none;
-    font-size: 1.2rem;
-    color: white;
-    cursor: pointer;
+
+
+  .popup-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+
+    h2 {
+      color: $primary;
+      font-size: 2rem;
+      margin: 0;
+    }
   }
 }
 
-.open-popup-btn{
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  border: 4px solid black;
+.close-popup {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 2rem;
+  height: 2rem;
   cursor: pointer;
+  z-index: 100;
+  position: sticky;
+  margin-left: auto;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    background-color: $text-color;
+    top: 0;
+    left: 50%;
+    transition: background-color 0.2s ease;
+  }
+
+  &::before {
+    transform: rotate(45deg);
+  }
+
+  &::after {
+    transform: rotate(-45deg);
+  }
+
+  &:hover::before,
+  &:hover::after {
+    background-color: $error_wrapper_color;
+  }
 }
 
 .help-circle {
-  width: 50px;
-  height: 50px;
+  width: 2.5rem;
+  height: 2.5rem;
   position: fixed;
-  left: 1vw;
-  top: 80px;
-  z-index: 2100;
+  left: 2vw;
+  top: 2vw;
+  z-index: 1;
   cursor: pointer;
 }
 
@@ -704,53 +743,64 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  max-width: 1200px;
+  gap: 1rem;
+  padding: 1.5rem 1rem;
+  max-width: 1800px;
   margin: 0 auto;
 }
 
 .hand-box {
-  background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
   backdrop-filter: blur(25px);
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-  min-width: 200px;
-  flex: 1 1 200px;
-  max-width: 230px;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  flex: 1 1 280px;
+  max-width: 300px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: transform 0.2s ease;
 }
 
-.hand-box .hand-box_title {
-  margin-bottom: 0.4rem;
-  font-size: 1rem;
-  color: #fff;
+.hand-box:hover {
+  transform: translateY(-5px);
 }
 
-.hand-box .hand-box_description {
-  margin: 0;
-  font-size: 0.85rem;
-  color: #ddd;
+.hand-box h3 {
+  margin-bottom: 0.6rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.hand-box p {
+  font-size: 0.95rem;
+  color: #ccc;
+  text-align: center;
+  margin-top: 0.8rem;
+  line-height: 1.5;
 }
 
 .card-row {
   display: flex;
   justify-content: center;
-  gap: 0.2rem;
-  margin-bottom: 0.4rem;
   flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 0.6rem;
   padding: 0.5rem;
-  border-radius: 0.75rem;
+  border-radius: 1rem;
+  background-color: rgba(255, 255, 255, 0.02);
+  width: 100%;
 }
 
 .mini-card {
-  width: 15%;
-  height: auto;
-  border-radius: 6px;
+  width: 18%;
+  max-width: 40px;
+  border-radius: 8px;
   background: linear-gradient(145deg, #1e1e1e, #2c2c2c);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
   display: flex;
@@ -764,62 +814,84 @@ body {
   padding: 2px;
 }
 
-#player-template {
-  display: none;
-}
-
-#chip-template {
-  display: none;
-}
-
+#player-template,
+#chip-template,
 #board-card-template {
   display: none;
 }
 
+
 @media (max-width: 768px){
 
-  .hand-rankings{
-    overflow-x: auto;
-  }
-
-  .open-popup-btn {
-    width: 48px;
-    height: 48px;
-    border-width: 3px;
-  }
-
   .hand-box {
-    padding: 0.5rem;
-    min-width: 140px;
-    max-width: 160px;
+    flex: 1 1 100%;
+    max-width: 100%;
   }
 
-  .hand-box .hand-box_title{
+  .mini-card {
+    width: 14%;
+    max-width: 36px;
+  }
+
+  .hand-box h3 {
     font-size: 1rem;
   }
-  .hand-box .hand-box_description{
-    font-size: 0.85rem;
-  }
 
-  .mini-card{
-    width: 25%;
-    font-size: 1.1rem;
+  .hand-box p {
+    font-size: 0.85rem;
   }
 }
 
-@media(max-width:400px){
-  .pop-up {
-    top: 2%;
-    left: 2%;
-    width: 96%;
-    height: 96%;
-    padding: 0.5rem;
+@media(max-width:480px){
+  .card-row {
+    gap: 0.2rem;
+    padding: 0.4rem;
   }
 
-  .pop-up .close_pop-up {
+  .mini-card {
+    width: 16%;
+    max-width: 32px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .hand-rankings {
+    max-width: 1800px;
+    gap: 1.5rem;
+  }
+
+  .hand-box{
+    padding: 1rem;
+    flex: 1 1 300px;
+    max-width: 320px;
+  }
+
+  .hand-box h3 {
+    font-size: 2rem;
+  }
+
+  .hand-box p {
     font-size: 1rem;
-    top:4px;
-    right: 6px;
+  }
+
+  .mini-card {
+    max-width: 46px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .hand-rankings {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .hand-box {
+    padding: 1.2rem;
+    flex: 1 1 360px;
+  }
+
+  .mini-card {
+    max-width: 48px;
   }
 }
 
@@ -828,6 +900,7 @@ body {
   font-size: 1.4vh;
   margin-top: 0.4vh;
   color: #fff;
+  transform: translateY(50%);
   background: rgba(0, 0, 0, 0.3);
   padding: 0.3vh 0.6vh;
   border-radius: 0.4vh;
