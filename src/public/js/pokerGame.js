@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const foldBtn = document.querySelector('#fold-btn');
     const checkBtn = document.querySelector('#check-btn');
     const potValueElement = document.querySelector('#pot-value')
-    const turnValueElement = document.querySelector('#turn-value');
     const cardsContainer = document.querySelector('#boardCards');
     const numOfPlayersElement = document.querySelector('#num-of-players');
 
@@ -76,7 +75,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateInfo = () => {
         potValueElement.textContent = pot;
-        turnValueElement.textContent = playersBySeats[activePlayerSeat - 1];
+
+        const players = document.querySelectorAll('.player-js');
+        const activePlayerNick = playersBySeats[activePlayerSeat - 1];
+        const activePlayer = document.querySelector(`#player-${activePlayerNick}`);
+
+        players.forEach(player => {
+            player.classList.remove('active');
+        });
+
+        activePlayer.classList.add('active');
     }
 
     const updateView = () => {

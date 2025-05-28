@@ -48,19 +48,14 @@ body {
 	align-items: center;
 
 	&.active {
-		animation: playerGlow 1.5s infinite;
+		.avatar {
+			animation: playerGlow 2s infinite;
+			border-color: springgreen;
+		}
 	}
 
 	&--main {
 		translate: 0 -65px;
-
-		.avatar {
-			border: 2px solid #ffd700;
-
-			&:hover {
-				border-color: #ffd700;
-			}
-		}
 	}
 }
 
@@ -77,7 +72,6 @@ body {
 
 	&:hover {
 		transform: scale(1.05);
-		border-color: $primary;
 	}
 }
 
@@ -1024,4 +1018,8 @@ body {
 
 .pot-amount {
 	color: springgreen;
+}
+
+.active-player {
+
 }
