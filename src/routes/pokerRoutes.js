@@ -19,6 +19,4 @@ router.get('/game/:id', auth, pokerController.show);
 
 router.post('/game/create', auth, pokerController.create);
 
-router.get('/leave/:id', auth, pokerController.leave);
-
 module.exports = router;

@@ -15,6 +15,7 @@
 body {
   min-height: 100vh;
   position: relative;
+    font-family: 'Arial', sans-serif;
   background-color: $background-color;
   color: $text-color;
 }
@@ -24,6 +25,7 @@ main {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 
 .hero {
@@ -295,7 +297,7 @@ main {
 
 .poker-rooms-list {
   margin: 2rem auto;
-  width: min(700px, 95vw);
+  width: min(700px, 95%);
   background: rgba(255, 255, 255, 0.04);
   border-radius: 1.5rem;
   box-shadow: 0 2px 24px rgba(0, 0, 0, 0.1);
