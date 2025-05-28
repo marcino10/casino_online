@@ -4,6 +4,7 @@
 @use 'variables/colors' as *;
 @use 'variables/mixin' as *;
 @use 'variables/reset' as *;
+
   * {
     margin: 0;
     padding: 0;
@@ -12,7 +13,7 @@
 
   body {
     width: 100%;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: $background_dark;
     color: $text_light;
     margin: 0;
