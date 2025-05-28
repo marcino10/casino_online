@@ -155,7 +155,6 @@ function getChipVariant(betAmount) {
 }
 
 export function pushChipFromPlayer(playerIndex, betAmount = 100) {
-
     setChipValue(1, 50);
 
     const chipsContainer = document.querySelector('.chips-container');

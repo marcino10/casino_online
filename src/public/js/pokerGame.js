@@ -79,12 +79,10 @@ document.addEventListener('DOMContentLoaded', () => {
         initialize();
         updateInfo();
 
-        if (startBtn) {
-            if(isStarted) {
-                startBtn.style.display = 'none';
-            } else {
-                startBtn.style.display = 'block';
-            }
+        if(isStarted) {
+            waitingPopup.style.display = 'none';
+        } else {
+            waitingPopup.style.display = 'flex';
         }
 
         window.addEventListener('resize', () => {
@@ -92,13 +90,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const showPlayerBet = () => {
+    const showPlayerBet = (actionSeat, betValue) => {
         const currentPlayer = document.querySelector(`#player-${playersBySeats[actionBySeat - 1]}`);
         const currentBet = currentPlayer.querySelector('.bet-value');
         const currentCredits = currentPlayer.querySelector('.balance-value');
 
         currentBet.textContent = currentPlayerBetValue;
         currentCredits.textContent = currentPlayerCredits;
+
+        pushChipFromPlayer(actionSeat - 1, betValue);
     }
 
     // Initialize the action panel as visible
@@ -146,8 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     foldBtn.addEventListener('click', () => {
-        const playerIndex = 0;
-        foldPlayerCards(playerIndex);
+        // const playerIndex = 0;
+        // foldPlayerCards(playerIndex);
         socket.emit('fold');
 
         actionPanel.classList.remove('visible');
@@ -160,9 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isStarted) {
         updateView();
     } else {
-        if (startBtn) {
-            startBtn.style.display = 'block';
-        }
+        waitingPopup.style.display = 'flex'
     }
 
     if (startBtn) {
@@ -180,17 +178,20 @@ document.addEventListener('DOMContentLoaded', () => {
         playersStates = data.playersStates;
         currentBetValue = data.betValue;
         currentPlayerBetValue = data.betValue;
-        currentPlayerCredits = data.creditsLeft
+        currentPlayerCredits = data.creditsLeft;
         activePlayerSeat = data.currentTurnSeat;
-        actionBySeat = data.ActionBySeat;
+        actionBySeat = data.actionBySeat;
         pot = data.pot;
+        const betDiff = data.betDiff;
         isStarted = true;
 
         updateView();
-        showPlayerBet();
+        showPlayerBet(actionBySeat, betDiff);
 
         cardsContainer.innerHTML = '';
-        waitingPopup.style.display = 'none';
+        if (waitingPopup) {
+            waitingPopup.style.display = 'none';
+        }
     });
 
     socket.on('raised', (data) => {
@@ -199,12 +200,11 @@ document.addEventListener('DOMContentLoaded', () => {
         currentBetValue = data.betValue;
         currentPlayerBetValue = data.betValue;
         currentPlayerCredits = data.creditsLeft;
+        const betDiff = data.betDiff;
         pot = data.pot;
 
-        showPlayerBet();
+        showPlayerBet(actionBySeat, betDiff);
         updateInfo();
-
-        pushChipFromPlayer(data.seat, data.betValue);
     });
 
     socket.on('folded', async (data) => {
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('new-turn', (data) => {
         tempCards = data.cards;
-        console.log(tempCards);
+        boardDeck.push(...tempCards);
 
         for (let i = 0; i < tempCards.length; i++) {
             dealCard(tempCards[i], i * 1000);

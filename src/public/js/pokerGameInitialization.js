@@ -9,7 +9,6 @@ export function initialize() {
 
     helpIcon.addEventListener('click', () => {
         popup.classList.add('visible');
-        console.log(helpIcon);
     });
 
     closePopup.addEventListener('click', () => {

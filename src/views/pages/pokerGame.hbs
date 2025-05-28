@@ -143,20 +143,16 @@
     <img class="help-circle" id="helpIcon" src="/img/help-circle.svg" />
 
     <main class="poker-game">
-        {{#unless isStarted}}
-            <div class="waiting-popup" id="waiting">
-                <div class="waiting-content">
-                    <p>Waiting for host to start the game</p>
-        {{/unless}}
-                    {{#if isHost}}
-                        <button id="start-game-btn" style="display: none">Start Game</button>
-                    {{/if}}
-        {{#unless isStarted}}
-                    <p>players: 1/10</p>
-                    <p id="start-status"></p>
-                </div>
+        <div class="waiting-popup" id="waiting">
+            <div class="waiting-content">
+                <p>Waiting for host to start the game</p>
+                {{#if isHost}}
+                    <button id="start-game-btn">Start Game</button>
+                {{/if}}
+                <p>players: 1/10</p>
+                <p id="start-status"></p>
             </div>
-        {{/unless}}
+        </div>
         <div class="table">
             <div class="player" id="player-template">
                 <div class="info">

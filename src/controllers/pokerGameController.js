@@ -76,11 +76,7 @@ const getPrizePools = (numOfPlayers) => {
 const getPositions = async (table) => {
     const postUrl = `${POKER_API_URL}/positions`;
 
-    const activePlayers = await PlayerState.find({
-        tableId: table._id,
-        isFolded: false
-    }).select('seat');
-
+    const activePlayers = await getAllActivePlayers(table._id);
     const allHands = table.allHandsJson;
     const playersActiveHands = {};
 
@@ -227,10 +223,6 @@ const nextRound = async (io, roomId, table) => {
     }
 }
 
-const getMinBetStepValue = async (buyIn) => {
-    return;
-}
-
 const getBlindBetValue = async (buyIn) => {
     const blindBetValue = Math.round(buyIn / 100);
 
@@ -315,6 +307,7 @@ const getUserTable = async (userId) => {
         isActive: true
     });
     if (!table) {
+        return null;
         throw new Error('Table not found');
     }
     return table;
@@ -370,6 +363,15 @@ const getAvailablePlayersStatesByNick = async (playersBySeats, userId, tableId) 
     return playersStatesByNick;
 }
 
+const getAllActivePlayers = async (tableId) => {
+    const players = await PlayerState.find({
+        tableId,
+        isFolded: false
+    });
+
+    return players;
+}
+
 const fold = async (io, reqSocket, roomId, userId) => {
     const table = await getTableByRoom(roomId);
     const playerState = await PlayerState.findOne({
@@ -379,6 +381,13 @@ const fold = async (io, reqSocket, roomId, userId) => {
 
     playerState.isFolded = true;
     await playerState.save();
+
+    const activePlayers = await getAllActivePlayers(table._id);
+    if (activePlayers.length === 1) {
+        table.currentRound = 3;
+        await nextRound(io, roomId, table);
+        return;
+    }
 
     if (table.currentTurnSeat === playerState.seat) {
         table.currentTurnSeat = await getNextPlayerSeat(table);
@@ -394,6 +403,21 @@ const fold = async (io, reqSocket, roomId, userId) => {
         currentTurnSeat: table.currentTurnSeat,
         playerCards: playerState.hand
     })
+}
+
+const leave = async (io, reqSocket, roomId, userId) => {
+    await fold(io, reqSocket, roomId, userId);
+
+    const table = await getTableByRoom(roomId);
+
+    await table.updateOne(
+        { _id: table._id },
+        { $pull: { players: { _id: userId } } }
+    );
+
+    if (table.players.length === 0) {
+        await table.updateOne({ _id: table._id }, { isActive: false });
+    }
 }
 
 const raise = async (io, reqSocket, roomId, userId, betValue = 0) => {
@@ -463,10 +487,15 @@ const startGame = async (io, hostSocket, roomId, userId) => {
 
     table.currentTurnSeat = 1;
 
-    const numOfPlayers = table.players.length;
-    const playersHands = await getCardsForPlayers(numOfPlayers, tableId);
+    const playersStates = await PlayerState.find({tableId});
+    const numOfPlayers = playersStates.length;
+    for (let i = 0; i < numOfPlayers; i++) {
+        playersStates[i].seat = i + 1;
+    }
 
-    table.allHandsJson = playersHands;
+    await PlayerState.bulkSave(playersStates);
+
+    table.allHandsJson = await getCardsForPlayers(numOfPlayers, tableId);
     table.numOfSeatsInCurrentGame = numOfPlayers;
     table.isStarted = true;
     table.currentTurnSeat = await getNextPlayerSeat(table);
@@ -487,8 +516,9 @@ const startGame = async (io, hostSocket, roomId, userId) => {
 
           socket.emit('game-started', {
                 players: playersBySeats,
-                ActionBySeat: 1,
-                betValue: firstPlayerState.creditsLeft,
+                actionBySeat: 1,
+                betValue: firstPlayerState.lastBet,
+                creditsLeft: firstPlayerState.creditsLeft,
                 betDiff,
                 pot: table.pot,
                 currentTurnSeat: table.currentTurnSeat,

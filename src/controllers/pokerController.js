@@ -71,23 +71,11 @@ const isUserInTable = async (userId, tableId) => {
     return table !== null;
 }
 
-const changeSeats = async(table, playerState) => {
-    await PlayerState.updateMany(
-        {
-            tableId: table._id,
-            seat: {$gt: playerState.seat}
-        },
-        {
-            $inc: { seat: -1 }
-        }
-    );
-}
-
 const createPlayerState = async (tableId, userId, numOfPlayers, buyIn) => {
     await PlayerState.create({
         tableId: tableId,
         playerId: userId,
-        seat: numOfPlayers + 1,
+        seat: null,
         creditsLeft: buyIn
     });
 };
@@ -243,51 +231,25 @@ exports.show = asyncHandler( async (req, res, next) => {
     });
 });
 
-exports.leave = asyncHandler( async (req, res, next) => {
-    const internalTableId = req.params.id;
-    const userId = req.user.userId;
-    const table = await PokerTable.findOne({
-        tableId: internalTableId,
-        isActive: true
-    });
-
-
-    if (table === null) {
-        setFlash(req, 'error_msg', 'The poker table does not exist');
-        return res.redirect('/poker');
-    }
-
-    if (!await isUserInTable(userId, table._id)) {
-        setFlash(req, 'error_msg', 'You are already not participating in this poker table');
-        return res.redirect('/poker');
-    }
-
-    const playerState = await PlayerState.findOne({
-        tableId: table._id,
-        playerId: userId
-    });
-
-    const user = await User.findOne({
-        _id: userId
-    });
-
-    playerState.isFolded = true;
-    user.credits += playerState.creditsLeft;
-    playerState.creditsLeft = 0;
-
-    await playerState.save();
-    await user.save();
-
-    await changeSeats(table, playerState);
-
-    table.players = table.players.filter(playerId => playerId.toString() !== userId.toString());
-
-    if (table.players.length === 0) {
-        table.isActive = false;
-    }
-
-    await table.save();
-
-    setFlash(req, "success_msg", "You have left the game");
-    return res.redirect('/poker');
-});
+// exports.leave = asyncHandler( async (req, res, next) => {
+//     const internalTableId = req.params.id;
+//     const userId = req.user.userId;
+//
+//     const table = await PokerTable.findOne({
+//         tableId: internalTableId,
+//         isActive: true
+//     });
+//
+//     if (table === null) {
+//         setFlash(req, 'error_msg', 'The poker table does not exist');
+//         return res.redirect('/poker');
+//     }
+//
+//     if (!await isUserInTable(userId, table._id)) {
+//         setFlash(req, 'error_msg', 'You are already not participating in this poker table');
+//         return res.redirect('/poker');
+//     }
+//
+//     setFlash(req, "success_msg", "You have left the game");
+//     return res.redirect('/poker');
+// });
