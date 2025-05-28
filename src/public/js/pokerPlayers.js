@@ -154,20 +154,16 @@ function getChipVariant(betAmount) {
     return chips;
 }
 
-export function pushChipFromPlayer(playerIndex, betAmount = 100) {
-    setChipValue(1, 50);
+export function pushChipFromPlayer(playerElement, betAmount = 100, buyIn = 50) {
+    setChipValue(1, buyIn);
 
     const chipsContainer = document.querySelector('.chips-container');
-    let sourceElement;
 
-    const players = document.querySelectorAll('.player-js');
-    sourceElement = players[playerIndex];
-
-    if (!sourceElement || !chipsContainer) return;
+    if (!playerElement || !chipsContainer) return;
 
     const chipVariants = getChipVariant(betAmount);
 
-    const sourceRect = sourceElement.getBoundingClientRect();
+    const sourceRect = playerElement.getBoundingClientRect();
     const containerRect = chipsContainer.getBoundingClientRect();
 
     const startX = sourceRect.left - containerRect.left + (sourceRect.width);

@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const exitModal = document.querySelector('#exitModal');
     const cancelButton = exitModal.querySelector('.cancel');
     const confirmExitBtn = exitModal.querySelector('#confirmExit');
+    const chipsContainer = document.querySelector('.chips-container');
 
     const gameData = window.gameData;
     const playerNick = gameData.nick;
@@ -83,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setBoardCards();
         initialize();
         updateInfo();
+        showActionPanel();
 
         if(isStarted) {
             waitingPopup.style.display = 'none';
@@ -96,20 +98,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const showPlayerBet = (actionSeat, betValue) => {
-        const currentPlayer = document.querySelector(`#player-${playersBySeats[actionBySeat - 1]}`);
+        const playerNick = playersBySeats[actionBySeat - 1];
+        const playerId = `player-${playerNick}`;
+        const currentPlayer = document.querySelector(`#${playerId}`);
         const currentBet = currentPlayer.querySelector('.bet-value');
         const currentCredits = currentPlayer.querySelector('.balance-value');
 
         currentBet.textContent = currentPlayerBetValue;
         currentCredits.textContent = currentPlayerCredits;
 
-        pushChipFromPlayer(actionSeat - 1, betValue);
+        pushChipFromPlayer(currentPlayer, betValue);
     }
 
-    // Initialize the action panel as visible
-    setTimeout(() => {
-        actionPanel.classList.add('visible');
-    }, 100);
+    const showActionPanel = () => {
+        if (playersBySeats[activePlayerSeat - 1] === playerNick) {
+            actionPanel.classList.add('visible');
+        } else {
+            actionPanel.classList.remove('visible');
+        }
+    }
 
     raiseButton.addEventListener('click', () => {
         actionPanel.classList.remove('visible');
@@ -154,8 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // const playerIndex = 0;
         // foldPlayerCards(playerIndex);
         socket.emit('fold');
-
-        actionPanel.classList.remove('visible');
     });
 
     checkBtn.addEventListener('click', () => {
@@ -195,6 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     socket.on('game-started', (data) => {
+        boardDeck = [];
         playersBySeats = data.players;
         playersStates = data.playersStates;
         currentBetValue = data.betValue;
@@ -203,13 +209,15 @@ document.addEventListener('DOMContentLoaded', () => {
         activePlayerSeat = data.currentTurnSeat;
         actionBySeat = data.actionBySeat;
         pot = data.pot;
-        const betDiff = data.betDiff;
         isStarted = true;
+        const betDiff = data.betDiff;
+
+        chipsContainer.innerHTML = '';
+        cardsContainer.innerHTML = '';
 
         updateView();
         showPlayerBet(actionBySeat, betDiff);
 
-        cardsContainer.innerHTML = '';
         if (waitingPopup) {
             waitingPopup.style.display = 'none';
         }
@@ -226,6 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         showPlayerBet(actionBySeat, betDiff);
         updateInfo();
+        showActionPanel();
     });
 
     socket.on('folded', async (data) => {
@@ -250,6 +259,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 deleteEventListenerForCardsReveal(mainPlayer);
             }, 1000);
         }
+
+        showActionPanel();
     });
 
     socket.on('new-turn', (data) => {
