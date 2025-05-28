@@ -127,6 +127,8 @@
                 </div>
             </div>
         </div>
+    </div>
+
         <div id="exitModal" class="exit" style="display: none;">
             <div class="exit-content">
                 <h2>Are you sure you want to leave?</h2>
@@ -137,23 +139,28 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <img class="exit-button" id="exitIcon" src="/img/exit.svg" />
+	<button id="exitIcon" class="exit-button">
+  		<img src="/img/exit.svg"/>
+	</button>
+
     <img class="help-circle" id="helpIcon" src="/img/help-circle.svg" />
 
     <main class="poker-game">
         {{#unless isStarted}}
-            <div class="waiting-popup" id="waiting">
-                <div class="waiting-content">
-                    <p>Waiting for host to start the game</p>
+            <div class="waiting-popup" id="waiting"> 
+					<button class="exit-button">
+						<img id="exitIcon" src="/img/exit.svg"/>
+					</button>
+					<div class="waiting-content">
+						<p class="waiting-title">Waiting for host to start the game</p>
         {{/unless}}
                     {{#if isHost}}
-                        <button id="start-game-btn" style="display: none">Start Game</button>
+                        <button id="start-game-btn" class="start-game_btn">Start Game</button>
                     {{/if}}
         {{#unless isStarted}}
-                    <p>players: 1/10</p>
-                    <p id="start-status"></p>
+                    <p class="waiting-players">players: 1/10</p>
+						<p id="start-status" class="start_status"></p>
                 </div>
             </div>
         {{/unless}}
