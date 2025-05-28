@@ -44,18 +44,23 @@ const authInfo = async (req, res, next) => {
                 .populate({
                     path: 'tableId',
                     match: { isActive: true },
-                    select: '_id tableId'
+                    select: '_id tableId players'
                 })
                 .lean();
-
-            const activePlayerStates = playerStates.filter(ps => ps.tableId);
-            const table = activePlayerStates[0];
+            const activePlayerStates = playerStates.filter(state => state.tableId);
 
             let isInPokerTable = false;
             let pokerTableId = null
             if (activePlayerStates.length > 0) {
-                isInPokerTable = true;
-                pokerTableId = table.tableId.tableId;
+                outerLoop: for (const playerState of activePlayerStates) {
+                    for (const player of playerState.tableId.players) {
+                        if (player.toString() === userId.toString()) {
+                            isInPokerTable = true;
+                            pokerTableId = playerState.tableId.tableId;
+                            break outerLoop;
+                        }
+                    }
+                }
             }
 
             const activeTables = await PokerTable.find({ isActive: true }).select('tableId players maxNumOfPlayers buyIn tableName').lean();

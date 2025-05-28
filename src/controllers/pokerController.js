@@ -71,23 +71,34 @@ const isUserInTable = async (userId, tableId) => {
     return table !== null;
 }
 
-const createPlayerState = async (tableId, userId, numOfPlayers, buyIn) => {
-    await PlayerState.create({
-        tableId: tableId,
-        playerId: userId,
-        seat: null,
-        creditsLeft: buyIn
+const createPlayerState = async (tableId, userId, buyIn) => {
+    const playerState = await PlayerState.findOne({
+        tableId,
+        playerId: userId
     });
-};
 
-const joinPlayerToGame = async (table, user, numOfPlayers = table.players.length) => {
+    if (playerState === null) {
+        await PlayerState.create({
+            tableId: tableId,
+            playerId: userId,
+            seat: null,
+            creditsLeft: buyIn
+        });
+    } else {
+        playerState.creditsLeft = buyIn;
+        await playerState.save();
+    }
+
+}
+
+const joinPlayerToGame = async (table, user) => {
     table.players.push(user._id);
-    await table.save();
-
     user.credits -= table.buyIn;
-    await user.save();
 
-    await createPlayerState(table._id, user._id, numOfPlayers, table.buyIn);
+
+    await createPlayerState(table._id, user._id, table.buyIn);
+    await table.save();
+    await user.save();
 }
 
 exports.create = asyncHandler( async (req, res, next) => {
@@ -230,26 +241,3 @@ exports.show = asyncHandler( async (req, res, next) => {
         gameData: JSON.stringify(gameData)
     });
 });
-
-// exports.leave = asyncHandler( async (req, res, next) => {
-//     const internalTableId = req.params.id;
-//     const userId = req.user.userId;
-//
-//     const table = await PokerTable.findOne({
-//         tableId: internalTableId,
-//         isActive: true
-//     });
-//
-//     if (table === null) {
-//         setFlash(req, 'error_msg', 'The poker table does not exist');
-//         return res.redirect('/poker');
-//     }
-//
-//     if (!await isUserInTable(userId, table._id)) {
-//         setFlash(req, 'error_msg', 'You are already not participating in this poker table');
-//         return res.redirect('/poker');
-//     }
-//
-//     setFlash(req, "success_msg", "You have left the game");
-//     return res.redirect('/poker');
-// });

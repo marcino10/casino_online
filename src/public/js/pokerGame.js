@@ -36,6 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const betSlider = document.querySelector('.bet-slider');
     const betValue = document.querySelector('#raise-bet-value');
     const quickBets = document.querySelectorAll('.quick-bet');
+    const exitIconSingle = document.querySelector('#exitIconSingle');
+    const exitIcon = document.querySelector('#exitIcon');
+    const exitModal = document.querySelector('#exitModal');
+    const cancelButton = exitModal.querySelector('.cancel');
+    const confirmExitBtn = exitModal.querySelector('#confirmExit');
 
     const gameData = window.gameData;
     const playerNick = gameData.nick;
@@ -157,6 +162,22 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('call');
     });
 
+    exitIconSingle.addEventListener('click', () => {
+        socket.emit('leave');
+    });
+
+    confirmExitBtn.addEventListener('click', () => {
+       socket.emit('leave');
+    });
+
+    exitIcon.addEventListener('click', () => {
+        exitModal.style.display = 'flex';
+    });
+
+    cancelButton.addEventListener('click', () => {
+        exitModal.style.display = "none";
+    });
+
     if (isStarted) {
         updateView();
     } else {
@@ -248,4 +269,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateView();
     });
+
+    socket.on('leaved', () => {
+        window.location.replace('/poker');
+    })
 });

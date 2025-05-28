@@ -40,7 +40,7 @@ module.exports = io => {
             });
 
             socket.on('leave', async () => {
-                console.log(123);
+                await leave(io, socket, roomId, userId);
             })
         }
     });

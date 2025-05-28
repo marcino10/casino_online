@@ -3,6 +3,7 @@ const PokerTable = require('../models/PokerTable');
 const User = require('../models/User');
 const Card = require('../models/Card');
 const axios = require('axios');
+const { Types } = require("mongoose");
 const POKER_API_URL = process.env.POKER_API_URL || 'http://localhost:3000/api/poker';
 
 const getCardsForPlayers = async (numOfPlayers, tableId) => {
@@ -85,9 +86,17 @@ const getPositions = async (table) => {
         playersActiveHands[playerSeat] = allHands[playerSeat];
     }
 
-    const allActiveHands = {
-        "0": allHands["0"],
-        ...playersActiveHands
+    let allActiveHands;
+    if (allHands["0"] === undefined) {
+        allActiveHands = {
+            "0": [],
+            ...playersActiveHands
+        }
+    } else {
+        allActiveHands = {
+            "0": allHands["0"],
+            ...playersActiveHands
+        }
     }
 
     const res = await axios.post(postUrl, allActiveHands);
@@ -154,6 +163,8 @@ const resetGame = async (table) => {
     table.allHandsJson = {};
     await table.save();
 
+    const playersIds = table.players.map(user => user._id);
+
     await PlayerState.updateMany(
         {tableId: table._id},
         {
@@ -164,6 +175,10 @@ const resetGame = async (table) => {
             }
         }
     );
+
+    await PlayerState.deleteMany({
+        playerId: { $nin: playersIds }
+    });
 }
 
 const nextRound = async (io, roomId, table) => {
@@ -408,16 +423,27 @@ const fold = async (io, reqSocket, roomId, userId) => {
 const leave = async (io, reqSocket, roomId, userId) => {
     await fold(io, reqSocket, roomId, userId);
 
-    const table = await getTableByRoom(roomId);
+    const user = await User.findOne({_id: userId});
+    const table = await PokerTable.findOne({tableId: roomId});
+    const playerState = await PlayerState.findOne({
+        tableId: table._id,
+        playerId: userId
+    });
 
-    await table.updateOne(
-        { _id: table._id },
-        { $pull: { players: { _id: userId } } }
-    );
+    user.credits += playerState.creditsLeft;
+    playerState.creditsLeft = 0;
+
+    table.players = table.players.filter(playerId => playerId.toString() !== userId.toString());
 
     if (table.players.length === 0) {
-        await table.updateOne({ _id: table._id }, { isActive: false });
+        table.isActive = false;
     }
+
+    await user.save();
+    await table.save();
+    await playerState.save();
+
+    reqSocket.emit('leaved');
 }
 
 const raise = async (io, reqSocket, roomId, userId, betValue = 0) => {
@@ -532,6 +558,7 @@ module.exports = {
     startGame,
     raise,
     fold,
+    leave,
     getUserTable,
     getPlayersBySeats,
     getAvailablePlayersStatesByNick

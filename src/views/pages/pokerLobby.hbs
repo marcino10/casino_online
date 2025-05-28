@@ -42,7 +42,7 @@
         </div>
 
         {{#if isInPokerTable}}
-            <div class="popup-overlay" id="rejoinGamePopup">
+            <div class="popup-overlay active" id="rejoinGamePopup">
                 <div class="popup-content rejoin-content">
                     <div class="popup-header">
                         <h2>Re-join Your Game</h2>
@@ -54,7 +54,7 @@
                     </div>
                     <div class="rejoin-actions">
                         <a class="rejoin-btn" id="rejoinConfirmBtn" href="/poker/game/{{ pokerTableId }}">Re-join</a>
-                        <a class="cancel-btn" id="rejoinLeaveBtn" href="/poker/leave/{{ pokerTableId }}">Leave</a>
+                        <a class="cancel-btn" id="rejoinLeaveBtn">Leave</a>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,8 @@
     {{> footer}}
 </main>
 
-<script src="/js/index.js"></script>
-<script type="module" src="/js/pokerPopup.js"></script>
+<script src="/js/index.js" defer></script>
+<script src="/socket.io/socket.io.js" defer></script>
+<script type="module" src="/js/pokerPopup.js" defer></script>
 </body>
 </html>

@@ -135,7 +135,7 @@
                 <p>This action will remove you from the game room.</p>
                 <div class="exit-actions">
                     <button class="cancel">Go Back</button>
-                    <button class="confirm">Leave</button>
+                    <button class="confirm" id="confirmExit">Leave</button>
                 </div>
             </div>
         </div>
@@ -148,8 +148,8 @@
 
     <main class="poker-game">
         <div class="waiting-popup" id="waiting">
-            <button class="exit-button">
-                <img id="exitIcon" src="/img/exit.svg"/>
+            <button class="exit-button" id="exitIconSingle">
+                <img src="/img/exit.svg"/>
             </button>
             <div class="waiting-content">
                 <p class="waiting-title">Waiting for host to start the game</p>

@@ -2,6 +2,8 @@ import { pokerRules } from './validation.js';
 import { showMessage } from './ui.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    const socket = io();
+
     const createGameFab = document.getElementById('createGameFab');
     const createGamePopup = document.getElementById('createGamePopup');
     const closePopup = document.getElementById('closePopup');
@@ -81,20 +83,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const rejoinLeaveBtn = document.getElementById('rejoinLeaveBtn');
     const rejoinConfirmBtn = document.getElementById('rejoinConfirmBtn');
 
-    //Show the rejoin modal (for demo, remove in production)
-    setTimeout(() => {
-        if (rejoinGamePopup) rejoinGamePopup.classList.add('active');
-    }, 1000);
-    //remove this after testing
-
     if (closeRejoinPopup) {
         closeRejoinPopup.addEventListener('click', () => {
             rejoinGamePopup.classList.remove('active');
         });
     }
+
     if (rejoinLeaveBtn) {
         rejoinLeaveBtn.addEventListener('click', () => {
-            // leave game logic here
+            socket.emit('leave');
             rejoinGamePopup.classList.remove('active');
         });
     }
@@ -108,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (rejoinConfirmBtn) {
         rejoinConfirmBtn.addEventListener('click', () => {
-            // rejoin game logic here
             rejoinGamePopup.classList.remove('active');
         });
     }
