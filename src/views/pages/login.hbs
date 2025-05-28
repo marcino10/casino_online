@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/login.css">
-    <title>Document</title>
+    <title>Login | Big Win Casino</title>
 </head>
 <body>
 
@@ -16,33 +16,26 @@
         <button type="button" class="container_button register_button">register</button>
     </div>
 
-
-        {{#if flash.error_msg}}
-            <p class="server-msg error" style="display: none;">
-                {{#each flash.error_msg}}{{this}}<br>{{/each}}
-            </p>
-        {{/if}}
-        {{#if flash.success_msg}}
-            <p class="server-msg success" style="display: none;">
-                {{#each flash.succes_msg}}{{this}}<br>{{/each}}
-            </p>
-        {{/if}}
-
+    {{#if flash.error_msg}}
+        <p class="server-msg error" style="display: none;">
+            {{#each flash.error_msg}}{{this}}<br>{{/each}}
+        </p>
+    {{/if}}
+    {{#if flash.success_msg}}
+        <p class="server-msg success" style="display: none;">
+            {{#each flash.succes_msg}}{{this}}<br>{{/each}}
+        </p>
+    {{/if}}
 
     <!-- Login -->
     <form class="form login_form" method="post" action="/auth/login">
         <input type="text" class="form_input login" placeholder="Username" name="login" required>
         <input type="password" class="form_input password" placeholder="Password" name="password" required>
-        <div class="form_options">
-            <input type="checkbox" class="form_check" id="login">
-            <label for="login" class="form_terms">Remember me</label>
-        </div>
         <button type="submit" class="submit_button">log in</button>
     </form>
 
 
     <!-- Register -->
-
     <form class="form register_form" method="post" action="/auth/register" novalidate>
         <div class="input-wrapper">
             <input type="text" class="form_input" placeholder="Username" name="nick" required>
@@ -59,30 +52,12 @@
             <small class="input-error"></small>
         </div>
 
-<!--        <div class="form_options">-->
-<!--            <input type="checkbox" class="form_check" id="register">-->
-<!--            <label for="register" class="form_terms">-->
-<!--                I agree to the <a href="#" class="form_terms-link">Terms and Services</a>-->
-<!--            </label>-->
-<!--        </div>-->
-
         <button type="submit" class="submit_button">register</button>
     </form>
 
 </div>
 
 <script type="module" src="/js/login.js"></script>
-
 </body>
 </html>
-
-
-
-<!--<form class='login_box' method="post" action="/auth/login">-->
-<!--    <h3>Logging</h3>-->
-<!--    <input class='login' type="text" placeholder="Login" required name="login">-->
-<!--    <input class='password' type="password" placeholder="Password" name="password" required>-->
-<!--    <button class='submit_button' type='submit'>Confirm</button>-->
-<!--</form>-->
-
 

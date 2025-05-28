@@ -1,6 +1,7 @@
 import { positionPlayers, pushChipFromPlayer, setCards, deleteEventListenerForCardsReveal } from "./pokerPlayers.js";
 import { initialize } from "./pokerGameInitialization.js";
 import { dealCard } from "./animations.js";
+import {foldPlayerCards} from "./animations.js";
 
 export const createCardElement = (card) => {
     const suit = card.suit;
@@ -144,12 +145,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 300);
     });
 
-    checkBtn.addEventListener('click', () => {
-        socket.emit('call');
+    foldBtn.addEventListener('click', () => {
+        const playerIndex = 0;
+        foldPlayerCards(playerIndex);
+        socket.emit('fold');
+
+        actionPanel.classList.remove('visible');
     });
 
-    foldBtn.addEventListener('click', () => {
-       socket.emit('fold');
+    checkBtn.addEventListener('click', () => {
+        socket.emit('call');
     });
 
     if (isStarted) {
@@ -244,5 +249,3 @@ document.addEventListener('DOMContentLoaded', () => {
         updateView();
     });
 });
-
-

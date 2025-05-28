@@ -8,118 +8,139 @@
 </head>
 <body>
     <div class="pop-up">
-        <button class="close_pop-up">X</button>
-        <div class="hand-rankings">
-            <div class="hand-box">
-                <h3>1 • Straight Flush</h3>
-                <div class="card-row">
-                    <img src="/img/deck/heart_10_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/heart_9_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/heart_8_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/heart_6_mobile.svg" class="mini-card" />
-                </div>
-                <p>Five consecutive cards of the same suit.</p>
-            </div>
-            <div class="hand-box">
-                <h3>2 • Four of a Kind</h3>
-                <div class="card-row">
-                    <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/spade_a_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/heart_k_mobile.svg" class="mini-card" />
-                </div>
-                <p>Four cards of the same rank.</p>
-            </div>
+        <div class="popup-content">
+            <div class="close-popup" id="closePopup"></div>
 
-            <div class="hand-box">
-                <h3>3 • Full House</h3>
-                <div class="card-row">
-                    <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/spade_k_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/heart_k_mobile.svg" class="mini-card" />
+            <div class="popup-scroll-content">
+                <div class="popup-header">
+                    <h2>Hand Rankings</h2>
+                    <p>Learn the hand rankings to improve your poker game!</p>
                 </div>
-                <p>Three of a kind and a pair.</p>
-            </div>
 
-            <div class="hand-box">
-                <h3>4 • Flush</h3>
-                <div class="card-row">
-                    <img src="/img/deck/club_k_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/club_10_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/club_8_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/club_7_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/club_5_mobile.svg" class="mini-card" />
-                </div>
-                <p>Five cards of the same suit, not in sequence.</p>
-            </div>
+                <div class="hand-rankings">
+                    <div class="hand-box">
+                        <h3>1 • Straight Flush</h3>
+                        <div class="card-row">
+                            <img src="/img/deck/heart_10_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/heart_9_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/heart_8_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/heart_6_mobile.svg" class="mini-card" />
+                        </div>
+                        <p>Five consecutive cards of the same suit.</p>
+                    </div>
+                    <div class="hand-box">
+                        <h3>2 • Four of a Kind</h3>
+                        <div class="card-row">
+                            <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/spade_a_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/heart_k_mobile.svg" class="mini-card" />
+                        </div>
+                        <p>Four cards of the same rank.</p>
+                    </div>
 
-            <div class="hand-box">
-                <h3>5 • Straight</h3>
-                <div class="card-row">
-                    <img src="/img/deck/heart_10_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/club_9_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/diamond_8_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/spade_7_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/heart_6_mobile.svg" class="mini-card" />
-                </div>
-                <p>Five consecutive cards of different suits.</p>
-            </div>
+                    <div class="hand-box">
+                        <h3>3 • Full House</h3>
+                        <div class="card-row">
+                            <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/spade_k_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/heart_k_mobile.svg" class="mini-card" />
+                        </div>
+                        <p>Three of a kind and a pair.</p>
+                    </div>
 
-            <div class="hand-box">
-                <h3>6 • Three of a Kind</h3>
-                <div class="card-row">
-                    <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/heart_k_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/spade_q_mobile.svg" class="mini-card" />
-                </div>
-                <p>Three cards of the same rank.</p>
-            </div>
+                    <div class="hand-box">
+                        <h3>4 • Flush</h3>
+                        <div class="card-row">
+                            <img src="/img/deck/club_k_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/club_10_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/club_8_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/club_7_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/club_5_mobile.svg" class="mini-card" />
+                        </div>
+                        <p>Five cards of the same suit, not in sequence.</p>
+                    </div>
 
-            <div class="hand-box">
-                <h3>7 • Two Pair</h3>
-                <div class="card-row">
-                    <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/diamond_k_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/spade_k_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
-                </div>
-                <p>Two pairs of different ranks.</p>
-            </div>
+                    <div class="hand-box">
+                        <h3>5 • Straight</h3>
+                        <div class="card-row">
+                            <img src="/img/deck/heart_10_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/club_9_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/diamond_8_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/spade_7_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/heart_6_mobile.svg" class="mini-card" />
+                        </div>
+                        <p>Five consecutive cards of different suits.</p>
+                    </div>
 
-            <div class="hand-box">
-                <h3>8 • One Pair</h3>
-                <div class="card-row">
-                    <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/club_k_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/spade_j_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
-                </div>
-                <p>One pair of cards of the same rank.</p>
-            </div>
+                    <div class="hand-box">
+                        <h3>6 • Three of a Kind</h3>
+                        <div class="card-row">
+                            <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/heart_k_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/spade_q_mobile.svg" class="mini-card" />
+                        </div>
+                        <p>Three cards of the same rank.</p>
+                    </div>
 
-            <div class="hand-box">
-                <h3>9 • High Card</h3>
-                <div class="card-row">
-                    <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/spade_k_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/diamond_q_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/club_9_mobile.svg" class="mini-card" />
-                    <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
+                    <div class="hand-box">
+                        <h3>7 • Two Pair</h3>
+                        <div class="card-row">
+                            <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/club_a_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/diamond_k_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/spade_k_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
+                        </div>
+                        <p>Two pairs of different ranks.</p>
+                    </div>
+
+                    <div class="hand-box">
+                        <h3>8 • One Pair</h3>
+                        <div class="card-row">
+                            <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/diamond_a_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/club_k_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/spade_j_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
+                        </div>
+                        <p>One pair of cards of the same rank.</p>
+                    </div>
+
+                    <div class="hand-box">
+                        <h3>9 • High Card</h3>
+                        <div class="card-row">
+                            <img src="/img/deck/heart_a_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/spade_k_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/diamond_q_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/club_9_mobile.svg" class="mini-card" />
+                            <img src="/img/deck/heart_7_mobile.svg" class="mini-card" />
+                        </div>
+                        <p>No combination – the highest card determines the hand.</p>
+                    </div>
                 </div>
-                <p>No combination – the highest card determines the hand.</p>
+            </div>
+        </div>
+        <div id="exitModal" class="exit" style="display: none;">
+            <div class="exit-content">
+                <h2>Are you sure you want to leave?</h2>
+                <p>This action will remove you from the game room.</p>
+                <div class="exit-actions">
+                    <button class="cancel">Go Back</button>
+                    <button class="confirm">Leave</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <img class="help-circle" id="helpIcon" src="/img/help-circle.svg" alt="Help" />
+    <img class="exit-button" id="exitIcon" src="/img/exit.svg" />
+    <img class="help-circle" id="helpIcon" src="/img/help-circle.svg" />
 
     <main class="poker-game">
         {{#unless isStarted}}
@@ -138,13 +159,9 @@
         {{/unless}}
         <div class="table">
             <div class="player" id="player-template">
-                <div class="name">???</div>
                 <div class="info">
                     <span class="bet">bet: $<span class="bet-value">???</span></span>
                     <span class="balance">Balance: $<span class="balance-value">???</span></span>
-                </div>
-                <div class="avatar-container">
-                    <div class="avatar"></div>
                 </div>
                 <div class="player-cards">
                     <div class="player-hand">
@@ -158,12 +175,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="avatar-container">
+                    <div class="avatar">
+                        <div class="name">???</div>
+                    </div>
+                </div>
             </div>
             <div class="players-container" id="playersContainer">
 
             </div>
 
-<!--            <div></div>-->
             <div class="deck">
                 <img class="card" src="/img/deck/back_red.webp" alt="Deck">
             </div>
@@ -220,16 +241,6 @@
             </div>
         </div>
 
-        <!-- Developer Panel -->
-<!--        style="display: none;"-->
-        <div class="dev-panel" style="display: none;">
-            <h3>Dev Tools</h3>
-            <div class="dev-group">
-                <button id="dev-turn">Show Turn</button>
-            </div>
-        </div>
-
-
     </main>
 
     <script src="/socket.io/socket.io.js" defer></script>
@@ -238,6 +249,5 @@
         window.isStarted = {{isStarted}};
     </script>
     <script type="module" src="/js/pokerGame.js" defer ></script>
-    <script type="module" src="/js/pokerGameDev.js" defer></script>
 </body>
 </html>

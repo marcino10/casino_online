@@ -88,3 +88,23 @@ export function betChip(playerElement, potElement, amount) {
 
     document.body.appendChild(chip);
 }
+
+export function foldPlayerCards(playerIndex) {
+    const players = document.querySelectorAll('.player-js');
+    const player = players[playerIndex];
+    if (!player) return;
+
+    const cards = player.querySelectorAll('.player-card');
+
+    cards.forEach((card, index) => {
+        setTimeout(() => {
+            card.classList.add('folded');
+        }, index * 150);
+    });
+
+    // setTimeout(() => {
+    //     cards.forEach(card => {
+    //         card.style.display = 'none';
+    //     });
+    // }, 600);
+}
