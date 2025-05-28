@@ -235,9 +235,14 @@ exports.show = asyncHandler( async (req, res, next) => {
         boardDeck: table.boardDeck
     }
 
+    const numOfPlayers = table.players.length;
+    const maxNumOfPlayers = table.maxNumOfPlayers;
+
     return res.render('pokerGame', {
         isHost,
         isStarted,
+        numOfPlayers,
+        maxNumOfPlayers,
         gameData: JSON.stringify(gameData)
     });
 });

@@ -435,8 +435,13 @@ const leave = async (io, reqSocket, roomId, userId) => {
 
     table.players = table.players.filter(playerId => playerId.toString() !== userId.toString());
 
-    if (table.players.length === 0) {
+    const numOfPlayers = table.players.length;
+    if (numOfPlayers === 0) {
         table.isActive = false;
+    } else {
+        io.to(roomId).emit('players-changed', {
+            numOfPlayers
+        })
     }
 
     await user.save();

@@ -69,25 +69,27 @@ export function dealCard(card, delay = 100) {
     }, { once: true });
 }
 
-export function betChip(playerElement, potElement, amount) {
-    const chip = document.createElement('div');
-    chip.classList.add('chip');
-    chip.textContent = amount;
-
-    const playerRect = playerElement.getBoundingClientRect();
-    const potRect = potElement.getBoundingClientRect();
-
-    chip.style.left = `${playerRect.left}px`;
-    chip.style.top = `${playerRect.top}px`;
-
-    chip.classList.add('betting');
-    setTimeout(() => {
-        chip.style.left = `${potRect.left}px`;
-        chip.style.top = `${potRect.top}px`;
-    }, 50);
-
-    document.body.appendChild(chip);
-}
+// function dealToPlayers() {
+//     const players = document.querySelectorAll('.player');
+//     const deckImage = document.querySelector('.deck img');
+//     let dealDelay = 0;
+//
+//     players.forEach((player) => {
+//         const cards = player.querySelectorAll('.player-card');
+//         cards.forEach((cardContainer) => {
+//             const card = deck.pop();
+//             if (card) {
+//                 const frontCard = cardContainer.querySelector('.front');
+//                 frontCard.src = `/img/deck/${formatCardFilename(card)}`;
+//                 frontCard.style.opacity = '0';
+//
+//                 dealCard(deckImage, frontCard, dealDelay);
+//                 dealDelay += 150;
+//             }
+//         });
+//     });
+//     renderDeckList();
+// }
 
 export function foldPlayerCards(playerIndex) {
     const players = document.querySelectorAll('.player-js');

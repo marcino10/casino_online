@@ -15,7 +15,6 @@ export const createCardElement = (card) => {
     return cardElement;
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
     const socket = io();
 
@@ -27,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const potValueElement = document.querySelector('#pot-value')
     const turnValueElement = document.querySelector('#turn-value');
     const cardsContainer = document.querySelector('#boardCards');
+    const numOfPlayersElement = document.querySelector('#num-of-players');
 
     const actionPanel = document.querySelector('.action-panel');
     const raisePanel = document.querySelector('.raise-panel');
@@ -194,6 +194,12 @@ document.addEventListener('DOMContentLoaded', () => {
             socket.emit('start-game');
         });
     }
+
+    socket.emit('change-players');
+
+    socket.on('players-changed', (data) => {
+        numOfPlayersElement.innerHTML = data.numOfPlayers;
+    })
 
     socket.on('start-status', (data) => {
         startStatus.textContent = data.message;

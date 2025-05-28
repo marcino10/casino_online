@@ -41,7 +41,15 @@ module.exports = io => {
 
             socket.on('leave', async () => {
                 await leave(io, socket, roomId, userId);
+                socket.leave(roomId);
             })
+
+            socket.on('change-players', async () => {
+                const numOfPlayers = table.players.length;
+                io.to(roomId).emit('players-changed', {
+                    numOfPlayers
+                });
+            });
         }
     });
 }

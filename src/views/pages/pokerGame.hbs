@@ -129,16 +129,16 @@
         </div>
     </div>
 
-        <div id="exitModal" class="exit" style="display: none;">
-            <div class="exit-content">
-                <h2>Are you sure you want to leave?</h2>
-                <p>This action will remove you from the game room.</p>
-                <div class="exit-actions">
-                    <button class="cancel">Go Back</button>
-                    <button class="confirm" id="confirmExit">Leave</button>
-                </div>
+    <div id="exitModal" class="exit" style="display: none;">
+        <div class="exit-content">
+            <h2>Are you sure you want to leave?</h2>
+            <p>This action will remove you from the game room.</p>
+            <div class="exit-actions">
+                <button class="cancel">Go Back</button>
+                <button class="confirm" id="confirmExit">Leave</button>
             </div>
         </div>
+    </div>
 
 	<button id="exitIcon" class="exit-button">
   		<img src="/img/exit.svg"/>
@@ -156,7 +156,7 @@
                 {{#if isHost}}
                     <button id="start-game-btn" class="start-game_btn">Start Game</button>
                 {{/if}}
-                <p class="waiting-players">players: 1/10</p>
+                <p class="waiting-players">players: <span id="num-of-players">{{ numOfPlayers }}</span>/<span id="max-num-of-players">{{ maxNumOfPlayers }}</span></p>
                 <p id="start-status" class="start_status"></p>
             </div>
         </div>

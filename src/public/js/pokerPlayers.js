@@ -166,7 +166,6 @@ export function pushChipFromPlayer(playerElement, betAmount = 100, buyIn = 50) {
     const sourceRect = playerElement.getBoundingClientRect();
     const containerRect = chipsContainer.getBoundingClientRect();
 
-    const startX = sourceRect.left - containerRect.left + (sourceRect.width);
     const startY = sourceRect.top - containerRect.top + (sourceRect.height / 2);
 
     chipVariants.forEach((chipData, idx) => {
@@ -178,37 +177,36 @@ export function pushChipFromPlayer(playerElement, betAmount = 100, buyIn = 50) {
         const chipValue = chip.querySelector('.chip-value');
         chipValue.textContent = chipData.value;
 
+        const randomOffsetX = Math.random() * 60;
+        const randomOffsetY = Math.random() * 60;
 
-    const randomOffsetX = Math.random() * 60;
-    const randomOffsetY = Math.random() * 60;
+        chip.style.opacity = '0.5';
+        chip.style.transform = `translate(${- 50}%, ${startY - containerRect.height*0.8}px)`;
+        chip.style.transform += ` rotate(${Math.random() * 360}deg)`;
+        chipsContainer.appendChild(chip);
 
-    chip.style.opacity = '0.5';
-    chip.style.transform = `translate(${- 50}%, ${startY - containerRect.height*0.8}px)`;
-    chip.style.transform += ` rotate(${Math.random() * 360}deg)`;
-    chipsContainer.appendChild(chip);
-
-    requestAnimationFrame(() => {
-        switch (chipData.class){
-            case 'chip--red':
-                chip.style.transform = `translate(${-275-randomOffsetX}%, ${200-randomOffsetY}%)`;
-                break;
-            case 'chip--green':
-                chip.style.transform = `translate(${-125-randomOffsetX}%, ${200-randomOffsetY}%)`;
-                break;
-            case 'chip--blue':
-                chip.style.transform = `translate(${25-randomOffsetX}%, ${200-randomOffsetY}%)`;
-                break;
-            case 'chip--black':
-                chip.style.transform = `translate(${175-randomOffsetX}%, ${200-randomOffsetY}%)`;
-                break;
-            case 'chip--gold':
-                chip.style.transform = `translate(${325-randomOffsetX}%, ${200-randomOffsetY}%)`;
-                break;
-            default:
-                chip.style.transform = `translate(${75-randomOffsetX}%, ${200-randomOffsetY}%)`;
-                break;
-        }
-        chip.style.opacity = '1';
-    });
+        requestAnimationFrame(() => {
+            switch (chipData.class){
+                case 'chip--red':
+                    chip.style.transform = `translate(${-275-randomOffsetX}%, ${200-randomOffsetY}%)`;
+                    break;
+                case 'chip--green':
+                    chip.style.transform = `translate(${-125-randomOffsetX}%, ${200-randomOffsetY}%)`;
+                    break;
+                case 'chip--blue':
+                    chip.style.transform = `translate(${25-randomOffsetX}%, ${200-randomOffsetY}%)`;
+                    break;
+                case 'chip--black':
+                    chip.style.transform = `translate(${175-randomOffsetX}%, ${200-randomOffsetY}%)`;
+                    break;
+                case 'chip--gold':
+                    chip.style.transform = `translate(${325-randomOffsetX}%, ${200-randomOffsetY}%)`;
+                    break;
+                default:
+                    chip.style.transform = `translate(${75-randomOffsetX}%, ${200-randomOffsetY}%)`;
+                    break;
+            }
+            chip.style.opacity = '1';
+        });
     });
 }
