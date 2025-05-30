@@ -103,30 +103,32 @@ const getPositions = async (table) => {
     return res.data.playersPositions;
 }
 
-const distributePrize = async (positions, prizePools, table) => {
+const distributePrize = async (table) => {
+    const positions = await getPositions(table);
+    const activePlayers = await getAllActivePlayers();
+    const prizePools = getPrizePools(activePlayers.length);
+
     let currentPrizePool = 0;
     const numOfPrizePools = prizePools.length;
     let allPrizeDistributed = 0;
 
     for (const position of positions) {
-        const numOfAvailablePrizePools = numOfPrizePools - currentPrizePool;
-        if (currentPrizePool >= numOfAvailablePrizePools) {
+        if (currentPrizePool >= numOfPrizePools) {
             break;
         }
 
         const numOfPlayersInPosition = position.length;
         let prizePoolForPosition = 0;
         for (let i = 0; i < numOfPlayersInPosition; i++) {
-            if (currentPrizePool >= numOfAvailablePrizePools) {
+            if (currentPrizePool >= numOfPrizePools) {
                 break;
             }
 
-            prizePoolForPosition += prizePools[currentPrizePool];
+            prizePoolForPosition = prizePools[currentPrizePool];
             currentPrizePool++;
         }
 
         const prizeValueForPlayer = Math.floor((table.pot * prizePoolForPosition) / numOfPlayersInPosition);
-        allPrizeDistributed += prizeValueForPlayer * numOfPlayersInPosition;
 
         for (const player of position) {
             const playerState = await PlayerState.findOne({
@@ -135,6 +137,7 @@ const distributePrize = async (positions, prizePools, table) => {
             });
 
             playerState.creditsLeft += prizeValueForPlayer;
+            allPrizeDistributed += prizeValueForPlayer;
             playerState.save();
         }
     }
@@ -214,13 +217,12 @@ const nextRound = async (io, roomId, table) => {
             });
             break;
         case 3:
-            const prizePools = getPrizePools(table.numOfSeatsInCurrentGame);
-            const positions = await getPositions(table);
-            await distributePrize(positions, prizePools, table);
-            await resetGame(table)
-
             const playersBySeats = await getPlayersBySeats(table._id);
 
+            await distributePrize(table);
+
+            table.isStarted = false;
+            await table.save();
 
             io.in(roomId).fetchSockets().then(async (sockets) => {
                 for (const socket of sockets) {
@@ -307,6 +309,27 @@ const getNextPlayerSeat = async (table) => {
         table.currentTurnSeat = nextSeat;
 
         return getNextPlayerSeat(table);
+    }
+
+    return nextSeat;
+}
+
+const getNextPlayerBetSeat = async (table) => {
+    let nextSeat = table.currentBetSeat + 1;
+
+    if (nextSeat > table.numOfSeatsInCurrentGame) {
+        nextSeat = 1;
+    }
+
+    const nextPlayerState = await PlayerState.findOne({
+        tableId: table._id,
+        seat: nextSeat
+    });
+
+    if (nextPlayerState.isFolded) {
+        table.currentBetSeat = nextSeat;
+
+        return getNextPlayerBetSeat(table);
     }
 
     return nextSeat;
@@ -404,9 +427,14 @@ const fold = async (io, reqSocket, roomId, userId) => {
         return;
     }
 
+    if (table.currentBetSeat === playerState.seat) {
+        table.isCurrentBetSeatFolded = true;
+        await table.save();
+    }
+
     if (table.currentTurnSeat === playerState.seat) {
         table.currentTurnSeat = await getNextPlayerSeat(table);
-        table.save();
+        await table.save();
     }
 
     if (table.currentTurnSeat === table.currentBetSeat) {
@@ -421,17 +449,25 @@ const fold = async (io, reqSocket, roomId, userId) => {
 }
 
 const leave = async (io, reqSocket, roomId, userId) => {
-    await fold(io, reqSocket, roomId, userId);
-
-    const user = await User.findOne({_id: userId});
     const table = await PokerTable.findOne({tableId: roomId});
+    const user = await User.findOne({_id: userId});
     const playerState = await PlayerState.findOne({
         tableId: table._id,
         playerId: userId
     });
 
-    user.credits += playerState.creditsLeft;
-    playerState.creditsLeft = 0;
+    if (playerState !== null) {
+        if (table.isStarted) {
+            await fold(io, reqSocket, roomId, userId);
+        }
+
+        user.credits += playerState.creditsLeft;
+        playerState.creditsLeft = 0;
+        await user.save();
+        await playerState.save();
+    }
+
+
 
     table.players = table.players.filter(playerId => playerId.toString() !== userId.toString());
 
@@ -444,9 +480,7 @@ const leave = async (io, reqSocket, roomId, userId) => {
         })
     }
 
-    await user.save();
     await table.save();
-    await playerState.save();
 
     reqSocket.emit('leaved');
 }
@@ -491,6 +525,11 @@ const raise = async (io, reqSocket, roomId, userId, betValue = 0) => {
     }
 
     table.currentTurnSeat = await getNextPlayerSeat(table);
+    if (table.isCurrentBetSeatFolded) {
+        table.currentBetSeat = await getNextPlayerBetSeat(table);
+        table.isCurrentBetSeatFolded = false;
+    }
+
     await table.save();
 
     io.to(roomId).emit('raised', {
@@ -520,7 +559,7 @@ const startGame = async (io, hostSocket, roomId, userId) => {
         return;
     }
 
-    table.currentTurnSeat = 1;
+    await resetGame(table);
 
     const playersStates = await PlayerState.find({tableId});
     const numOfPlayers = playersStates.length;

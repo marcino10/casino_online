@@ -65,6 +65,10 @@ const pokerTableSchema = new Schema({
         type: Number,
         default: 0
     },
+    isCurrentBetSeatFolded: {
+        type: Boolean,
+        default: false
+    },
     numOfSeatsInCurrentGame: {
         type: Number
     },
