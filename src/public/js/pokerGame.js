@@ -1,4 +1,4 @@
-import { positionPlayers, pushChipFromPlayer, setCards, deleteEventListenerForCardsReveal } from "./pokerPlayers.js";
+import { positionPlayers, pushChipFromPlayer, setCards, deleteEventListenerForCardsReveal, setChipValue } from "./pokerPlayers.js";
 import { initialize } from "./pokerGameInitialization.js";
 import { dealCard } from "./animations.js";
 import {foldPlayerCards} from "./animations.js";
@@ -33,8 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmRaiseButton = document.querySelector('.confirm-raise');
     const cancelRaiseButton = document.querySelector('.cancel-raise');
     const betSlider = document.querySelector('.bet-slider');
-    const betValue = document.querySelector('#raise-bet-value');
+    const sliderBetValue = document.querySelector('#raise-bet-value');
     const quickBets = document.querySelectorAll('.quick-bet');
+    const allInQuickBet = document.querySelector('#all-in-quick-bet');
+    const checkQuickBet = document.querySelector('#check-quick-bet');
     const exitIconSingle = document.querySelector('#exitIconSingle');
     const exitIcon = document.querySelector('#exitIcon');
     const exitModal = document.querySelector('#exitModal');
@@ -44,6 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const gameData = window.gameData;
     const playerNick = gameData.nick;
+    const buyIn = gameData.buyIn;
+    let maxBet = gameData.maxBet;
     let isStarted = window.isStarted;
     let playersBySeats = gameData.playersBySeats;
     let playersStates = gameData.playersStates;
@@ -87,12 +91,27 @@ document.addEventListener('DOMContentLoaded', () => {
         activePlayer.classList.add('active');
     }
 
+    const setRaiseValues = () => {
+        betSlider.setAttribute('min', currentBetValue);
+        betSlider.setAttribute('max', maxBet)
+        betSlider.value = currentBetValue;
+
+        sliderBetValue.textContent = currentBetValue;
+
+        allInQuickBet.setAttribute('data-amount', maxBet);
+        allInQuickBet.textContent = `All in ($${maxBet})`;
+
+        checkQuickBet.setAttribute('data-amount', currentBetValue);
+        checkQuickBet.textContent = `Check ($${currentBetValue})`;
+    }
+
     const updateView = () => {
         drawPlayers();
         setBoardCards();
         initialize();
         updateInfo();
         showActionPanel();
+        setRaiseValues();
 
         if(isStarted) {
             waitingPopup.style.display = 'none';
@@ -134,14 +153,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     betSlider.addEventListener('input', (e) => {
-        betValue.textContent = `$${e.target.value}`;
+        sliderBetValue.textContent = e.target.value;
     });
 
     quickBets.forEach(button => {
         button.addEventListener('click', () => {
             const amount = button.dataset.amount;
             betSlider.value = amount;
-            betValue.textContent = `$${amount}`;
+            sliderBetValue.textContent = amount;
         });
     });
 
@@ -160,9 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
         })
 
         raisePanel.classList.remove('visible');
-        setTimeout(() => {
-            actionPanel.classList.add('visible');
-        }, 300);
     });
 
     foldBtn.addEventListener('click', () => {
@@ -223,6 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
         activePlayerSeat = data.currentTurnSeat;
         actionBySeat = data.actionBySeat;
         pot = data.pot;
+        maxBet = data.maxBet;
         isStarted = true;
         const betDiff = data.betDiff;
 
@@ -249,6 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showPlayerBet(actionBySeat, betDiff);
         updateInfo();
         showActionPanel();
+        setRaiseValues();
     });
 
     socket.on('folded', async (data) => {

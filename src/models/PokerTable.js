@@ -67,6 +67,10 @@ const pokerTableSchema = new Schema({
     },
     numOfSeatsInCurrentGame: {
         type: Number
+    },
+    maxBet: {
+        type: Number,
+        default: 0
     }
 });
 

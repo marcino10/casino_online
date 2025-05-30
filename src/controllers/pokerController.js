@@ -232,7 +232,9 @@ exports.show = asyncHandler( async (req, res, next) => {
         currentBet: table.currentBet,
         playersStates: playersStatesByNick,
         currentTurnSeat: table.currentTurnSeat,
-        boardDeck: table.boardDeck
+        boardDeck: table.boardDeck,
+        maxBet: table.maxBet,
+        buyIn: table.buyIn
     }
 
     const numOfPlayers = table.players.length;

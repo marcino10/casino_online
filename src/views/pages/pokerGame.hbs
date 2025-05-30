@@ -224,13 +224,11 @@
                     <input type="range" class="bet-slider" min="1" max="50" step="1" value="1">
                     <div class="bet-display">
                         <span class="bet-label">Bet Amount:</span>
-                        <span class="bet-value" id="raise-bet-value">$100</span>
+                        <span class="bet-value" id="raise-bet-value">$<span id="raise-bet-value"></span></span>
                     </div>
                     <div class="quick-bets">
-                        <button class="quick-bet" data-amount="5">$5</button>
-                        <button class="quick-bet" data-amount="10">$10</button>
-                        <button class="quick-bet" data-amount="20">$20</button>
-                        <button class="quick-bet" data-amount="50">$50</button>
+                        <button class="quick-bet" data-amount="1" id="check-quick-bet"></button>
+                        <button class="quick-bet" data-amount="5" id="all-in-quick-bet">$$$</button>
                     </div>
                 </div>
                 <div class="raise-actions">

@@ -265,12 +265,14 @@ body {
 	}
 
 	.quick-bets {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		display: flex;
+		width: 100%;
 		gap: 0.5rem;
+
 		margin-top: 0.5rem;
 
 		.quick-bet {
+			width: 100%;
 			padding: 0.4rem;
 			font-size: 0.85rem;
 			border: 1px solid rgba(255, 255, 255, 0.1);

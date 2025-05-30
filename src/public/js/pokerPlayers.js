@@ -128,7 +128,7 @@ function normalizeChipValue(rawValue) {
     return rawValue;
 }
 
-function setChipValue(minBet, maxBet) {
+export function setChipValue(minBet, maxBet) {
     const percentages = [0.05, 0.1, 0.25, 0.5, 1];
 
     CHIP_VALUES[0].value = minBet;

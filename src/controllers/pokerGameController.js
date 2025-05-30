@@ -458,6 +458,10 @@ const raise = async (io, reqSocket, roomId, userId, betValue = 0) => {
         return;
     }
 
+    if (betValue > table.maxBet) {
+        return;
+    }
+
     const playerState = await PlayerState.findOne({
         playerId: userId,
         tableId: table._id
@@ -472,7 +476,7 @@ const raise = async (io, reqSocket, roomId, userId, betValue = 0) => {
     }
 
     let betDiff;
-    if (betValue === 0) {
+    if (betValue === 0 || betValue === table.currentBet) {
         try {
             betDiff = await bet(table, playerState);
         } catch (err) {
@@ -526,10 +530,18 @@ const startGame = async (io, hostSocket, roomId, userId) => {
 
     await PlayerState.bulkSave(playersStates);
 
+    let maxBet = 9999999999;
+    for (const playerState of playersStates) {
+        if (playerState.creditsLeft < maxBet) {
+            maxBet = playerState.creditsLeft;
+        }
+    }
+
     table.allHandsJson = await getCardsForPlayers(numOfPlayers, tableId);
     table.numOfSeatsInCurrentGame = numOfPlayers;
     table.isStarted = true;
     table.currentTurnSeat = await getNextPlayerSeat(table);
+    table.maxBet = maxBet;
     await table.save();
 
     const firstPlayerState = await PlayerState.findOne({
@@ -551,6 +563,7 @@ const startGame = async (io, hostSocket, roomId, userId) => {
                 betValue: firstPlayerState.lastBet,
                 creditsLeft: firstPlayerState.creditsLeft,
                 betDiff,
+                maxBet,
                 pot: table.pot,
                 currentTurnSeat: table.currentTurnSeat,
                 playersStates
