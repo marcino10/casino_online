@@ -1,59 +1,38 @@
 @use '../variables/colors' as *;
 @use '../variables/mixin' as *;
 
-.header{
-  position: relative;
-  margin-bottom: 10px;
-  min-height: 7rem;
+.header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
   width: 100%;
+  z-index: 1000;
   padding: 1.5rem;
   background-color: $base_color;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  transition: all 0.3s ease;
-  z-index: 1000;
-
-  &.scrolled {
-    position: sticky;
-    top: 0;
-    padding: 0.5rem 1rem;
-    background-color: darken($base_color, 2%);
-    display: flex;
-    justify-content: space-between;
-  }
+  margin-bottom: 10px;
 }
 
 .title {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 2.5rem;
-  text-align: center;
-  line-height: 2rem;
+  font-size: 1.6rem;
+  line-height: normal;
   text-align: center;
   transition: all 0.3s ease;
-
-  &.scrolled {
-    position: static;
-    transform: none;
-    font-size: 1.6rem;
-    line-height: 1.2;
-    margin-left: 1rem;
-    white-space: nowrap;
-  }
+  white-space: nowrap;
 }
 
 .balance-card {
   background-color: $balance_background;
   color: $header_text_color;
-  padding: 1rem 2rem;
+  max-width: 30vw;
+  padding: 0.4rem;
+  font-size: 0.9rem;
+  line-height: 0.8rem;
   border-radius: 1em;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   text-align: center;
-  font-size: 1rem;
   font-weight: 600;
   width: clamp(160px, 25%, 300px);
   white-space: nowrap;
@@ -61,75 +40,38 @@
   box-sizing: border-box;
   flex-shrink: 0;
   transition: all 0.3s ease;
-
-  &.scrolled {
-    max-width: 30vw;
-    padding: 0.4rem;
-    font-size: 0.9rem;
-    line-height: 0.8rem;
-
-    .balance {
-      font-size: 0.8rem;
-    }
-
-    .amount {
-      font-size: 0.9rem;
-    }
-  }
 }
 
 .balance {
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 500;
   margin-bottom: 0.3em;
   color: $balance_text_color;
-  white-space: normal;
 }
 
 .amount {
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: $amount_color;
   overflow-wrap: break-word;
 }
 
-@media (max-width: 800px) {
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .title {
-    position: static;
-    margin-left: 10%;
-    font-size: 1.6rem;
-    padding: 1rem;
-    animation: title-mobile 0.6s ease-in-out forwards;
-    line-height: normal;
-  }
-
-  @keyframes title-mobile {
-    from {
-      font-size: 2.2rem;
-    }
-    to {
-      font-size: 1.6rem;
-    }
-  }
-
-  .balance-card {
-    max-width: 30vw;
-    padding: 0.4rem;
-    font-size: 0.9rem;
-    line-height: 0.8rem;
+@media (min-width: 768px) {
+  .amount {
+    font-size: 1.2rem;
   }
 
   .balance {
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
 
-  .amount {
-    font-size: 0.9rem;
+  .balance-card {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+
+  .title {
+    font-size: 2.2rem;
+    line-height: 2rem;
   }
 }

@@ -2,40 +2,26 @@
 @use 'components/footer';
 @use 'components/header';
 @use 'components/scrollbar';
+@use 'components/pokerLobby';
 @use 'variables/reset';
 @use 'variables/colors' as *;
 @use 'variables/mixin' as *;
 
-$font-stack: 'Arial', sans-serif;
-
-
-* {
-  margin: 0;
+.main {
+  width: 100%;
+  height: 100%;
   padding: 0;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
 }
 
-body {
-    min-height: 100vh;
-    position: relative;
-	font-family: $font-stack;
-	background-color: $background-color;
-	color: $text-color;
-}
-
-main {
-  padding: 0;
+.content {
+  flex: 1;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
-
-.hero {
-  @include center;
-  justify-content: start;
-  flex-direction: column;
   text-align: center;
-  flex: 1;
 }
 
 .inventory {
@@ -85,6 +71,10 @@ main {
   &:hover {
     animation: button_game_hover 0.3s ease-out forwards;
   }
+}
+
+.server-msg {
+  margin-top: 25px;
 }
 
 @keyframes button_game_hover {

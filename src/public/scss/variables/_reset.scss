@@ -1,3 +1,22 @@
+@use '../variables/colors' as *;
+
+$font-stack: 'Arial', sans-serif;
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	min-height: 100vh;
+	width: 100%;
+	position: relative;
+	font-family: $font-stack;
+	background-color: $background-color;
+	color: $text-color;
+}
+
 a {
 	text-decoration: none;
 	color: inherit;

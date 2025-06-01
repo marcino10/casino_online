@@ -11,52 +11,54 @@
 </head>
 
 <body>
-    {{> nav}}
-    
-    <main>
-        {{> header}}
-            <section class="dashboard">
+    <main class="main">
+        {{> nav}}
 
-                <div class="block">
-                    <div class="profile_info">
-                        <div class="profile_inner">
-                            <img src="/img/avatar_icon.webp" class="avatar">
-                            <div class="user_info">
-                                <p class="nickname">Nick: TwojaNazwa</p>
-                                <p class="email">Email: emejl.emejl@emejl</p>
+        <section class="content">
+            {{> header}}
+            <section class="dashboard-wrapper">
+                <div class="dashboard">
+                    <div class="block">
+                        <div class="profile_info">
+                            <div class="profile_inner">
+                                <img src="/img/avatar_icon.webp" class="avatar">
+                                <div class="user_info">
+                                    <p class="nickname">Nick: TwojaNazwa</p>
+                                    <p class="email">Email: emejl.emejl@emejl</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="block">
-                    <div class="change_avatar">
-                        <h3 class="change_title">Change avatar</h3>
-                        <form class="form">
-                            <input class="file" type="file">
-                            <button class="button" type="submit">Save</button>
-                        </form>
+                    <div class="block">
+                        <div class="change_avatar">
+                            <h3 class="change_title">Change avatar</h3>
+                            <form class="form">
+                                <input class="file" type="file">
+                                <button class="button" type="submit">Save</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="block">
+                        <div class="change_password">
+                            <h3 class="change_title">Change password</h3>
+                            <form class="form">
+                                <input class="password" type="password" placeholder="Current password" required>
+                                <input class="password" type="password" placeholder="New password" required>
+                                <input class="password" type="password" placeholder="Repeat new password" required>
+                                <button class="button" type="submit">Confirm</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-
-                <div class="block">
-                    <div class="change_password">
-                        <h3 class="change_title">Change password</h3>
-                        <form class="form">
-                            <input class="password" type="password" placeholder="Current password" required>
-                            <input class="password" type="password" placeholder="New password" required>
-                            <input class="password" type="password" placeholder="Repeat new password" required>
-                            <button class="button" type="submit">Confirm</button>
-                        </form>
-                    </div>
-                </div>
-
             </section>
             {{> footer}}
-        </main>
+        </section>
+    </main>
 
-        <script src="/js/index.js"></script>
-        <script type="module" src="/js/dashboard.js"></script>
+    <script src="/js/index.js"></script>
+    <script type="module" src="/js/dashboard.js"></script>
 </body>
 
 </html>

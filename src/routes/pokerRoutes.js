@@ -10,7 +10,7 @@ router.get('/', auth, authInfo, (req, res) => {
         });
     }
 
-    res.render('pokerLobby', req.data);
+    res.render('index', req.data);
 });
 
 router.get('/join/:id', auth, pokerController.join);

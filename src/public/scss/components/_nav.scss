@@ -1,24 +1,6 @@
 @use '../variables/colors' as *;
 @use '../variables/mixin' as *;
 
-* {
-	margin: 0;
-	padding: 0;
-}
-
-html {
-	font-family: Poppins, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-	line-height: 1.5rem;
-}
-
-body {
-	min-height: 100vh;
-	background-color: $base_color;
-	color: $text-color;
-	display: grid;
-	grid-template-columns: auto 1fr;
-}
-
 .sidebar {
 	box-sizing: border-box;
 	height: 100vh;
