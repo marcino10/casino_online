@@ -12,11 +12,6 @@
             <div class="close-popup" id="closePopup"></div>
 
             <div class="popup-scroll-content">
-                <div class="popup-header">
-                    <h2>Hand Rankings</h2>
-                    <p>Learn the hand rankings to improve your poker game!</p>
-                </div>
-
                 <div class="hand-rankings">
                     <div class="hand-box">
                         <h3>1 • Straight Flush</h3>
@@ -147,10 +142,10 @@
     <img class="help-circle" id="helpIcon" src="/img/help-circle.svg" />
 
     <main class="poker-game">
+        <div class="countdown">
+            <p id="countdown-value">5</p>
+        </div>
         <div class="waiting-popup" id="waiting">
-            <button class="exit-button" id="exitIconSingle">
-                <img src="/img/exit.svg"/>
-            </button>
             <div class="waiting-content">
                 <p class="waiting-title">Waiting for host to start the game</p>
                 {{#if isHost}}
@@ -162,9 +157,21 @@
         </div>
         <div class="table">
             <div class="player" id="player-template">
-                <div class="info">
-                    <span class="bet">bet: $<span class="bet-value">???</span></span>
-                    <span class="balance">Balance: $<span class="balance-value">???</span></span>
+                <div class="info-wrapper">
+                    <div class="info" id="bet-info">
+                        <div class="bet">
+                            <p>bet:</p>
+                            <p class="cash">$<span class="bet-value">???</span></p>
+                        </div>
+                        <div class="balance">
+                            <p>Balance:</p>
+                            <p class="cash">$<span class="balance-value">???</span></p>
+                        </div>
+                    </div>
+                    <div class="info none info--final" id="final-info">
+                        <div class="cash">+<span id="profit">??</span>$</div>
+                        <div class="player-ranking" id="ranking"></div>
+                    </div>
                 </div>
                 <div class="player-cards">
                     <div class="player-hand">

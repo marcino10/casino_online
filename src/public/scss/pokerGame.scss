@@ -38,7 +38,7 @@ body {
 
 .player {
 	position: absolute;
-	width: 8vh;
+	width: 150px;
 	text-align: center;
 	transform: translate(-50%, -50%);
 	pointer-events: auto;
@@ -326,13 +326,11 @@ body {
 	z-index: 1000;
 	width: 100%;
 	height: 100%;
-	background: rgba(0, 0, 0, 0.2);
 	color: $text_light;
 	font-size: 2rem;
 	font-weight: bold;
 	background-size: cover;
-	background-position: top;
-	background-repeat: no-repeat;
+	background: rgba(0, 0, 0, 0.2) no-repeat top;
 }
 
 .waiting-content {
@@ -358,6 +356,20 @@ body {
 .waiting-players {
 	font-size: 16px;
 	color: #ccc;
+	margin-top: 25px;
+	margin-bottom: 15px;
+}
+
+.cash {
+	color: springgreen;
+}
+
+.player-ranking {
+	color: gold;
+}
+
+.none {
+	opacity: 0 !important;
 }
 
 @keyframes playerGlow {
@@ -904,19 +916,43 @@ body {
   }
 }
 
-
 .info{
-  font-size: 1.4vh;
-  margin-top: 0.4vh;
-  color: #fff;
-  transform: translateY(50%);
-  background: rgba(0, 0, 0, 0.3);
-  padding: 0.3vh 0.6vh;
-  border-radius: 0.4vh;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2vh;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+	&-wrapper {
+		width: 100%;
+		height: 60px;
+		max-width: 120px;
+		margin-top: 0.4vh;
+		margin-bottom: 10px;
+		position: relative;
+	}
+
+	position: absolute;
+	top: 0;
+	width: 100%;
+	font-size: 1.4vh;
+	padding: 15px 10px;
+	color: #fff;
+	transform: translateY(50%);
+	background: rgba(0, 0, 0, 0.3);
+	border-radius: 0.4vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 5px;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+	opacity: 1;
+	transition: opacity .5s linear;
+
+	&--final {
+		border: 1px solid gold;
+	}
+}
+
+.bet,
+.balance {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
 }
 
 .exit-button {
@@ -925,7 +961,7 @@ body {
 	position: fixed;
 	left: 1vw;
 	top: clamp(20px, 4vh, 60px);
-	z-index: 999;
+	z-index: 1001;
 	cursor: pointer;
 	background: none;
 	border: none;
@@ -968,7 +1004,7 @@ body {
 .exit {
 	display: none;
 	position: fixed;
-	z-index: 1;
+	z-index: 1001;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -1022,6 +1058,11 @@ body {
 	color: springgreen;
 }
 
-.active-player {
-
+.countdown {
+	position: absolute;
+	margin: 0 10px;
+	bottom: 0;
+	left: 0;
+	font-size: 5rem;
+	color: lightgray;
 }

@@ -30,6 +30,14 @@ const playerPokerStateSchema = new Schema({
     isFolded: {
         type: Boolean,
         default: false
+    },
+    rankingName: {
+        type: String,
+        default: ''
+    },
+    currentGameProfit: {
+        type: Number,
+        default: 0
     }
 });
 

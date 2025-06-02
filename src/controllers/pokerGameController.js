@@ -100,6 +100,20 @@ const getPositions = async (table) => {
     }
 
     const res = await axios.post(postUrl, allActiveHands);
+
+    const playersBestHands = res.data.playersBestHands;
+    for (const player of Object.keys(playersBestHands)) {
+        if (playersBestHands.hasOwnProperty(player)) {
+            const playerState = await PlayerState.findOne({
+                tableId: table._id,
+                seat: Number(player)
+            });
+
+            playerState.rankingName = playersBestHands[player].rankingName;
+            playerState.save();
+        }
+    }
+
     return res.data.playersPositions;
 }
 
@@ -137,6 +151,7 @@ const distributePrize = async (table) => {
             });
 
             playerState.creditsLeft += prizeValueForPlayer;
+            playerState.currentGameProfit = prizeValueForPlayer;
             allPrizeDistributed += prizeValueForPlayer;
             playerState.save();
         }
@@ -174,7 +189,9 @@ const resetGame = async (table) => {
             $set: {
                 isFolded: false,
                 lastBet: 0,
-                hand: []
+                hand: [],
+                currentGameProfit: 0,
+                rankingName: ''
             }
         }
     );
@@ -217,23 +234,31 @@ const nextRound = async (io, roomId, table) => {
             });
             break;
         case 3:
-            const playersBySeats = await getPlayersBySeats(table._id);
-
             await distributePrize(table);
 
             table.isStarted = false;
             await table.save();
 
-            io.in(roomId).fetchSockets().then(async (sockets) => {
-                for (const socket of sockets) {
-                    const playersStates = await getAvailablePlayersStatesByNick(playersBySeats, socket.user.userId, table._id);
+            const playersStates = await PlayerState.find({tableId: table._id}).populate('playerId', 'nick').populate('hand', 'suit value');
 
-                    socket.emit('game-ended', {
-                        playersStates,
-                        pot: table.pot,
-                        currentTurnSeat: table.currentTurnSeat
-                    });
+            let playersStatesByNick = {};
+            for (const currentPlayerState of playersStates) {
+                const isFolded = currentPlayerState.isFolded;
+
+                playersStatesByNick[currentPlayerState.playerId.nick] = {
+                    isFolded,
+                    hand: currentPlayerState.hand,
+                    lastBet: currentPlayerState.lastBet,
+                    creditsLeft: currentPlayerState.creditsLeft,
+                    profit: currentPlayerState.currentGameProfit,
+                    rankingName: currentPlayerState.rankingName
                 }
+            }
+
+            io.to(roomId).emit('game-ended', {
+                playersStates: playersStatesByNick,
+                pot: table.pot,
+                currentTurnSeat: table.currentTurnSeat
             });
 
             break;

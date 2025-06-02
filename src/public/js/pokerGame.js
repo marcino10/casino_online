@@ -37,12 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const quickBets = document.querySelectorAll('.quick-bet');
     const allInQuickBet = document.querySelector('#all-in-quick-bet');
     const checkQuickBet = document.querySelector('#check-quick-bet');
-    const exitIconSingle = document.querySelector('#exitIconSingle');
     const exitIcon = document.querySelector('#exitIcon');
     const exitModal = document.querySelector('#exitModal');
     const cancelButton = exitModal.querySelector('.cancel');
     const confirmExitBtn = exitModal.querySelector('#confirmExit');
     const chipsContainer = document.querySelector('.chips-container');
+    const countdownElement = document.querySelector('.countdown');
+    const countdownValueElement = document.querySelector('#countdown-value');
 
     const gameData = window.gameData;
     const playerNick = gameData.nick;
@@ -59,6 +60,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPlayerBetValue = null;
     let currentPlayerCredits = null;
     let tempCards = null;
+    let countdown  = 5;
+
+    const setCountdown = async () => {
+        countdownElement.style.display = 'block';
+        countdownValueElement.textContent = countdown;
+
+        const interval = setInterval(() => {
+            countdown -= 1;
+            countdownValueElement.textContent = countdown;
+
+            if (countdown <= 0) {
+                clearInterval(interval);
+                countdownValueElement.textContent = '';
+                countdownElement.style.display = 'none';
+            }
+        }, 1000);
+    }
 
     const drawPlayers = () => {
         let playerIndex = playersBySeats.indexOf(playerNick);
@@ -75,6 +93,40 @@ document.addEventListener('DOMContentLoaded', () => {
             cardsContainer.appendChild(cardElement);
             cardElement.style.opacity = '1';
         }
+    }
+
+    const setFinalInfo = () => {
+        for (const player of Object.keys(playersStates)) {
+            if (playersStates.hasOwnProperty(player)) {
+                const playerState = playersStates[player];
+                const playerElement = document.querySelector(`#player-${player}`);
+
+                const profitElement = playerElement.querySelector('#profit');
+                const rankingElement = playerElement.querySelector('#ranking');
+                const betInfoElement = playerElement.querySelector('#bet-info');
+                const finalInfoElement = playerElement.querySelector('#final-info');
+
+                profitElement.textContent = playerState.profit;
+
+                const rankingName = playerState.rankingName;
+                if (rankingName !== '') {
+                    rankingElement.textContent = rankingName;
+                } else {
+                    rankingElement.textContent = 'Folded';
+                }
+
+                betInfoElement.classList.add('none');
+                finalInfoElement.classList.remove('none');
+            }
+        }
+    }
+
+    const finalScreen = async () => {
+        setFinalInfo();
+        await setCountdown();
+        setTimeout(() => {
+            waitingPopup.style.display = 'flex';
+        }, 5000);
     }
 
     const updateInfo = () => {
@@ -117,6 +169,8 @@ document.addEventListener('DOMContentLoaded', () => {
             waitingPopup.style.display = 'none';
         } else {
             waitingPopup.style.display = 'flex';
+            countdownElement.style.display = 'none';
+            countdown = 5;
         }
 
         window.addEventListener('resize', () => {
@@ -191,10 +245,6 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('call');
     });
 
-    exitIconSingle.addEventListener('click', () => {
-        socket.emit('leave');
-    });
-
     confirmExitBtn.addEventListener('click', () => {
        socket.emit('leave');
     });
@@ -210,7 +260,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isStarted) {
         updateView();
     } else {
-        waitingPopup.style.display = 'flex'
+        waitingPopup.style.display = 'flex';
+        countdownElement.style.display = 'none';
     }
 
     if (startBtn) {
@@ -305,13 +356,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    socket.on('game-ended', (data) => {
+    socket.on('game-ended', async (data) => {
         playersStates = data.playersStates;
         pot = data.pot;
         activePlayerSeat = data.currentTurnSeat;
         isStarted = false;
 
-        updateView();
+        await finalScreen();
     });
 
     socket.on('leaved', () => {
