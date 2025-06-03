@@ -121,6 +121,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    const revealCards = () => {
+        const players = document.querySelectorAll('.player-js');
+
+        players.forEach(player => {
+            const playerNick = player.id.split('-')[1];
+            const playerState = playersStates[playerNick];
+            const playerCards = player.querySelectorAll('.player-card');
+
+            setCards(player, playerState.hand);
+            playerCards.forEach(card => {
+                card.classList.add('revealed');
+            });
+        });
+    }
+
     const finalScreen = async () => {
         setFinalInfo();
         await setCountdown();
@@ -169,8 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
             waitingPopup.style.display = 'none';
         } else {
             waitingPopup.style.display = 'flex';
-            countdownElement.style.display = 'none';
-            countdown = 5;
         }
 
         window.addEventListener('resize', () => {
@@ -261,7 +274,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateView();
     } else {
         waitingPopup.style.display = 'flex';
-        countdownElement.style.display = 'none';
     }
 
     if (startBtn) {
@@ -362,6 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
         activePlayerSeat = data.currentTurnSeat;
         isStarted = false;
 
+        revealCards();
         await finalScreen();
     });
 

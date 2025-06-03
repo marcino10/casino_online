@@ -103,10 +103,4 @@ export function foldPlayerCards(playerIndex) {
             card.classList.add('folded');
         }, index * 150);
     });
-
-    // setTimeout(() => {
-    //     cards.forEach(card => {
-    //         card.style.display = 'none';
-    //     });
-    // }, 600);
 }
