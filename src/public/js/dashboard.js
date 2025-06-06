@@ -30,27 +30,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  newPasswordInput.addEventListener('input', () => {
+  const passwordValidation = () => {
     const val = newPasswordInput.value;
     if (!isValidPassword(val)) {
       showError(newPasswordInput, 'Password must be 5+ characters and contain a number');
+      return false;
     } else {
       clearError(newPasswordInput);
     }
 
     if (!isSamePassword(val, repeatPasswordInput.value)) {
       showError(repeatPasswordInput, 'Passwords do not match.');
+      return false;
     } else {
-      clearError(repeatPasswordInput);
+        clearError(repeatPasswordInput);
     }
+
+    return true;
+  }
+
+
+  newPasswordInput.addEventListener('input', () => {
+    passwordValidation();
   });
 
   repeatPasswordInput.addEventListener('input', () => {
-    const val = repeatPasswordInput.value;
-    if (!isSamePassword(newPasswordInput.value, val)) {
-      showError(repeatPasswordInput, 'Passwords do not match.');
-    } else {
-      clearError(repeatPasswordInput);
+    passwordValidation()
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (passwordValidation()) {
+      form.submit();
     }
   });
 

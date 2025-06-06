@@ -29,23 +29,12 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="block">
-                        <div class="change_avatar">
-                            <h3 class="change_title">Change avatar</h3>
-                            <form class="form">
-                                <input class="file" type="file">
-                                <button class="button" type="submit">Save</button>
-                            </form>
-                        </div>
-                    </div>
-
                     <div class="block">
                         <div class="change_password">
                             <h3 class="change_title">Change password</h3>
-                            <form class="form">
-                                <input class="password" type="password" placeholder="Current password" required>
-                                <input class="password" type="password" placeholder="New password" required>
+                            <form class="form" method="post" action="/auth/change/password">
+                                <input class="password" type="password" placeholder="Current password" name="oldPassword" required>
+                                <input class="password" type="password" placeholder="New password" name="newPassword" required>
                                 <input class="password" type="password" placeholder="Repeat new password" required>
                                 <button class="button" type="submit">Confirm</button>
                             </form>
@@ -53,6 +42,16 @@
                     </div>
                 </div>
             </section>
+            {{#if flash.error_msg}}
+                <p class="server-msg error">
+                    {{#each flash.error_msg}}{{this}}<br>{{/each}}
+                </p>
+            {{/if}}
+            {{#if flash.success_msg}}
+                <p class="server-msg success">
+                    {{#each flash.success_msg}}{{this}}<br>{{/each}}
+                </p>
+            {{/if}}
             {{> footer}}
         </section>
     </main>

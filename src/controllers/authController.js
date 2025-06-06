@@ -101,6 +101,43 @@ exports.register = asyncHandler(async (req, res, next) => {
     await authenticateUser(user, req, res);
 });
 
+exports.changePassword = asyncHandler(async (req, res, next) => {
+    const { oldPassword, newPassword } = req.body;
+
+    if (!oldPassword || !newPassword) {
+        return res.status(400).json({ error: 'Old and new passwords are required.' });
+    }
+
+    if (!isValidPassword(newPassword)) {
+        return res.status(400).json({ error: 'New password must be at least 5 characters long and contain at least one number.' });
+    }
+
+    try {
+        const authUser = req.user;
+        if (!authUser) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+
+        const user = await User.findById(authUser.userId);
+
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Old password is incorrect.' });
+        }
+
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        user.password = hashedPassword;
+        await user.save();
+
+        setFlash(req, 'success_msg', 'Password changed successfully');
+        return res.redirect('/dashboard');
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'An error occurred while changing the password.' });
+    }
+});
+
 exports.login = asyncHandler(async (req, res, next) => {
     const {login, password} = req.body;
     if (!login || !password) {
