@@ -1066,3 +1066,40 @@ body {
 	font-size: 5rem;
 	color: lightgray;
 }
+
+.waiting-cash {
+	font-size: 1.2rem;
+	width: 100%;
+
+	.waiting-content {
+		width: 100%;
+		max-width: 500px;
+	}
+
+	.buttons-wrapper {
+		width: 100%;
+		display: flex;
+		gap: 10px;
+		margin-top: 10px;
+	}
+}
+
+.leave,
+.rejoin {
+	width: 100%;
+	border-radius: 8px;
+	padding: 10px 0;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	text-align: center;
+	font-size: inherit;
+}
+
+.leave {
+	background-color: #ff4d4f;
+}
+
+.rejoin {
+	background-color: #20beff;
+}

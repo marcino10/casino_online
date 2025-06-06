@@ -3,8 +3,15 @@ const PokerTable = require('../models/PokerTable');
 const User = require('../models/User');
 const Card = require('../models/Card');
 const axios = require('axios');
-const { Types } = require("mongoose");
 const POKER_API_URL = process.env.POKER_API_URL || 'http://localhost:3000/api/poker';
+
+const getMinCash = (buyIn) => {
+    const minCash = Math.round(0.3 * buyIn);
+    if (minCash < 1) {
+        return 1;
+    }
+    return minCash;
+}
 
 const getCardsForPlayers = async (numOfPlayers, tableId) => {
     const postData = {
@@ -201,6 +208,17 @@ const resetGame = async (table) => {
     });
 }
 
+const leavePlayersWithTooLowCredits = async (io, table) => {
+    const minCash = getMinCash(table.buyIn);
+    const playersStates = await PlayerState.find({tableId: table._id});
+
+    for (const playerState of playersStates) {
+        if (playerState.creditsLeft < minCash) {
+            await systemLeave(io, table.tableId, playerState.playerId.toString());
+        }
+    }
+}
+
 const nextRound = async (io, roomId, table) => {
     const currentRound = table.currentRound;
     const currentCards = table.allHandsJson;
@@ -261,6 +279,7 @@ const nextRound = async (io, roomId, table) => {
                 currentTurnSeat: table.currentTurnSeat
             });
 
+            await leavePlayersWithTooLowCredits(io, table);
             break;
     }
 }
@@ -474,6 +493,12 @@ const fold = async (io, reqSocket, roomId, userId) => {
 }
 
 const leave = async (io, reqSocket, roomId, userId) => {
+    await systemLeave(io, roomId, userId, reqSocket);
+
+    reqSocket.emit('leaved');
+}
+
+const systemLeave = async (io, roomId, userId, reqSocket = null) => {
     const table = await PokerTable.findOne({tableId: roomId});
     const user = await User.findOne({_id: userId});
     const playerState = await PlayerState.findOne({
@@ -482,7 +507,7 @@ const leave = async (io, reqSocket, roomId, userId) => {
     });
 
     if (playerState !== null) {
-        if (table.isStarted) {
+        if (table.isStarted && reqSocket !== null) {
             await fold(io, reqSocket, roomId, userId);
         }
 
@@ -491,8 +516,6 @@ const leave = async (io, reqSocket, roomId, userId) => {
         await user.save();
         await playerState.save();
     }
-
-
 
     table.players = table.players.filter(playerId => playerId.toString() !== userId.toString());
 
@@ -506,8 +529,6 @@ const leave = async (io, reqSocket, roomId, userId) => {
     }
 
     await table.save();
-
-    reqSocket.emit('leaved');
 }
 
 const raise = async (io, reqSocket, roomId, userId, betValue = 0) => {

@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startBtn = document.querySelector('#start-game-btn');
     const startStatus = document.querySelector('#start-status');
     const waitingPopup = document.querySelector('#waiting');
+    const cashWaitingPopup = document.querySelector('#waiting-cash');
     const foldBtn = document.querySelector('#fold-btn');
     const checkBtn = document.querySelector('#check-btn');
     const potValueElement = document.querySelector('#pot-value')
@@ -48,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameData = window.gameData;
     const playerNick = gameData.nick;
     const buyIn = gameData.buyIn;
+    const minCash = Math.round(buyIn * 0.3);
     let maxBet = gameData.maxBet;
     let isStarted = window.isStarted;
     let playersBySeats = gameData.playersBySeats;
@@ -139,9 +141,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const finalScreen = async () => {
         setFinalInfo();
         await setCountdown();
-        setTimeout(() => {
-            waitingPopup.style.display = 'flex';
-        }, 5000);
+
+        const mainPlayerState = playersStates[playerNick];
+
+        if (mainPlayerState.creditsLeft < minCash) {
+            setTimeout(() => {
+                cashWaitingPopup.style.display = 'flex';
+            }, 5000);
+        } else {
+            setTimeout(() => {
+                waitingPopup.style.display = 'flex';
+            }, 5000);
+        }
+
     }
 
     const updateInfo = () => {

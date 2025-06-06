@@ -245,6 +245,8 @@ exports.show = asyncHandler( async (req, res, next) => {
         isStarted,
         numOfPlayers,
         maxNumOfPlayers,
+        buyIn: table.buyIn,
+        tableId: internalTableId,
         gameData: JSON.stringify(gameData)
     });
 });
