@@ -3,13 +3,7 @@ const router = express.Router();
 const [auth, redirectIfAuth, authInfo] = require('../middlewares/authMiddleware');
 const User = require('../models/User');
 
-router.get('/', authInfo, async (req, res) => {
-    if (!req.data) {
-        return res.render('index', {
-            isAuth: false
-        });
-    }
-
+router.get('/', auth, authInfo, async (req, res) => {
     return res.render('index', {
         ...req.data,
         activePage: 'home'

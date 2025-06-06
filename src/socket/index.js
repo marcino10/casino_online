@@ -19,8 +19,6 @@ module.exports = io => {
                 }
             });
 
-            console.log(userId + ' connected');
-
             socket.on('raise', async (data) => {
                 const betValue = data.betValue;
 

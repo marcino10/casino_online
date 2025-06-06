@@ -394,6 +394,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('leaved', () => {
-        window.location.replace('/poker');
+        window.location.replace('/');
     })
 });

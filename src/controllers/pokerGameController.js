@@ -519,16 +519,15 @@ const systemLeave = async (io, roomId, userId, reqSocket = null) => {
 
     table.players = table.players.filter(playerId => playerId.toString() !== userId.toString());
 
-    if (table.host.toString() === userId.toString()) {
-        table.host = table.players[0] || null;
-    }
-
     const numOfPlayers = table.players.length;
     if (numOfPlayers === 0) {
         table.isActive = false;
     } else {
-        const hostId = table.host;
-        const host = await User.findById(hostId);
+        if (table.host.toString() === userId.toString()) {
+            table.host = table.players[0] || null;
+        }
+
+        const host = await User.findById(table.host);
 
         io.to(roomId).emit('players-changed', {
             numOfPlayers,
