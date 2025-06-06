@@ -6,16 +6,18 @@ module.exports = io => {
         const table = await getUserTable(userId);
 
         if (table) {
-            const isHost = userId.toString() === table.host.toString();
             const roomId = table.tableId;
 
             socket.join(table.tableId);
 
-            if (isHost) {
-                socket.on('start-game', async () => {
+            socket.on('start-game', async () => {
+                const table = await getUserTable(userId);
+                const isHost = userId.toString() === table.host.toString();
+
+                if (isHost) {
                     await startGame(io, socket, roomId, userId);
-                });
-            }
+                }
+            });
 
             console.log(userId + ' connected');
 

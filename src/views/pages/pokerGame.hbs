@@ -148,9 +148,7 @@
         <div class="waiting-popup" id="waiting">
             <div class="waiting-content">
                 <p class="waiting-title">Waiting for host to start the game</p>
-                {{#if isHost}}
-                    <button id="start-game-btn" class="start-game_btn">Start Game</button>
-                {{/if}}
+                <button id="start-game-btn" class="start-game_btn" {{#unless isHost}}style="display: none"{{/unless}}>Start Game</button>
                 <p class="waiting-players">players: <span id="num-of-players">{{ numOfPlayers }}</span>/<span id="max-num-of-players">{{ maxNumOfPlayers }}</span></p>
                 <p id="start-status" class="start_status"></p>
             </div>

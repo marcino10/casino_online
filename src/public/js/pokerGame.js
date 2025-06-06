@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const playerNick = gameData.nick;
     const buyIn = gameData.buyIn;
     const minCash = Math.round(buyIn * 0.3);
+    let hostNick = null;
     let maxBet = gameData.maxBet;
     let isStarted = window.isStarted;
     let playersBySeats = gameData.playersBySeats;
@@ -62,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPlayerBetValue = null;
     let currentPlayerCredits = null;
     let tempCards = null;
-    let countdown  = 5;
+    let countdown = 5;
 
     const setCountdown = async () => {
         countdownElement.style.display = 'block';
@@ -261,8 +262,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     foldBtn.addEventListener('click', () => {
-        // const playerIndex = 0;
-        // foldPlayerCards(playerIndex);
         socket.emit('fold');
     });
 
@@ -288,16 +287,19 @@ document.addEventListener('DOMContentLoaded', () => {
         waitingPopup.style.display = 'flex';
     }
 
-    if (startBtn) {
-        startBtn.addEventListener('click', () => {
-            socket.emit('start-game');
-        });
-    }
+    startBtn.addEventListener('click', () => {
+        socket.emit('start-game');
+    });
 
     socket.emit('change-players');
 
     socket.on('players-changed', (data) => {
         numOfPlayersElement.innerHTML = data.numOfPlayers;
+        hostNick = data.hostNick;
+
+        if (hostNick === playerNick) {
+            startBtn.style.display = 'block'
+        }
     })
 
     socket.on('start-status', (data) => {
@@ -317,6 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
         maxBet = data.maxBet;
         isStarted = true;
         const betDiff = data.betDiff;
+        countdown = 5;
 
         chipsContainer.innerHTML = '';
         cardsContainer.innerHTML = '';
